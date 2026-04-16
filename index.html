@@ -61,7 +61,7 @@
         /* GRID INTERNO DOS CARDS - EXATAMENTE 2 LADO A LADO */
         .machine-grid { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Força exatamente 2 colunas */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 12px; 
         }
         
@@ -76,6 +76,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-width: 0; /* Essencial para textos longos não quebrarem o layout */
         }
 
         .station-card:hover {
@@ -104,10 +105,10 @@
 
         .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
         .info-label { font-size: 9px; font-weight: bold; color: #888; text-transform: uppercase; }
-        .info-value { font-size: 12px; font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info-value { font-size: 12px; font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
-        .stat-box { text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px; }
+        .stat-box { text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px; min-width: 0; }
         .stat-num { display: block; font-size: 16px; font-weight: 900; color: #333; }
         .stat-label { font-size: 8px; font-weight: bold; color: #666; text-transform: uppercase; }
         
@@ -144,25 +145,35 @@
 
         /* RESPONSIVIDADE PARA CELULARES E TABLETS PEQUENOS */
         @media (max-width: 650px) {
-            body { padding: 8px; }
-            .header { flex-direction: column; align-items: stretch; position: relative; padding: 10px; }
-            .actions-container { flex-direction: column; gap: 10px; align-items: stretch; }
+            body { padding: 5px; overflow-x: hidden; } /* Trava rolagem horizontal da página toda */
+            .header { flex-direction: column; align-items: stretch; position: relative; padding: 10px; margin-bottom: 10px; }
+            .actions-container { flex-direction: column; gap: 8px; align-items: stretch; }
             .filter-box { width: 100%; }
             .filter-box select { width: 100%; }
             .btn-sync { margin-top: 5px; width: 100%; padding: 12px; font-size: 13px; }
             
-            /* Mantém 2 colunas lado a lado no celular, mas ajusta o espaçamento */
-            .machine-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            .main-container { gap: 10px; }
+            .machine-container { padding: 6px; border-radius: 6px; }
             
-            /* Ajustes finos nos cards para caberem perfeitamente na tela estreita */
-            .machine-container { padding: 10px; }
+            /* O SEGREDO ESTÁ AQUI: minmax(0, 1fr) força as colunas a não ultrapassarem a tela */
+            .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+            
+            /* Ajustes finos nos cards para celular */
             .station-card { padding: 8px; border-left-width: 4px; }
-            .card-header h2 { font-size: 0.85rem; }
+            
+            /* Coloca o select 'RODANDO' para a linha de baixo para não empurrar a tela */
+            .card-header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 8px; }
+            .card-header h2 { font-size: 0.95rem; }
+            .card-header select { width: 100%; padding: 4px; font-size: 9px; }
+
+            .info-row { margin-bottom: 8px; padding-bottom: 4px; }
+            .info-label { font-size: 8px; }
             .info-value { font-size: 11px; }
+
             .stats-grid { gap: 4px; }
-            .stat-box { padding: 4px; }
+            .stat-box { padding: 4px 2px; }
             .stat-num { font-size: 13px; }
-            .stat-label { font-size: 7px; }
+            .stat-label { font-size: 7px; letter-spacing: -0.3px; }
             
             #status-update { text-align: center; margin-top: 5px; }
         }

@@ -13,9 +13,14 @@
             --color-quebrada: #fbc02d; 
             --color-ok: #2e7d32;
         }
+        * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); margin: 0; padding: 15px; }
         
+        /* CABEÇALHO FIXO NO TOPO (STICKY) */
         .header { 
+            position: sticky; 
+            top: 0; /* Define onde ele vai colar na tela */
+            z-index: 1000; /* Garante que os cards passem por baixo dele */
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -23,69 +28,96 @@
             background: #fff; 
             padding: 15px; 
             border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Sombra um pouco maior para destacar quando rolar */
             flex-wrap: wrap; 
             gap: 15px;
         }
         .header h1 { margin: 0; font-size: 1.5rem; }
         .header p { margin: 5px 0 0 0; }
 
-        .grid-container { 
+        /* CONTAINERS DAS MÁQUINAS - TOTALMENTE RESPONSIVO */
+        .main-container { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
             gap: 20px; 
+            align-items: start;
         }
         
+        .machine-container {
+            background: #fdfdfd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+            border-top: 6px solid #333;
+            width: 100%;
+        }
+        
+        /* Cores de destaque para cada máquina */
+        .machine-container.m1 { border-top-color: #d32f2f; }
+        .machine-container.m2 { border-top-color: #1976d2; }
+        .machine-container.m3 { border-top-color: #7b1fa2; }
+
+        /* GRID INTERNO DOS CARDS - EXATAMENTE 2 LADO A LADO */
+        .machine-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* Força exatamente 2 colunas */
+            gap: 12px; 
+        }
+        
+        /* ESTILO DOS CARDS */
         .station-card { 
             background: var(--bg-card); 
-            border-radius: 10px; 
-            padding: 15px; 
-            border-left: 8px solid var(--color-ok); 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            border-radius: 8px; 
+            padding: 12px; 
+            border-left: 6px solid var(--color-ok); 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
             transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .station-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             cursor: default;
         }
 
         .station-card.status-parada { border-left-color: var(--color-parada); background-color: #ffebee; }
         .station-card.status-quebrada { border-left-color: var(--color-quebrada); background-color: #fffde7; }
 
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .card-header h2 { margin: 0; font-size: 1.2rem; color: #333; display: flex; align-items: center; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 5px; flex-wrap: wrap; }
+        .card-header h2 { margin: 0; font-size: 1rem; color: #333; display: flex; align-items: center; white-space: nowrap; }
         
-        /* ESTILO DO CONTADOR "2x" - VERSÃO REDUZIDA */
         .badge-repetido {
             background: #333;
             color: #fff;
-            padding: 1px 6px; 
+            padding: 1px 4px; 
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
-            margin-left: 8px;
+            margin-left: 6px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
             vertical-align: middle;
         }
 
-        .info-row { display: flex; flex-direction: column; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-        .info-label { font-size: 10px; font-weight: bold; color: #888; text-transform: uppercase; }
-        .info-value { font-size: 14px; font-weight: 600; color: #222; }
+        .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+        .info-label { font-size: 9px; font-weight: bold; color: #888; text-transform: uppercase; }
+        .info-value { font-size: 12px; font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .stat-box { text-align: center; padding: 10px; background: #f8f9fa; border-radius: 5px; }
-        .stat-num { display: block; font-size: 20px; font-weight: 900; color: #333; }
-        .stat-label { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
+        .stat-box { text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px; }
+        .stat-num { display: block; font-size: 16px; font-weight: 900; color: #333; }
+        .stat-label { font-size: 8px; font-weight: bold; color: #666; text-transform: uppercase; }
         
-        select { padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 11px; font-weight: bold; }
+        select { padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 10px; font-weight: bold; width: auto; max-width: 100%; }
         #loading-msg { text-align: center; font-weight: bold; color: #d32f2f; padding: 20px; display: none; }
         
         .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .filter-box { display: flex; flex-direction: column; }
         .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
-        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; }
+        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; }
 
         .btn-sync { 
             background-color: #333; 
@@ -99,20 +131,30 @@
             font-size: 12px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             margin-top: 15px; 
+            transition: 0.2s;
         }
         .btn-sync:hover { background-color: #444; }
-        .btn-global { background-color: #d32f2f; margin-top: 15px; }
+        .btn-global { background-color: #d32f2f; }
         .btn-global:hover { background-color: #b71c1c; }
-        .btn-print { background-color: #2c3e50; margin-top: 15px; }
+        .btn-print { background-color: #2c3e50; }
         .btn-print:hover { background-color: #1a252f; }
 
-        @media (max-width: 600px) {
-            .header { flex-direction: column; align-items: flex-start; }
-            .actions-container { width: 100%; justify-content: space-between; }
-            .btn-sync { margin-top: 0; width: 100%; justify-content: center; }
-            .grid-container { grid-template-columns: 1fr; }
+        /* RESPONSIVIDADE PARA CELULARES E TABLETS PEQUENOS */
+        @media (max-width: 650px) {
+            body { padding: 10px; }
+            .header { flex-direction: column; align-items: stretch; position: relative; /* Remove o sticky no celular se quiser poupar espaço, ou mantenha se preferir */ }
+            .actions-container { flex-direction: column; gap: 10px; align-items: stretch; }
+            .filter-box { width: 100%; }
+            .filter-box select { width: 100%; }
+            .btn-sync { margin-top: 5px; width: 100%; padding: 12px; font-size: 13px; }
+            
+            /* No celular, para os cards não ficarem esmagados e ilegíveis, eles caem para 1 por linha */
+            .machine-grid { grid-template-columns: 1fr; }
+            
+            #status-update { text-align: center; margin-top: 5px; }
         }
     </style>
 </head>
@@ -153,7 +195,8 @@
     </div>
 
     <div id="loading-msg">⚠️ Erro ao carregar dados!</div>
-    <div class="grid-container" id="stationGrid"></div>
+    
+    <div class="main-container" id="stationGrid"></div>
 
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbzQKH2Z5xyOUJASsupjo4kskJnYYGVm4i31vxq0UdAYp-P7VZmHYam0FYt-jfbiNJok/exec";
@@ -171,7 +214,6 @@
                 const response = await fetch(`${URL_API}?grupo=${grupoAtual}`);
                 const dados = await response.json();
                 
-                // Lógica para contar repetições de Modelo + Tamanho (Normalizando Ponto para Vírgula)
                 const contagem = {};
                 dados.forEach(d => {
                     if (d.modelo && d.tamanho && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
@@ -185,15 +227,27 @@
                 document.getElementById('loading-msg').style.display = 'none';
                 grid.innerHTML = "";
 
-                for (let i = 1; i <= numEstacoes; i++) {
+                // Criação Dinâmica dos Containers das 3 Máquinas
+                const numMaquinas = 3;
+                const containersMaquinas = {};
+
+                for (let m = 1; m <= numMaquinas; m++) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `machine-container m${m}`;
+                    wrapper.innerHTML = `
+                        <div class="machine-grid" id="grid-maq-${m}"></div>
+                    `;
+                    grid.appendChild(wrapper);
+                    containersMaquinas[m] = wrapper.querySelector('.machine-grid');
+                }
+
+                // Função auxiliar para criar o HTML do card
+                const criarCardElemento = (i) => {
                     let item = dados.find(d => String(d.estacao) === String(i));
                     const statusBanco = (item && item.status) ? item.status : 'parada';
                     const modeloBanco = (item && item.modelo) ? item.modelo : 'Não Alocado';
-                    
-                    // Normaliza o tamanho na hora de exibir e comparar
                     const tamanhoBanco = (item && item.tamanho) ? String(item.tamanho).replace('.', ',').trim() : '--';
 
-                    // Verifica se esta estação está rodando algo repetido
                     const chaveAtual = `${modeloBanco.trim()}-${tamanhoBanco}`;
                     const totalRepetido = contagem[chaveAtual] || 0;
                     const badgeRepetido = totalRepetido > 1 ? `<span class="badge-repetido">${totalRepetido}x</span>` : "";
@@ -211,7 +265,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Modelo</span>
-                            <span class="info-value">${modeloBanco}</span>
+                            <span class="info-value" title="${modeloBanco}">${modeloBanco}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Tamanho</span>
@@ -223,8 +277,20 @@
                             <div class="stat-box"><span class="stat-num">${item && item.reprovados ? item.reprovados : 0}</span><span class="stat-label">Reprov</span></div>
                         </div>
                     `;
-                    grid.appendChild(card);
+                    return card;
+                };
+
+                const metade = numEstacoes / 2;
+
+                // Distribui os pares para o container da máquina correta
+                for (let i = 1; i <= metade; i++) {
+                    const numMaq = ((i - 1) % 3) + 1; 
+                    const gridDestino = containersMaquinas[numMaq];
+
+                    gridDestino.appendChild(criarCardElemento(i));
+                    gridDestino.appendChild(criarCardElemento(i + metade));
                 }
+
                 document.getElementById('status-update').innerText = "Última atualização: " + new Date().toLocaleTimeString();
             } catch (e) { document.getElementById('loading-msg').style.display = 'block'; }
         }
@@ -248,22 +314,39 @@
             const grupo = document.getElementById('filtroGrupo').value;
             const dataAtual = new Date().toLocaleString('pt-BR');
             const stations = document.querySelectorAll('.station-card');
+            
             let printContent = `<html><head><title>Relatório - ${grupo}</title><style>@page { size: A4; margin: 8mm; } body { font-family: 'Segoe UI', sans-serif; color: #222; } .print-header { border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; } table { width: 100%; border-collapse: collapse; table-layout: fixed; } th, td { border: 1px solid #999; padding: 6px 4px; text-align: center; font-size: 8.5pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; } th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; } .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-quebrada { color: #b7950b; font-weight: bold; }</style></head><body><div class="print-header"><div><h1>${grupo} - Relatório de Alocação</h1></div><div>Gerado: ${dataAtual}</div></div><table><thead><tr><th style="width:35px;">EST</th><th>MODELO</th><th style="width:70px;">TAM</th><th style="width:45px;">GIRO</th><th style="width:45px;">REFIL</th><th style="width:45px;">REPR</th><th style="width:75px;">STATUS</th></tr></thead><tbody>`;
+            
+            let dadosImpressao = [];
+
             stations.forEach(card => {
-                const estRaw = card.querySelector('h2').innerText.replace('EST ', '');
-                const est = estRaw.split(' ')[0].trim(); 
+                const h2Text = card.querySelector('h2').innerText;
+                const match = h2Text.match(/EST\s*(\d+)/);
+                const numEstacao = match ? parseInt(match[1], 10) : 0;
                 
                 const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
                 const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
                 const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
                 const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
                 const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
+                
                 let statusTxt = "", statusCls = "";
                 if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
                 else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
                 else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
-                printContent += `<tr><td style="font-weight:bold;">${est}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>`;
+
+                dadosImpressao.push({
+                    numero: numEstacao,
+                    html: `<tr><td style="font-weight:bold;">${numEstacao}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>`
+                });
             });
+
+            dadosImpressao.sort((a, b) => a.numero - b.numero);
+
+            dadosImpressao.forEach(item => {
+                printContent += item.html;
+            });
+
             printContent += `</tbody></table></body></html>`;
             const win = window.open('', '_blank'); win.document.write(printContent); win.document.close();
             setTimeout(() => { win.print(); win.close(); }, 500);

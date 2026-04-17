@@ -51,8 +51,10 @@
         .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .filter-box { display: flex; flex-direction: column; }
         .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; text-align: center; }
-        /* AQUI: Adicionado text-align: center; e text-align-last: center; para centralizar o texto da caixinha */
+        
+        /* Regra de centralização aplicada aqui e fortalecida nas options via JavaScript */
         .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; text-align: center; text-align-last: center; }
+        .filter-box select option { text-align: center; }
 
         .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
         .btn-sync:hover { background-color: #444; }
@@ -109,31 +111,31 @@
             <div class="filter-box">
                 <label>GRUPO</label>
                 <select id="filtroGrupo" onchange="trocarGrupo()">
-                    <option value="Grupo 1">Grupo 1</option>
-                    <option value="Grupo 2">Grupo 2</option>
-                    <option value="Grupo 3">Grupo 3</option>
-                    <option value="Grupo 4">Grupo 4</option>
-                    <option value="Grupo 5">Grupo 5</option>
-                    <option value="Grupo 6">Grupo 6</option>
-                    <option value="Grupo 7">Grupo 7</option>
-                    <option value="Grupo 8">Grupo 8</option>
+                    <option value="Grupo 1" style="text-align: center;">Grupo 1</option>
+                    <option value="Grupo 2" style="text-align: center;">Grupo 2</option>
+                    <option value="Grupo 3" style="text-align: center;">Grupo 3</option>
+                    <option value="Grupo 4" style="text-align: center;">Grupo 4</option>
+                    <option value="Grupo 5" style="text-align: center;">Grupo 5</option>
+                    <option value="Grupo 6" style="text-align: center;">Grupo 6</option>
+                    <option value="Grupo 7" style="text-align: center;">Grupo 7</option>
+                    <option value="Grupo 8" style="text-align: center;">Grupo 8</option>
                 </select>
             </div>
             
             <div class="filter-box">
                 <label>MODELO</label>
                 <select id="filtroModelo" onchange="aplicarFiltroModelo()">
-                    <option value="TODOS">Todos</option>
+                    <option value="TODOS" style="text-align: center;">Todos</option>
                 </select>
             </div>
 
             <div class="filter-box">
                 <label>STATUS GLOBAL</label>
                 <select id="statusGlobal">
-                    <option value="">Selecionar...</option>
-                    <option value="rodando">RODANDO</option>
-                    <option value="parada">PARADA</option>
-                    <option value="quebrada">QUEBRADA</option>
+                    <option value="" style="text-align: center;">Selecionar...</option>
+                    <option value="rodando" style="text-align: center;">RODANDO</option>
+                    <option value="parada" style="text-align: center;">PARADA</option>
+                    <option value="quebrada" style="text-align: center;">QUEBRADA</option>
                 </select>
             </div>
             <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
@@ -236,11 +238,14 @@
                 const selectModelo = document.getElementById('filtroModelo');
                 const valorSelecionadoAtual = selectModelo.value; 
                 
-                selectModelo.innerHTML = '<option value="TODOS">Todos</option>';
+                // Forçando o alinhamento central da opção padrão direto no JS
+                selectModelo.innerHTML = '<option value="TODOS" style="text-align: center;">Todos</option>';
+                
                 [...modelosUnicos].sort().forEach(m => {
                     const opt = document.createElement('option');
                     opt.value = m;
                     opt.textContent = m;
+                    opt.style.textAlign = 'center'; // Forçando o alinhamento central nas opções dinâmicas
                     if (m === valorSelecionadoAtual) opt.selected = true;
                     selectModelo.appendChild(opt);
                 });
@@ -319,7 +324,7 @@
                 
                 document.getElementById('status-update').innerHTML = 
                     `Última atualização: ${new Date().toLocaleTimeString()}<br>` + 
-                    `Últ. Alocação: ${dataAlocacaoFormatada}`;
+                    `Alocação salva: ${dataAlocacaoFormatada}`;
                     
                 aplicarFiltroModelo(); 
 

@@ -50,9 +50,9 @@
         
         .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .filter-box { display: flex; flex-direction: column; }
-        /* AQUI: Adicionado text-align: center; para centralizar a legenda */
         .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; text-align: center; }
-        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; }
+        /* AQUI: Adicionado text-align: center; e text-align-last: center; para centralizar o texto da caixinha */
+        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; text-align: center; text-align-last: center; }
 
         .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
         .btn-sync:hover { background-color: #444; }
@@ -319,7 +319,7 @@
                 
                 document.getElementById('status-update').innerHTML = 
                     `Última atualização: ${new Date().toLocaleTimeString()}<br>` + 
-                    `Alocação salva: ${dataAlocacaoFormatada}`;
+                    `Últ. Alocação: ${dataAlocacaoFormatada}`;
                     
                 aplicarFiltroModelo(); 
 

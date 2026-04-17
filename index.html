@@ -16,89 +16,26 @@
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); margin: 0; padding: 15px; }
         
-        /* CABEÇALHO FIXO NO TOPO (STICKY) */
-        .header { 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            background: #fff; 
-            padding: 15px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-            flex-wrap: wrap; 
-            gap: 15px;
-        }
+        .header { position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-wrap: wrap; gap: 15px; }
         .header h1 { margin: 0; font-size: 1.5rem; }
         .header p { margin: 5px 0 0 0; }
 
-        .main-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
-            gap: 20px; 
-            align-items: start;
-        }
-        
-        .machine-container {
-            background: #fdfdfd;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e0e0e0;
-            border-top: 6px solid #333;
-            width: 100%;
-        }
-        
+        .main-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; align-items: start; }
+        .machine-container { background: #fdfdfd; border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; border-top: 6px solid #333; width: 100%; }
         .machine-container.m1 { border-top-color: #d32f2f; }
         .machine-container.m2 { border-top-color: #1976d2; }
         .machine-container.m3 { border-top-color: #7b1fa2; }
-
-        .machine-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-        }
+        .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         
-        .station-card { 
-            background: var(--bg-card); 
-            border-radius: 8px; 
-            padding: 12px; 
-            border-left: 6px solid var(--color-ok); 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-            transition: transform 0.2s ease, box-shadow 0.2s ease; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-width: 0;
-        }
-
-        .station-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            cursor: default;
-        }
-
+        .station-card { background: var(--bg-card); border-radius: 8px; padding: 12px; border-left: 6px solid var(--color-ok); box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+        .station-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); cursor: default; }
         .station-card.status-parada { border-left-color: var(--color-parada); background-color: #ffebee; }
         .station-card.status-quebrada { border-left-color: var(--color-quebrada); background-color: #fffde7; }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 5px; flex-wrap: wrap; }
         .card-header h2 { margin: 0; font-size: 1rem; color: #333; display: flex; align-items: center; white-space: nowrap; }
         
-        .badge-repetido {
-            background: #333;
-            color: #fff;
-            padding: 1px 4px; 
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            margin-left: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            vertical-align: middle;
-        }
-
+        .badge-repetido { background: #333; color: #fff; padding: 1px 4px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); vertical-align: middle; }
         .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
         .info-label { font-size: 9px; font-weight: bold; color: #888; text-transform: uppercase; }
         .info-value { font-size: 12px; font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
@@ -116,28 +53,25 @@
         .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
         .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; }
 
-        .btn-sync { 
-            background-color: #333; 
-            color: white; 
-            border: none; 
-            padding: 10px 15px; 
-            border-radius: 6px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px; 
-            transition: 0.2s;
-        }
+        .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
         .btn-sync:hover { background-color: #444; }
         .btn-global { background-color: #d32f2f; }
         .btn-global:hover { background-color: #b71c1c; }
         .btn-print { background-color: #2c3e50; }
         .btn-print:hover { background-color: #1a252f; }
+
+        /* ESTILOS DO MODAL CUSTOMIZADO */
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+        .custom-modal-box { background: #fff; padding: 25px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 320px; max-width: 90%; text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .custom-modal-box h3 { margin-top: 0; font-size: 15px; color: #333; margin-bottom: 20px; font-weight: 600; line-height: 1.4; white-space: pre-line; }
+        .custom-modal-input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; text-align: center; box-sizing: border-box; outline: none; font-weight: bold; letter-spacing: 2px;}
+        .custom-modal-input:focus { border-color: #333; }
+        .custom-modal-actions { display: flex; gap: 10px; justify-content: center; }
+        .custom-modal-actions button { padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; flex: 1; text-transform: uppercase; font-size: 12px; }
+        .btn-cancelar { background: #e0e0e0; color: #444; }
+        .btn-cancelar:hover { background: #d0d0d0; }
+        .btn-confirmar { background: #d32f2f; color: #fff; }
+        .btn-confirmar:hover { background: #b71c1c; }
 
         @media (max-width: 650px) {
             body { padding: 5px; overflow-x: hidden; }
@@ -160,7 +94,7 @@
             .stat-box { padding: 4px 2px; }
             .stat-num { font-size: 13px; }
             .stat-label { font-size: 7px; letter-spacing: -0.3px; }
-            #status-update { text-align: center; margin-top: 5px; }
+            #status-update { text-align: center; margin-top: 5px; } 
         }
     </style>
 </head>
@@ -196,16 +130,66 @@
             <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
             <button class="btn-sync btn-print" onclick="gerarImpressao()">🖨️ Imprimir</button>
             <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Atualizar Referência</button>
-            <div id="status-update" style="font-size: 11px; color: #888; line-height: 1.4;">Atualizando...</div>
+            <div id="status-update" style="font-size: 11px; color: #888; line-height: 1.4; text-align: center;">Atualizando...</div>
         </div>
     </div>
 
     <div id="loading-msg">⚠️ Erro ao carregar dados!</div>
-    
     <div class="main-container" id="stationGrid"></div>
+
+    <div id="customModalOverlay" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <h3 id="customModalMessage">Mensagem</h3>
+            <input type="password" id="customModalInput" class="custom-modal-input" placeholder="Digite seu crachá..." style="display:none;" autocomplete="off">
+            <div class="custom-modal-actions">
+                <button id="customModalBtnCancel" class="btn-cancelar">Cancelar</button>
+                <button id="customModalBtnOk" class="btn-confirmar">OK</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbzQKH2Z5xyOUJASsupjo4kskJnYYGVm4i31vxq0UdAYp-P7VZmHYam0FYt-jfbiNJok/exec";
+
+        // FUNÇÕES DO MODAL CUSTOMIZADO
+        function customAlert(msg) {
+            return new Promise(resolve => {
+                const overlay = document.getElementById('customModalOverlay');
+                document.getElementById('customModalMessage').innerText = msg;
+                document.getElementById('customModalInput').style.display = 'none';
+                document.getElementById('customModalBtnCancel').style.display = 'none';
+                
+                const btnOk = document.getElementById('customModalBtnOk');
+                btnOk.style.display = 'block';
+                btnOk.innerText = 'Entendi';
+                overlay.style.display = 'flex';
+
+                btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
+            });
+        }
+
+        function customPrompt(msg) {
+            return new Promise(resolve => {
+                const overlay = document.getElementById('customModalOverlay');
+                const input = document.getElementById('customModalInput');
+                document.getElementById('customModalMessage').innerText = msg;
+                input.style.display = 'block';
+                input.value = '';
+                
+                const btnCancel = document.getElementById('customModalBtnCancel');
+                const btnOk = document.getElementById('customModalBtnOk');
+                btnCancel.style.display = 'block';
+                btnOk.style.display = 'block';
+                btnOk.innerText = 'Confirmar';
+                overlay.style.display = 'flex';
+                input.focus();
+
+                btnOk.onclick = () => { overlay.style.display = 'none'; resolve(input.value); };
+                btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); };
+                
+                input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
+            });
+        }
 
         function trocarGrupo() {
             const grupo = document.getElementById('filtroGrupo').value;
@@ -291,7 +275,6 @@
                     dataAlocacaoFormatada = `${diaMes} - ${horaMin}`;
                 }
                 
-                // AQUI FOI REMOVIDA A FORMATAÇÃO EXTRA PARA HERDAR O MESMO ESTILO EXATO DA ÚLTIMA ATUALIZAÇÃO
                 document.getElementById('status-update').innerHTML = 
                     `Última atualização: ${new Date().toLocaleTimeString()}<br>` + 
                     `Últ. Alocação: ${dataAlocacaoFormatada}`;
@@ -306,12 +289,12 @@
                 btn.disabled = true; btn.innerText = "⌛ Aguarde...";
                 document.getElementById('status-update').innerText = "Sincronizando banco de dados...";
                 await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: grupoAtual }) });
-                setTimeout(() => {
-                    alert('Solicitação enviada! Atualize em instantes.');
+                setTimeout(async () => {
+                    await customAlert('Solicitação enviada! Atualize em instantes.');
                     carregarPainel();
                     btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência";
                 }, 2000);
-            } catch (error) { alert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }
+            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }
         }
 
         function gerarImpressao() {
@@ -333,10 +316,7 @@
                 if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
                 else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
                 else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
-                dadosImpressao.push({
-                    numero: numEstacao,
-                    html: `<tr><td style="font-weight:bold;">${numEstacao}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>`
-                });
+                dadosImpressao.push({ numero: numEstacao, html: `<tr><td style="font-weight:bold;">${numEstacao}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>` });
             });
             dadosImpressao.sort((a, b) => a.numero - b.numero);
             dadosImpressao.forEach(item => { printContent += item.html; });
@@ -347,10 +327,13 @@
 
         async function alterarStatusGlobal() {
             const novoStatus = document.getElementById('statusGlobal').value;
-            if (!novoStatus) return alert("Selecione um status.");
+            if (!novoStatus) { await customAlert("Selecione um status primeiro."); return; }
+            
             const crachas = ["48192292175030"];
-            const info = prompt(`Colocar TODAS como ${novoStatus.toUpperCase()}? Informe seu crachá:`);
-            if (!info || !crachas.includes(info.trim())) return alert("Não autorizado.");
+            const info = await customPrompt(`Colocar TODAS as estações como ${novoStatus.toUpperCase()}?\n\nInforme seu crachá para confirmar:`);
+            
+            if (!info || !crachas.includes(info.trim())) { await customAlert("Acesso negado. Crachá inválido ou não informado."); return; }
+            
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
             try {
@@ -359,14 +342,21 @@
                 for (let i = 1; i <= numEstacoes; i++) {
                     promessas.push(fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupoAtual, estacao: i, status: novoStatus, cracha: info.trim() }) }));
                 }
-                await Promise.all(promessas); alert(`Sucesso!`); carregarPainel();
+                await Promise.all(promessas); 
+                await customAlert(`Sucesso! Status alterado para ${novoStatus.toUpperCase()}.`); 
+                carregarPainel();
             } catch (err) { carregarPainel(); }
         }
 
         async function mudarStatus(grupo, estacao, novoStatus) {
             const crachas = ["48192292175030"];
-            const info = prompt("Informe seu crachá:");
-            if (!info || !crachas.includes(info.trim())) { alert("Acesso negado."); carregarPainel(); return; }
+            const info = await customPrompt(`Mudar EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nInforme seu crachá:`);
+            
+            if (!info || !crachas.includes(info.trim())) { 
+                await customAlert("Acesso negado. Alteração cancelada."); 
+                carregarPainel(); 
+                return; 
+            }
             try {
                 document.getElementById('status-update').innerText = "Salvando status...";
                 await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupo, estacao: estacao, status: novoStatus, cracha: info.trim() }) });

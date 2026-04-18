@@ -351,31 +351,78 @@
 
         function gerarImpressao() {
             const grupo = document.getElementById('filtroGrupo').value;
+            const numEstacoes = (grupo === "Grupo 4" || grupo === "Grupo 5") ? 48 : 36;
+            const metade = numEstacoes / 2;
             const dataAtual = new Date().toLocaleString('pt-BR');
             const stations = document.querySelectorAll('.station-card');
-            let printContent = `<html><head><title>Relatório - ${grupo}</title><style>@page { size: A4; margin: 8mm; } body { font-family: 'Segoe UI', sans-serif; color: #222; } .print-header { border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; } table { width: 100%; border-collapse: collapse; table-layout: fixed; } th, td { border: 1px solid #999; padding: 6px 4px; text-align: center; font-size: 8.5pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; } th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; } .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-quebrada { color: #b7950b; font-weight: bold; }</style></head><body><div class="print-header"><div><h1>${grupo} - Relatório de Alocação</h1></div><div>Gerado: ${dataAtual}</div></div><table><thead><tr><th style="width:35px;">EST</th><th>MODELO</th><th style="width:70px;">TAM</th><th style="width:45px;">GIRO</th><th style="width:45px;">REFIL</th><th style="width:45px;">REPR</th><th style="width:75px;">STATUS</th></tr></thead><tbody>`;
-            let dadosImpressao = [];
+            
+            // Coletar todos os dados das estações
+            let dadosCard = {};
             stations.forEach(card => {
-                if (card.style.display === 'none') return; 
-
                 const h2Text = card.querySelector('h2').innerText;
                 const match = h2Text.match(/EST\s*(\d+)/);
-                const numEstacao = match ? parseInt(match[1], 10) : 0;
-                const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
-                const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
-                const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
-                const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
-                const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
-                let statusTxt = "", statusCls = "";
-                if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
-                else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
-                else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
-                dadosImpressao.push({ numero: numEstacao, html: `<tr><td style="font-weight:bold;">${numEstacao}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>` });
+                if (match) {
+                    const numEstacao = parseInt(match[1], 10);
+                    const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
+                    const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
+                    const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
+                    const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
+                    const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
+                    
+                    let statusTxt = "", statusCls = "";
+                    if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
+                    else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
+                    else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
+                    
+                    dadosCard[numEstacao] = { mod, tam, giro, refil, repr, statusTxt, statusCls };
+                }
             });
-            dadosImpressao.sort((a, b) => a.numero - b.numero);
-            dadosImpressao.forEach(item => { printContent += item.html; });
+
+            // Estilos ajustados para caber em uma única folha A4 (margens menores, fonte menor, padding apertado)
+            let printContent = `<html><head><title>Relatório - ${grupo}</title><style>
+                @page { size: A4 landscape; margin: 6mm; } 
+                body { font-family: 'Segoe UI', sans-serif; color: #222; margin: 0; padding: 0; line-height: 1.2;} 
+                .print-header { border-bottom: 2px solid #333; margin-bottom: 8px; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: flex-end; } 
+                .print-header h2 { margin: 0; font-size: 14pt; }
+                table { width: 100%; border-collapse: collapse; table-layout: fixed; } 
+                th, td { border: 1px solid #999; padding: 3px 2px; text-align: center; font-size: 8pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height: 16px;} 
+                th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; font-size: 7.5pt; } 
+                .st-rodando { color: #2e7d32; font-weight: bold; } 
+                .st-parada { color: #d32f2f; font-weight: bold; } 
+                .st-quebrada { color: #b7950b; font-weight: bold; }
+                .divisor { border-left: 3px solid #333 !important; }
+            </style></head><body>
+            <div class="print-header"><div><h2>${grupo} - Relatório de Alocação</h2></div><div>Gerado: ${dataAtual}</div></div>
+            <table><thead><tr>
+                <th style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
+                <th class="divisor" style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
+            </tr></thead><tbody>`;
+            
+            // Montar as linhas agrupando a estação esquerda e a estação da direita (frente) na mesma linha da tabela
+            for (let i = 1; i <= metade; i++) {
+                let par = i + metade;
+                
+                let d1 = dadosCard[i] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
+                let d2 = dadosCard[par] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
+
+                printContent += `<tr>
+                    <td style="font-weight:bold;">${i}</td>
+                    <td style="text-align:left; padding-left:4px;">${d1.mod}</td>
+                    <td>${d1.tam}</td><td>${d1.giro}</td><td>${d1.refil}</td><td>${d1.repr}</td>
+                    <td class="${d1.statusCls}">${d1.statusTxt}</td>
+                    
+                    <td class="divisor" style="font-weight:bold;">${par}</td>
+                    <td style="text-align:left; padding-left:4px;">${d2.mod}</td>
+                    <td>${d2.tam}</td><td>${d2.giro}</td><td>${d2.refil}</td><td>${d2.repr}</td>
+                    <td class="${d2.statusCls}">${d2.statusTxt}</td>
+                </tr>`;
+            }
+            
             printContent += `</tbody></table></body></html>`;
-            const win = window.open('', '_blank'); win.document.write(printContent); win.document.close();
+            
+            const win = window.open('', '_blank'); 
+            win.document.write(printContent); 
+            win.document.close();
             setTimeout(() => { win.print(); win.close(); }, 500);
         }
 

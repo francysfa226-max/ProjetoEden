@@ -216,7 +216,7 @@
         const URL_API = "https://script.google.com/macros/s/AKfycbw_C0966ct0MblBDK0lmPKZThLWqFagPMkroKregG2r3L9MyukP077DTgiITkfAHsF6/exec";
         
         const usuariosAutorizados = {
-            "48192292175030": "Administrador"
+            "48192292175030": "Francisco Eduardo"
         };
 
         let historicoGrupos = {}; 
@@ -234,7 +234,7 @@
                 som.play().catch(e => console.warn("Interaja com a página uma vez para o som ser permitido."));
             }
 
-            toast.innerHTML = `<strong>🚕 Nova Alocação Salva!</strong><br>${grupoAlterado}<br>Usuário: ${nomeExibicao}<br>Horário: ${dataHora}`;
+            toast.innerHTML = `<strong>🚕 Alocação Atualizada!</strong><br>${grupoAlterado}<br>Abastecedor: ${nomeExibicao}<br>Horário: ${dataHora}`;
             toast.style.display = 'block';
             
             setTimeout(() => toast.style.opacity = '1', 10);

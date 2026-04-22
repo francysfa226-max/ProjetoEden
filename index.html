@@ -304,7 +304,7 @@
 
             // Aqui ele puxa o nome do recém cadastrado na hora da notificação
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Usuário";
+            const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Usuário","Francisco Eduardo";
 
             if (som) {
                 som.currentTime = 0; 

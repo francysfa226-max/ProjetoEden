@@ -213,7 +213,6 @@
     </div>
 
     <script>
-        // API ORIGINAL DO MONITOR (Devolvida e mantida)
         const URL_API = "https://script.google.com/macros/s/AKfycbw_C0966ct0MblBDK0lmPKZThLWqFagPMkroKregG2r3L9MyukP077DTgiITkfAHsF6/exec";
         
         const usuariosAutorizados = {
@@ -229,9 +228,9 @@
 
             const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Usuário";
 
+            // Reproduz o som. Requer que a tela tenha recebido um clique prévio do usuário
             if (som) {
                 som.currentTime = 0; 
-                // Alguns navegadores bloqueiam som automático se você não clicar na tela antes.
                 som.play().catch(e => console.warn("Interaja com a página uma vez para o som ser permitido."));
             }
 
@@ -240,13 +239,13 @@
             
             setTimeout(() => toast.style.opacity = '1', 10);
             
+            // Alterado para 15 segundos (15000 ms)
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => toast.style.display = 'none', 500); 
-            }, 10000); 
+            }, 15000); 
         }
 
-        // Detecta atualização em tempo real caso CAD e MONITOR estejam abertos no mesmo PC
         window.addEventListener('storage', function(e) {
             if(e.key === 'alocacaoGlobalSalva' && e.newValue) {
                 const dados = JSON.parse(e.newValue);
@@ -258,7 +257,6 @@
             }
         });
 
-        // Verificação passiva em Background com bloqueio estrito de CACHE
         async function checarProximoGrupoBackground() {
             const grupoAtualVisor = document.getElementById('filtroGrupo').value;
             let grupoChecar = "Grupo " + bgGroupIndex;
@@ -269,7 +267,6 @@
             if(grupoChecar === grupoAtualVisor) return;
 
             try {
-                // Requisição com timestamp para evitar chache do GitHub Pages
                 const response = await fetch(`${URL_API}?grupo=${grupoChecar}&_t=${new Date().getTime()}`, { cache: "no-store" });
                 const dados = await response.json();
                 const infoData = dados.find(d => d.dataHora);
@@ -359,7 +356,6 @@
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
             try {
-                // Requisição principal com bypass de Cache para funcionamento correto em nuvem
                 const response = await fetch(`${URL_API}?grupo=${grupoAtual}&_t=${new Date().getTime()}`, { cache: "no-store" });
                 const dados = await response.json();
 
@@ -450,7 +446,6 @@
                     gridDestino.appendChild(criarCardElemento(i + metade));
                 }
 
-                // Verifica notificação do próprio grupo ativo no monitor
                 const infoData = dados.find(d => d.dataHora);
                 
                 if (infoData && infoData.dataHora) {

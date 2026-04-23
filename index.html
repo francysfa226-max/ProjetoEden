@@ -92,13 +92,8 @@
             position: relative; width: 100%; height: 100%; text-align: left;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d; display: grid; grid-template-columns: 1fr;
-            /* Comando will-change removido para não borrar o texto! */
         }
-        
-        /* Levanta a carta levemente ao passar o mouse */
         .flip-card:hover .flip-card-inner { transform: translateY(-4px); }
-        
-        /* Gira sem escalar (sem zoom) para manter a fonte vetorizada e nítida */
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); z-index: 10; }
         
         .flip-card-front, .flip-card-back {
@@ -109,7 +104,7 @@
             box-shadow: var(--shadow-soft);
             padding: 16px; display: flex; flex-direction: column; justify-content: space-between;
             transition: box-shadow 0.3s ease;
-            transform: translateZ(0); /* Força a renderização nítida via GPU */
+            transform: translateZ(0); 
         }
         .flip-card:hover .flip-card-front { box-shadow: var(--shadow-hover); }
 
@@ -166,7 +161,7 @@
         .btn-sync { 
             background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: var(--shadow-soft);
             padding: 10px 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; 
-            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; margin-top: 15px; 
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; 
             transition: all 0.2s ease; 
         }
         .btn-sync:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); background: rgba(120,120,128,0.1); }
@@ -214,16 +209,59 @@
         }
         .toast-alerta.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+        /* =========================================
+           RESPONSIVIDADE: NAV BAR LADO A LADO CELULAR
+           ========================================= */
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .header { flex-direction: column; align-items: stretch; padding: 20px; border-radius: var(--radius-lg); }
-            .header h1 { font-size: 1.3rem; justify-content: center;}
-            .header p { text-align: center; }
-            .actions-container { flex-direction: column; gap: 10px; align-items: stretch; }
-            .btn-sync { width: 100%; justify-content: center; padding: 14px; font-size: 13px; }
-            .main-container { gap: 15px; grid-template-columns: 1fr; }
-            .machine-grid { grid-template-columns: 1fr; }
-            .btn-theme-floating { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
+            body { padding: 5px; }
+            .header { flex-direction: column; align-items: stretch; padding: 15px; border-radius: var(--radius-md); margin-bottom: 15px; }
+            .header h1 { font-size: 1.1rem; justify-content: center;}
+            .header p { text-align: center; font-size: 0.75rem; }
+            
+            /* Navbar no celular com GRID (3 colunas, fica perfeito lado a lado) */
+            .actions-container { 
+                display: grid; 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 6px; 
+                align-items: stretch;
+            }
+            .filter-box { width: 100%; }
+            .filter-box select { padding: 8px 16px 8px 4px; font-size: 9px; background-size: 10px; width: 100%; }
+            .filter-box label { font-size: 7.5px; margin-bottom: 4px; }
+            
+            .btn-sync { 
+                width: 100%; margin-top: 0; padding: 8px 4px; 
+                font-size: 9.5px; gap: 4px; 
+                text-align: center; justify-content: center;
+            }
+            
+            #status-update { grid-column: span 3; margin-top: 8px; }
+
+            .main-container { gap: 10px; grid-template-columns: 1fr; }
+            .machine-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            
+            .flip-card { min-height: 140px; }
+            .flip-card-front, .flip-card-back { padding: 8px; border-radius: var(--radius-md); }
+            
+            .card-header { margin-bottom: 8px; }
+            .card-header h2 { font-size: 0.85rem; }
+            .badge-repetido { font-size: 8px; padding: 1px 4px; margin-left: 4px; }
+            
+            .info-row { margin-bottom: 8px; }
+            .info-label { font-size: 7.5px; }
+            .info-value { font-size: 10.5px; }
+            
+            .stats-grid { gap: 4px; }
+            .stat-box { padding: 4px 2px; border-radius: var(--radius-sm); }
+            .stat-num { font-size: 13px; }
+            .stat-label { font-size: 6px; }
+
+            .det-sec { padding: 6px; margin-bottom: 8px; }
+            .det-title { font-size: 8.5px; margin-bottom: 4px; }
+            .det-item { font-size: 8.5px; margin-bottom: 6px; }
+            .det-item span.prs { font-size: 8px; padding: 2px 4px; margin-left: 3px; }
+            
+            .btn-theme-floating { width: 45px; height: 45px; font-size: 18px; bottom: 15px; right: 15px; }
         }
     </style>
 </head>
@@ -265,10 +303,10 @@
                 </select>
             </div>
             
-            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
+            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar</button>
             <button class="btn-sync btn-print" onclick="gerarImpressao()">🖨️ Imprimir</button>
-            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Sincronizar ERP</button>
-            <div id="status-update" style="font-size: 10px; font-weight: 700; color: var(--text-sec); text-align: center; width: 100%; margin-top: 5px;">Aguardando...</div>
+            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Atualizar</button>
+            <div id="status-update">Aguardando...</div>
         </div>
     </div>
 
@@ -563,8 +601,8 @@
             try {
                 btn.disabled = true; btn.innerText = "⌛ Aguarde..."; document.getElementById('status-update').innerText = "Sincronizando...";
                 await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: grupoAtual }) });
-                setTimeout(async () => { await customAlert('Sincronizado!'); carregarPainel(); btn.disabled = false; btn.innerHTML = "🔄 Sincronizar ERP"; }, 2000);
-            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Sincronizar ERP"; }
+                setTimeout(async () => { await customAlert('Sincronizado!'); carregarPainel(); btn.disabled = false; btn.innerHTML = "🔄 Atualizar"; }, 2000);
+            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar"; }
         }
 
         function gerarImpressao() {}

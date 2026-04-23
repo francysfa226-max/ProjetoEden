@@ -5,620 +5,356 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Monitoramento - Produção</title>
     <style>
-        :root { 
-            --bg-body: #f4f4f9; 
-            --bg-card: #ffffff; 
-            --text-dark: #1a1a1a; 
-            --color-parada: #d32f2f; 
-            --color-quebrada: #fbc02d; 
-            --color-ok: #2e7d32;
+        /* === VARIÁVEIS EXTRATERRESTRES === */
+        :root {
+            --bg-base: #f0f2f5;
+            --bg-ambient-1: rgba(249, 38, 114, 0.08); 
+            --bg-ambient-2: rgba(0, 122, 255, 0.08);  
             
-            --bg-machine: #fdfdfd;
-            --border-color: #e0e0e0;
-            --border-info: #eee;
-            --text-muted: #888888;
-            --text-value: #222222;
-            --bg-stat: #f8f9fa;
-            --text-stat-label: #666666;
-            --bg-parada-card: #ffebee;
-            --bg-quebrada-card: #fffde7;
-            --bg-input: #ffffff;
-            --border-input: #cccccc;
+            --glass-bg: rgba(255, 255, 255, 0.75); 
+            --card-bg: #ffffff; 
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-blur: blur(20px) saturate(180%);
+            
+            --text-main: #1d1d1f;
+            --text-sec: #86868b;
+            --text-value: #000000;
+            
+            --color-rodando: #34c759;
+            --color-parada: #ff3b30;
+            --color-quebrada: #ffcc00;
+            --color-numix: #f1544d;
+            
+            --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --shadow-glass: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
         body.dark-mode {
-            --bg-body: #121212;
-            --bg-card: #1e1e1e;
-            --text-dark: #e0e0e0;
-            --bg-machine: #181818;
-            --border-color: #333333;
-            --border-info: #333333;
-            --text-muted: #aaaaaa;
+            --bg-base: #0a0a0c;
+            --bg-ambient-1: rgba(249, 38, 114, 0.12);
+            --bg-ambient-2: rgba(10, 132, 255, 0.12);
+            
+            --glass-bg: rgba(28, 28, 32, 0.65);
+            --card-bg: #1c1c1f; 
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            --text-main: #f5f5f7;
+            --text-sec: #a1a1a6;
             --text-value: #ffffff;
-            --bg-stat: #2a2a2a;
-            --text-stat-label: #bbbbbb;
-            --bg-parada-card: #3b1c1c;
-            --bg-quebrada-card: #332d14;
-            --bg-input: #2c2c2c;
-            --border-input: #444444;
+            
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.6);
+            --shadow-glass: inset 0 1px 1px rgba(255, 255, 255, 0.05);
         }
 
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); color: var(--text-dark); margin: 0; padding: 15px; transition: background-color 0.3s, color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         
-        .header { position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--bg-card); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-wrap: wrap; gap: 15px; transition: background-color 0.3s; }
-        .header h1 { margin: 0; font-size: 1.5rem; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
-        .header p { margin: 5px 0 0 0; color: var(--text-muted); }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 15% 50%, var(--bg-ambient-1), transparent 40%),
+                radial-gradient(circle at 85% 30%, var(--bg-ambient-2), transparent 40%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            padding: 20px; 
+            min-height: 100vh;
+            transition: background-color 0.4s ease, color 0.4s ease; 
+        }
+        
+        .header { 
+            position: sticky; top: 15px; z-index: 1000; 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 30px; padding: 15px 25px; 
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-xl); 
+            box-shadow: var(--shadow-soft), var(--shadow-glass);
+            flex-wrap: wrap; gap: 15px; 
+        }
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .header p { font-size: 0.85rem; font-weight: 500; color: var(--text-sec); margin-top: 2px;}
 
-        .main-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; align-items: start; }
-        .machine-container { background: var(--bg-machine); border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); border-top: 6px solid var(--text-dark); width: 100%; transition: background-color 0.3s, border-color 0.3s; }
-        .machine-container.m1 { border-top-color: #d32f2f; }
-        .machine-container.m2 { border-top-color: #1976d2; }
-        .machine-container.m3 { border-top-color: #7b1fa2; }
-        .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .main-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 25px; align-items: start; }
+        .machine-container { background: transparent; width: 100%; }
+        .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
         
-        /* ======== ESTILOS DA ANIMAÇÃO 3D DO CARTÃO ======== */
-        .flip-card {
-            background-color: transparent;
-            perspective: 1000px;
-            width: 100%;
-            min-height: 160px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .flip-card:hover { transform: translateY(-3px); }
+        .flip-card { background-color: transparent; perspective: 1200px; width: 100%; min-height: 170px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); transform-style: preserve-3d; display: grid; grid-template-columns: 1fr; }
+        .flip-card:hover .flip-card-inner { transform: translateY(-4px); }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); z-index: 10; }
         
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: left;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d;
-            display: grid;
-            grid-template-columns: 1fr;
-        }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        
-        .flip-card-front, .flip-card-back {
-            grid-area: 1 / 1 / 2 / 2;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Frente da Carta */
-        .flip-card-front {
-            background: var(--bg-card);
-            padding: 12px;
-            border-left: 6px solid var(--color-ok);
-            justify-content: space-between;
-        }
-        .flip-card-front.status-parada { border-left-color: var(--color-parada); background-color: var(--bg-parada-card); }
-        .flip-card-front.status-quebrada { border-left-color: var(--color-quebrada); background-color: var(--bg-quebrada-card); }
+        .flip-card-front, .flip-card-back { grid-area: 1 / 1 / 2 / 2; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: var(--radius-lg); background: var(--card-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-soft); padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transform: translateZ(0); }
+        .flip-card-front.status-rodando::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: var(--radius-lg) 0 0 var(--radius-lg); opacity: 0.9; background: var(--color-rodando); box-shadow: 2px 0 10px rgba(52,199,89,0.3); }
+        .flip-card-front.status-parada::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: var(--radius-lg) 0 0 var(--radius-lg); opacity: 0.9; background: var(--color-parada); box-shadow: 2px 0 10px rgba(255,59,48,0.3); }
+        .flip-card-front.status-quebrada::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: var(--radius-lg) 0 0 var(--radius-lg); opacity: 0.9; background: var(--color-quebrada); box-shadow: 2px 0 10px rgba(255,204,0,0.3); }
 
-        /* Verso da Carta */
-        .flip-card-back {
-            background: var(--bg-card);
-            transform: rotateY(180deg);
-            border: 2px solid var(--border-color);
-            padding: 12px;
-            overflow-y: auto;
-            max-height: 220px;
-        }
-        .flip-card-back::-webkit-scrollbar { width: 4px; }
-        .flip-card-back::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+        .badge-repetido { background: var(--color-numix); color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: 800; margin-left: 8px; }
         
-        .det-sec { margin-bottom: 8px; }
-        .det-title { font-size: 10px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border-info); margin-bottom: 4px; padding-bottom: 2px; }
-        .det-empty { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 20px; font-style: italic; }
-        /* ================================================== */
+        .info-row { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .info-label { font-size: 9px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .info-value { font-size: 13px; font-weight: 700; color: var(--text-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 5px; flex-wrap: wrap; }
-        .card-header h2 { margin: 0; font-size: 1rem; color: var(--text-dark); display: flex; align-items: center; white-space: nowrap; transition: color 0.3s; }
-        .badge-repetido { background: var(--text-dark); color: var(--bg-card); padding: 1px 4px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); vertical-align: middle; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: auto; }
+        .stat-box { text-align: center; padding: 8px 4px; border-radius: var(--radius-md); background: rgba(120, 120, 128, 0.08); border: 1px solid rgba(120, 120, 128, 0.05); }
+        .stat-num { display: block; font-size: 18px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        .stat-label { font-size: 8px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border-info); transition: border-color 0.3s; }
-        .info-label { font-size: 9px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; transition: color 0.3s; }
-        .info-value { font-size: 12px; font-weight: 600; color: var(--text-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; transition: color 0.3s; }
+        .flip-card-back { transform: rotateY(180deg) translateZ(1px); padding: 20px; overflow-y: auto; max-height: 240px; }
+        .det-sec { margin-bottom: 12px; background: rgba(120, 120, 128, 0.05); padding: 12px; border-radius: var(--radius-md); border: 1px solid rgba(120,120,128,0.08); }
+        .det-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid rgba(120,120,128,0.1); padding-bottom: 4px;}
+        .det-item { font-size: 11px; color: var(--text-main); margin-bottom: 10px; font-weight: 700; line-height: 1.5; }
+        .det-item span.prs { background: var(--color-numix); color: white; padding: 3px 6px; border-radius: 6px; font-size: 10px; margin-left: 6px; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
-        .stat-box { text-align: center; padding: 6px; background: var(--bg-stat); border-radius: 4px; min-width: 0; transition: background-color 0.3s; }
-        .stat-num { display: block; font-size: 16px; font-weight: 900; color: var(--text-value); transition: color 0.3s; }
-        .stat-label { font-size: 8px; font-weight: bold; color: var(--text-stat-label); text-transform: uppercase; transition: color 0.3s; }
+        select { appearance: none; -webkit-appearance: none; background: rgba(120, 120, 128, 0.12) url("data:image/svg+xml;utf8,<svg fill='%23888' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") no-repeat right 4px center; background-size: 14px; color: var(--text-main); padding: 6px 20px 6px 10px; border-radius: var(--radius-sm); border: 1px solid rgba(120,120,128,0.1); font-size: 10px; font-weight: 700; outline: none; cursor: pointer; }
         
-        select { background-color: var(--bg-input); color: var(--text-dark); padding: 4px; border-radius: 4px; border: 1px solid var(--border-input); font-size: 10px; font-weight: bold; width: auto; max-width: 100%; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
-        #loading-msg { text-align: center; font-weight: bold; color: white; background-color: #d32f2f; padding: 15px; border-radius: 8px; display: none; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        
-        .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .filter-box { display: flex; flex-direction: column; }
-        .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: var(--text-muted); text-align: center; transition: color 0.3s; }
-        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid var(--border-input); font-size: 14px; cursor: pointer; text-align: center; text-align-last: center; }
-        .filter-box select option { text-align: center; background-color: var(--bg-input); color: var(--text-dark); }
+        .filter-box label { font-size: 10px; font-weight: 800; margin-bottom: 6px; color: var(--text-sec); text-align: center; }
+        .filter-box select { padding: 10px 28px 10px 14px; font-size: 13px; border-radius: var(--radius-md); }
 
-        .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
-        .btn-sync:hover { background-color: #444; }
-        .btn-global { background-color: #d32f2f; }
-        .btn-global:hover { background-color: #b71c1c; }
-        .btn-print { background-color: #2c3e50; }
-        .btn-print:hover { background-color: #1a252f; }
+        .actions-container { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .btn-sync { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-size: 11px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-top: 15px; }
+        .btn-global { background: var(--color-numix); color: #fff; border: none; }
+        .btn-print { background: #1d1d1f; color: #fff; border: none;}
+
+        #loading-msg { text-align: center; font-weight: 700; color: white; background: var(--color-parada); padding: 15px; border-radius: var(--radius-md); display: none; margin-bottom: 20px; }
         
-        .btn-theme-floating { position: fixed; bottom: 25px; right: 25px; background-color: var(--bg-card); color: var(--text-dark); border: 2px solid var(--border-color); border-radius: 50%; width: 55px; height: 55px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1001; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s, border-color 0.3s; }
-        .btn-theme-floating:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,0.4); border-color: var(--text-dark); }
+        .btn-theme-floating { position: fixed; bottom: 30px; right: 30px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 50%; width: 60px; height: 60px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1001; }
 
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-        .custom-modal-box { background: var(--bg-card); padding: 25px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 320px; max-width: 90%; text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif; transition: background-color 0.3s; }
-        .custom-modal-box h3 { margin-top: 0; font-size: 15px; color: var(--text-dark); margin-bottom: 20px; font-weight: 600; line-height: 1.4; white-space: pre-line; transition: color 0.3s; }
-        .custom-modal-input { background-color: var(--bg-input); color: var(--text-dark); width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border-input); border-radius: 6px; font-size: 16px; text-align: center; box-sizing: border-box; outline: none; font-weight: bold; letter-spacing: 2px; transition: background-color 0.3s, color 0.3s; }
-        .custom-modal-input:focus { border-color: var(--color-parada); }
-        .custom-modal-actions { display: flex; gap: 10px; justify-content: center; }
-        .custom-modal-actions button { padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; flex: 1; text-transform: uppercase; font-size: 12px; }
-        .btn-cancelar { background: #e0e0e0; color: #111; }
-        .btn-cancelar:hover { background: #d0d0d0; }
-        .btn-confirmar { background: #d32f2f; color: #fff; }
-        .btn-confirmar:hover { background: #b71c1c; }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .custom-modal-box { background: var(--bg-base); padding: 30px; border-radius: var(--radius-xl); width: 340px; text-align: center; border: 1px solid var(--glass-border); }
+        .custom-modal-input { background: var(--card-bg); color: var(--text-main); width: 100%; padding: 14px; margin-bottom: 24px; border: 1px solid rgba(120,120,128,0.2); border-radius: var(--radius-md); font-size: 18px; text-align: center; outline: none; }
+        .custom-modal-actions { display: flex; gap: 12px; justify-content: center; }
+        .custom-modal-actions button { padding: 12px 0; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; flex: 1; font-size: 13px; text-transform: uppercase; }
+        .btn-cancelar { background: rgba(120,120,128,0.15); color: var(--text-main); }
+        .btn-confirmar { background: var(--color-numix); color: #fff; }
 
-        .config-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; transition: 0.3s; padding: 5px; color: var(--text-dark); }
-        .config-btn:hover { transform: rotate(45deg); }
-        .config-panel { width: 550px !important; max-width: 95% !important; text-align: left !important; }
-        .config-grid { display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
-        .config-section { flex: 1; border: 1px solid var(--border-color); padding: 15px; border-radius: 6px; background: var(--bg-machine); min-width: 200px;}
-        .config-section h4 { margin-top: 0; margin-bottom: 10px; font-size: 13px; color: #d32f2f; border-bottom: 2px solid var(--border-color); padding-bottom: 5px; }
-        .config-input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid var(--border-input); border-radius: 4px; font-size: 12px; outline: none; background: var(--bg-input); color: var(--text-dark); }
-        .config-btn-action { width: 100%; padding: 8px; background: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; text-transform: uppercase; transition: 0.2s;}
-        .config-btn-action:hover { background: #d32f2f; }
-        #configMsg { height: 15px; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 15px; }
-
-        @media (max-width: 650px) {
-            body { padding: 5px; overflow-x: hidden; }
-            .header { flex-direction: column; align-items: stretch; position: relative; padding: 10px; margin-bottom: 10px; }
-            .header h1 { font-size: 1.2rem; }
-            .actions-container { flex-direction: column; gap: 8px; align-items: stretch; }
-            .filter-box { width: 100%; }
-            .filter-box select { width: 100%; }
-            .btn-sync { margin-top: 5px; width: 100%; padding: 12px; font-size: 13px; }
-            .main-container { gap: 10px; }
-            .machine-container { padding: 6px; border-radius: 6px; }
-            .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-            .flip-card-front, .flip-card-back { padding: 8px; }
-            .card-header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 8px; }
-            .card-header h2 { font-size: 0.95rem; }
-            .card-header select { width: 100%; padding: 4px; font-size: 9px; }
-            .info-row { margin-bottom: 8px; padding-bottom: 4px; }
-            .info-label { font-size: 8px; }
-            .info-value { font-size: 11px; }
-            .stats-grid { gap: 4px; }
-            .stat-box { padding: 4px 2px; }
-            .stat-num { font-size: 13px; }
-            .stat-label { font-size: 7px; letter-spacing: -0.3px; }
-            #status-update { text-align: center; margin-top: 5px; } 
-            .btn-theme-floating { width: 45px; height: 45px; font-size: 20px; bottom: 15px; right: 15px; }
-        }
-
-        .toast-alerta { position: fixed; bottom: 25px; left: 25px; background: #2e7d32; color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 99999; display: none; font-size: 14px; border-left: 6px solid #1b5e20; transition: opacity 0.5s; opacity: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .toast-alerta { position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--glass-bg); backdrop-filter: var(--glass-blur); color: var(--text-main); padding: 16px 24px; border-radius: 30px; box-shadow: var(--shadow-hover); z-index: 99999; display: block; font-size: 13px; font-weight: 600; text-align: center; border: 1px solid var(--glass-border); transition: transform 0.4s ease, opacity 0.4s; opacity: 0; }
+        .toast-alerta.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 </head>
 <body>
     <audio id="somNotificacao" src="https://www.myinstants.com/media/sounds/uber-request.mp3" preload="auto"></audio>
-
     <div id="toastAlocacao" class="toast-alerta"></div>
 
     <div class="header">
         <div>
-            <h1>📊 Painel de Abastecimento <button class="config-btn" onclick="verificarSenhaConfig()" title="Configurações do Sistema">⚙️</button></h1>
-            <p>Monitoramento em Tempo Real</p>
+            <h1>📊 Monitoramento <button style="background:transparent; border:none; color:var(--text-main); cursor:pointer;" onclick="verificarSenhaConfig()">⚙️</button></h1>
+            <p>Dashboard de Abastecimento</p>
         </div>
         <div class="actions-container">
-            <div class="filter-box">
-                <label>GRUPO</label>
-                <select id="filtroGrupo" onchange="trocarGrupo()">
-                    <option value="Grupo 1" style="text-align: center;">Grupo 1</option>
-                    <option value="Grupo 2" style="text-align: center;">Grupo 2</option>
-                    <option value="Grupo 3" style="text-align: center;">Grupo 3</option>
-                    <option value="Grupo 4" style="text-align: center;">Grupo 4</option>
-                    <option value="Grupo 5" style="text-align: center;">Grupo 5</option>
-                    <option value="Grupo 6" style="text-align: center;">Grupo 6</option>
-                    <option value="Grupo 7" style="text-align: center;">Grupo 7</option>
-                    <option value="Grupo 8" style="text-align: center;">Grupo 8</option>
-                </select>
-            </div>
-            
-            <div class="filter-box">
-                <label>MODELO</label>
-                <select id="filtroModelo" onchange="aplicarFiltroModelo()">
-                    <option value="TODOS" style="text-align: center;">Todos</option>
-                </select>
-            </div>
-
-            <div class="filter-box">
-                <label>STATUS GLOBAL</label>
-                <select id="statusGlobal">
-                    <option value="" style="text-align: center;">Selecionar...</option>
-                    <option value="rodando" style="text-align: center;">RODANDO</option>
-                    <option value="parada" style="text-align: center;">PARADA</option>
-                    <option value="quebrada" style="text-align: center;">QUEBRADA</option>
-                </select>
-            </div>
-            
+            <div class="filter-box"><label>GRUPO</label><select id="filtroGrupo" onchange="trocarGrupo()"><option value="Grupo 1">Grupo 1</option><option value="Grupo 2">Grupo 2</option><option value="Grupo 3">Grupo 3</option><option value="Grupo 4">Grupo 4</option><option value="Grupo 5">Grupo 5</option><option value="Grupo 6">Grupo 6</option><option value="Grupo 7">Grupo 7</option><option value="Grupo 8">Grupo 8</option></select></div>
+            <div class="filter-box"><label>MODELO</label><select id="filtroModelo" onchange="aplicarFiltroModelo()"><option value="TODOS">Todos</option></select></div>
+            <div class="filter-box"><label>STATUS GLOBAL</label><select id="statusGlobal"><option value="">Selecionar...</option><option value="rodando">RODANDO</option><option value="parada">PARADA</option><option value="quebrada">QUEBRADA</option></select></div>
             <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
             <button class="btn-sync btn-print" onclick="gerarImpressao()">🖨️ Imprimir</button>
-            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Atualizar Referência</button>
-            <div id="status-update" style="font-size: 11px; color: var(--text-muted); line-height: 1.4; text-align: center; transition: color 0.3s;">Atualizando...</div>
+            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Sincronizar ERP</button>
+            <div id="status-update" style="font-size: 10px; font-weight: 700; color: var(--text-sec); text-align: center; width: 100%; margin-top: 5px;">Aguardando...</div>
         </div>
     </div>
 
     <div id="loading-msg"></div>
     <div class="main-container" id="stationGrid"></div>
-
-    <button id="btnTema" class="btn-theme-floating" onclick="alternarTema()" title="Alternar Tema Escuro/Claro">🌙</button>
+    <button id="btnTema" class="btn-theme-floating" onclick="alternarTema()">🌙</button>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal-box">
             <h3 id="customModalMessage">Mensagem</h3>
-            <input type="password" id="customModalInput" class="custom-modal-input" placeholder="Digite seu crachá..." style="display:none;" autocomplete="off">
-            <div class="custom-modal-actions">
-                <button id="customModalBtnCancel" class="btn-cancelar">Cancelar</button>
-                <button id="customModalBtnOk" class="btn-confirmar">OK</button>
-            </div>
+            <input type="password" id="customModalInput" class="custom-modal-input" placeholder="Seu crachá..." style="display:none;" autocomplete="off">
+            <div class="custom-modal-actions"><button id="customModalBtnCancel" class="btn-cancelar">Cancelar</button><button id="customModalBtnOk" class="btn-confirmar">OK</button></div>
         </div>
     </div>
 
     <div id="configModalOverlay" class="custom-modal-overlay">
-        <div class="custom-modal-box config-panel">
-            <h3 style="text-align: center; font-size: 18px;">⚙️ Cadastro Rápido - Crachás</h3>
-            <div id="configMsg"></div>
-            <div class="config-grid">
-                <div class="config-section" style="flex: 1;">
-                    <h4>👤 Adicionar Funcionário</h4>
-                    <input type="number" id="configNovoCracha" class="config-input" placeholder="Nº do Crachá..." autocomplete="off">
-                    <input type="text" id="configNovoNome" class="config-input" placeholder="Nome do Funcionário..." autocomplete="off">
-                    <button class="config-btn-action" onclick="adicionarCracha()">Salvar Crachá</button>
-                </div>
-            </div>
-            <div class="custom-modal-actions">
-                <button onclick="fecharConfig()" class="btn-cancelar" style="flex: none; width: 100%;">Concluir e Fechar</button>
-            </div>
+        <div class="custom-modal-box" style="width:450px;">
+            <h3>⚙️ Cadastro - Crachás</h3>
+            <div id="configMsg" style="margin-bottom:10px;"></div>
+            <input type="number" id="configNovoCracha" class="custom-modal-input" placeholder="Crachá..." style="display:block; font-size:14px; margin-bottom:10px;">
+            <input type="text" id="configNovoNome" class="custom-modal-input" placeholder="Nome..." style="display:block; font-size:14px;">
+            <button class="btn-confirmar" style="width:100%; padding:10px; margin-bottom:10px;" onclick="adicionarCracha()">Salvar</button>
+            <button onclick="document.getElementById('configModalOverlay').style.display='none'" class="btn-cancelar" style="width:100%; padding:10px;">Fechar</button>
         </div>
     </div>
 
     <script>
-        // ======= NÃO ESQUEÇA DE COLAR SEU LINK AQUI =======
         const URL_API = "https://script.google.com/macros/s/AKfycbzVeJ6D14-2N3df36dCxMNTG-7mT-NLXHbabxiL3Bqwh-5ybe01tOiB4_V32m6WST3T/exec";
-        
         const defaultUsuarios = { "48192292175030": "Francisco Eduardo" };
         let usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-        let historicoGrupos = {}; 
-        let estadoAlocacao = {}; 
-        let bgGroupIndex = 1;     
-        
+        let historicoGrupos = {}; let estadoAlocacao = {}; let bgGroupIndex = 1; let estacoesGlobaisParaImpressao = {};
+
         async function verificarSenhaConfig() {
-            const senha = await customPrompt("Acesso Restrito!\nDigite a senha administrativa:");
+            const senha = await customPrompt("Senha administrativa:");
             if (senha === "14490") document.getElementById('configModalOverlay').style.display = 'flex';
-            else if (senha !== null && senha !== "") await customAlert("Senha incorreta!");
-        }
-
-        function fecharConfig() { document.getElementById('configModalOverlay').style.display = 'none'; usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios; }
-
-        function mostrarMsgConfig(msg, cor) {
-            const el = document.getElementById('configMsg'); el.style.color = cor; el.innerText = msg;
-            setTimeout(() => el.innerText = '', 3500);
+            else if (senha) await customAlert("Incorreta!");
         }
 
         function adicionarCracha() {
-            const cracha = document.getElementById('configNovoCracha').value.trim();
-            const nome = document.getElementById('configNovoNome').value.trim();
-            if(!cracha || !nome) { mostrarMsgConfig("⚠️ Preencha o número do crachá e o nome.", "#d32f2f"); return; }
-            usuariosAutorizados[cracha] = nome; localStorage.setItem('customUsuarios', JSON.stringify(usuariosAutorizados));
-            mostrarMsgConfig(`✅ Crachá de ${nome} adicionado com sucesso!`, "#2e7d32");
-            document.getElementById('configNovoCracha').value = ''; document.getElementById('configNovoNome').value = '';
+            const c = document.getElementById('configNovoCracha').value; const n = document.getElementById('configNovoNome').value;
+            if(!c || !n) return; usuariosAutorizados[c] = n; localStorage.setItem('customUsuarios', JSON.stringify(usuariosAutorizados));
+            document.getElementById('configNovoCracha').value=''; document.getElementById('configNovoNome').value=''; alert("Salvo!");
         }
 
-        function exibirNotificacao(cracha, dataHora, grupoAlterado) {
-            const toast = document.getElementById('toastAlocacao');
-            const som = document.getElementById('somNotificacao');
-            usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Usuário";
-
-            if (som) { som.currentTime = 0; som.play().catch(e => console.warn("Interaja com a página uma vez para o som ser permitido.")); }
-            toast.innerHTML = `<strong>🚕 Alocação Atualizada!</strong><br>${grupoAlterado}<br>Abastecedor: ${nomeExibicao}<br>Horário: ${dataHora}`;
-            toast.style.display = 'block'; setTimeout(() => toast.style.opacity = '1', 10);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.style.display = 'none', 500); }, 30000); 
-        }
-
-        window.addEventListener('storage', function(e) {
-            if(e.key === 'alocacaoGlobalSalva' && e.newValue) {
-                const dados = JSON.parse(e.newValue); const chave = dados.dataHora + dados.cracha;
-                if(historicoGrupos[dados.grupo] !== chave) { historicoGrupos[dados.grupo] = chave; exibirNotificacao(dados.cracha, dados.dataHora, dados.grupo); }
-            }
-            if(e.key === 'customUsuarios') usuariosAutorizados = JSON.parse(e.newValue);
-        });
-
-        async function checarProximoGrupoBackground() {
-            const grupoAtualVisor = document.getElementById('filtroGrupo').value;
-            let grupoChecar = "Grupo " + bgGroupIndex;
-            bgGroupIndex++; if(bgGroupIndex > 8) bgGroupIndex = 1;
-            if(grupoChecar === grupoAtualVisor) return;
-
-            try {
-                const response = await fetch(`${URL_API}?grupo=${grupoChecar}&_t=${new Date().getTime()}`, { cache: "no-store" });
-                const dados = await response.json();
-                const estacoesReais = {};
-                dados.forEach(d => { if (!d.grupo || d.grupo === grupoChecar) estacoesReais[d.estacao] = d; });
-                const listaExibida = Object.values(estacoesReais);
-                const infoData = listaExibida.find(d => d.dataHora);
-                
-                if (infoData && infoData.dataHora) {
-                    const chave = infoData.dataHora + (infoData.cracha || "");
-                    const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-                    if (!historicoGrupos[grupoChecar]) { historicoGrupos[grupoChecar] = chave; estadoAlocacao[grupoChecar] = strEstado; } 
-                    else if (historicoGrupos[grupoChecar] !== chave) {
-                        historicoGrupos[grupoChecar] = chave; 
-                        if (estadoAlocacao[grupoChecar] !== strEstado) { estadoAlocacao[grupoChecar] = strEstado; exibirNotificacao(infoData.cracha, infoData.dataHora, grupoChecar); }
-                    }
-                }
-            } catch(e) {}
-        }
-        setInterval(checarProximoGrupoBackground, 3500);
-
-        function alternarTema() {
-            const body = document.body; body.classList.toggle('dark-mode');
-            localStorage.setItem('temaEscuroMonitor', body.classList.contains('dark-mode'));
-            document.getElementById('btnTema').innerText = body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        }
-
-        function customAlert(msg) {
-            return new Promise(resolve => {
-                const overlay = document.getElementById('customModalOverlay');
-                document.getElementById('customModalMessage').innerText = msg;
-                document.getElementById('customModalInput').style.display = 'none';
-                document.getElementById('customModalBtnCancel').style.display = 'none';
-                const btnOk = document.getElementById('customModalBtnOk'); btnOk.style.display = 'block'; btnOk.innerText = 'Entendi';
-                overlay.style.display = 'flex'; btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
-            });
-        }
-
-        function customPrompt(msg) {
-            return new Promise(resolve => {
-                const overlay = document.getElementById('customModalOverlay'); const input = document.getElementById('customModalInput');
-                document.getElementById('customModalMessage').innerText = msg; input.style.display = 'block'; input.value = '';
-                const btnCancel = document.getElementById('customModalBtnCancel'); const btnOk = document.getElementById('customModalBtnOk');
-                btnCancel.style.display = 'block'; btnOk.style.display = 'block'; btnOk.innerText = 'Confirmar';
-                overlay.style.display = 'flex'; input.focus();
-                btnOk.onclick = () => { overlay.style.display = 'none'; resolve(input.value); };
-                btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); };
-                input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
-            });
-        }
-
-        function trocarGrupo() { localStorage.setItem('ultimoGrupoSelecionado', document.getElementById('filtroGrupo').value); carregarPainel(); }
-
-        function aplicarFiltroModelo() {
-            const modeloSelecionado = document.getElementById('filtroModelo').value;
-            document.querySelectorAll('.flip-card').forEach(card => {
-                const modeloCard = card.getAttribute('data-modelo');
-                card.style.display = (modeloSelecionado === "TODOS" || modeloCard === modeloSelecionado) ? 'block' : 'none';
-            });
-        }
-
-        // ======= NOVA FUNÇÃO DE AGRUPAMENTO (COR E ORDEM) =======
-        function gerarListaDetalhes(titulo, lista, corTitulo) {
-            if(!lista || lista.length === 0) return '';
-            
-            const grupos = {};
-            lista.forEach(l => {
-                const chave = `COR ${l.cor} ORDEM ${l.ordem}`;
-                if (!grupos[chave]) { grupos[chave] = { pacotes: [], totalPares: 0 }; }
-                grupos[chave].pacotes.push(l.pacote);
-                grupos[chave].totalPares += l.qtd;
-            });
-
-            let html = `<div class="det-sec"><div class="det-title" style="color:${corTitulo}">${titulo}</div>`;
-            
-            for (const chave in grupos) {
-                const pacotesAgrupados = grupos[chave].pacotes.join('#');
-                const pares = grupos[chave].totalPares;
-                
-                html += `<div style="font-size: 9.5px; color: var(--text-dark); margin-bottom: 6px; font-weight: 700; line-height: 1.4;">
-                            ${chave}#${pacotesAgrupados} 
-                            <span style="color: var(--text-muted); font-size: 8px;">(${pares} prs)</span>
-                         </div>`;
-            }
-            html += `</div>`;
-            return html;
+        function exibirNotificacao(cracha, dataHora, grupo) {
+            const toast = document.getElementById('toastAlocacao'); const som = document.getElementById('somNotificacao');
+            const nome = usuariosAutorizados[cracha] || cracha || "Usuário";
+            if (som) { som.currentTime = 0; som.play().catch(() => {}); }
+            toast.innerHTML = `<strong>Alocação no ${grupo}</strong><br>${nome} às ${dataHora}`;
+            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 10000);
         }
 
         async function carregarPainel() {
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
             try {
-                const response = await fetch(`${URL_API}?grupo=${grupoAtual}&_t=${new Date().getTime()}`, { cache: "no-store" });
+                const response = await fetch(`${URL_API}?grupo=${grupoAtual}&_t=${new Date().getTime()}`);
                 const dados = await response.json();
                 const estacoesReais = {};
                 dados.forEach(d => { if (!d.grupo || d.grupo === grupoAtual) estacoesReais[d.estacao] = d; });
-                const listaExibida = Object.values(estacoesReais);
+                estacoesGlobaisParaImpressao = estacoesReais;
 
                 const modelosUnicos = new Set();
-                listaExibida.forEach(d => { if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") modelosUnicos.add(d.modelo.trim()); });
+                Object.values(estacoesReais).forEach(d => { if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") modelosUnicos.add(d.modelo.trim()); });
+                const selectModelo = document.getElementById('filtroModelo'); const selecionado = selectModelo.value;
+                selectModelo.innerHTML = '<option value="TODOS">Todos</option>';
+                [...modelosUnicos].sort().forEach(m => { const opt = document.createElement('option'); opt.value = m; opt.textContent = m; if(m === selecionado) opt.selected = true; selectModelo.appendChild(opt); });
 
-                const selectModelo = document.getElementById('filtroModelo');
-                const valorSelecionadoAtual = selectModelo.value; 
-                selectModelo.innerHTML = '<option value="TODOS" style="text-align: center;">Todos</option>';
-                [...modelosUnicos].sort().forEach(m => {
-                    const opt = document.createElement('option'); opt.value = m; opt.textContent = m; opt.style.textAlign = 'center'; 
-                    if (m === valorSelecionadoAtual) opt.selected = true; selectModelo.appendChild(opt);
-                });
-
-                const contagem = {};
-                listaExibida.forEach(d => {
-                    if (d.modelo && d.tamanho && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
-                        const tamanhoNorm = String(d.tamanho).replace('.', ',').trim();
-                        contagem[`${d.modelo.trim()}-${tamanhoNorm}`] = (contagem[`${d.modelo.trim()}-${tamanhoNorm}`] || 0) + 1;
-                    }
-                });
-
-                const grid = document.getElementById('stationGrid');
-                document.getElementById('loading-msg').style.display = 'none';
-                grid.innerHTML = "";
-
-                const numMaquinas = 3; const containersMaquinas = {};
-                for (let m = 1; m <= numMaquinas; m++) {
-                    const wrapper = document.createElement('div'); wrapper.className = `machine-container m${m}`;
-                    wrapper.innerHTML = `<div class="machine-grid" id="grid-maq-${m}"></div>`;
-                    grid.appendChild(wrapper); containersMaquinas[m] = wrapper.querySelector('.machine-grid');
+                const grid = document.getElementById('stationGrid'); grid.innerHTML = "";
+                const containersMaquinas = {};
+                for (let m = 1; m <= 3; m++) {
+                    const div = document.createElement('div'); div.className = 'machine-container';
+                    div.innerHTML = `<div class="machine-grid" id="grid-maq-${m}"></div>`;
+                    grid.appendChild(div); containersMaquinas[m] = div.querySelector('.machine-grid');
                 }
 
-                const criarCardElemento = (i) => {
-                    let item = estacoesReais[i]; 
-                    const statusBanco = (item && item.status) ? item.status : 'parada';
-                    const modeloBanco = (item && item.modelo) ? item.modelo : 'Não Alocado';
-                    const tamanhoBanco = (item && item.tamanho) ? String(item.tamanho).replace('.', ',').trim() : '--';
-                    const totalRepetido = contagem[`${modeloBanco.trim()}-${tamanhoBanco}`] || 0;
-                    const badgeRepetido = totalRepetido > 1 ? `<span class="badge-repetido">${totalRepetido}x</span>` : "";
-
-                    const hasDetails = item && (item.detGiro?.length || item.detRefil?.length || item.detReprov?.length);
-
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'flip-card';
-                    wrapper.setAttribute('data-modelo', modeloBanco.trim());
-                    
-                    wrapper.onclick = function() { this.classList.add('flipped'); };
-                    wrapper.onmouseleave = function() { this.classList.remove('flipped'); };
-
-                    wrapper.innerHTML = `
+                const criarCard = (i) => {
+                    const item = estacoesReais[i] || {};
+                    const status = item.status || 'parada';
+                    const mod = item.modelo || 'Não Alocado';
+                    const tam = item.tamanho ? String(item.tamanho).replace('.', ',') : '--';
+                    const card = document.createElement('div'); card.className = 'flip-card'; card.setAttribute('data-modelo', mod.trim());
+                    card.onclick = function() { this.classList.add('flipped'); }; card.onmouseleave = function() { this.classList.remove('flipped'); };
+                    card.innerHTML = `
                         <div class="flip-card-inner">
-                            <div class="flip-card-front status-${statusBanco}">
-                                <div class="card-header">
-                                    <h2>EST ${String(i).padStart(2, '0')}${badgeRepetido}</h2>
-                                    <select onclick="event.stopPropagation()" onchange="mudarStatus('${grupoAtual}', ${i}, this.value)">
-                                        <option value="rodando" ${statusBanco === 'rodando' ? 'selected' : ''}>RODANDO</option>
-                                        <option value="parada" ${statusBanco === 'parada' ? 'selected' : ''}>PARADA</option>
-                                        <option value="quebrada" ${statusBanco === 'quebrada' ? 'selected' : ''}>QUEBRADA</option>
-                                    </select>
-                                </div>
-                                <div class="info-row"><span class="info-label">Modelo</span><span class="info-value" title="${modeloBanco}">${modeloBanco}</span></div>
-                                <div class="info-row"><span class="info-label">Tamanho</span><span class="info-value">${tamanhoBanco}</span></div>
+                            <div class="flip-card-front status-${status}">
+                                <div class="card-header"><h2>EST ${String(i).padStart(2, '0')}</h2>
+                                <select onclick="event.stopPropagation()" onchange="mudarStatus('${grupoAtual}', ${i}, this.value)">
+                                    <option value="rodando" ${status==='rodando'?'selected':''}>RODANDO</option>
+                                    <option value="parada" ${status==='parada'?'selected':''}>PARADA</option>
+                                    <option value="quebrada" ${status==='quebrada'?'selected':''}>QUEBRADA</option>
+                                </select></div>
+                                <div class="info-row"><span class="info-label">Modelo</span><span class="info-value">${mod}</span></div>
+                                <div class="info-row"><span class="info-label">Tamanho</span><span class="info-value">${tam}</span></div>
                                 <div class="stats-grid">
-                                    <div class="stat-box"><span class="stat-num">${item && item.giro ? item.giro : 0}</span><span class="stat-label">Giro</span></div>
-                                    <div class="stat-box"><span class="stat-num">${item && item.refilagem ? item.refilagem : 0}</span><span class="stat-label">Refil</span></div>
-                                    <div class="stat-box"><span class="stat-num">${item && item.reprovados ? item.reprovados : 0}</span><span class="stat-label">Reprov</span></div>
+                                    <div class="stat-box"><span class="stat-num">${item.giro||0}</span><span class="stat-label">Giro</span></div>
+                                    <div class="stat-box"><span class="stat-num">${item.refilagem||0}</span><span class="stat-label">Refil</span></div>
+                                    <div class="stat-box"><span class="stat-num">${item.reprovados||0}</span><span class="stat-label">Reprov</span></div>
                                 </div>
                             </div>
                             <div class="flip-card-back">
-                                <div style="font-size:11px; font-weight:900; text-align:center; margin-bottom:10px; color:var(--text-dark);">📋 PACOTES ALOCADOS</div>
-                                ${gerarListaDetalhes('Giro (Borracha)', item ? item.detGiro : [], 'var(--text-dark)')}
-                                ${gerarListaDetalhes('Refilagem', item ? item.detRefil : [], '#1976d2')}
-                                ${gerarListaDetalhes('Reprovados', item ? item.detReprov : [], '#d32f2f')}
-                                ${!hasDetails ? '<div class="det-empty">Nenhum pacote detalhado encontrado.</div>' : ''}
-                                <div style="text-align:center; font-size:8px; color:var(--text-muted); margin-top:auto; padding-top:10px;">(Tire o mouse para voltar)</div>
+                                <div style="font-size:11px; font-weight:800; text-align:center; margin-bottom:10px;">📋 DETALHES</div>
+                                ${gerarListaDetalhes('Giro', item.detGiro, 'var(--text-main)')}
+                                ${gerarListaDetalhes('Refilagem', item.detRefil, 'var(--text-main)')}
+                                ${gerarListaDetalhes('Reprovados', item.detReprov, 'var(--color-numix)')}
                             </div>
-                        </div>
-                    `;
-                    return wrapper;
+                        </div>`;
+                    return card;
                 };
 
-                const metade = numEstacoes / 2; const paresPorMaquina = metade / 3;
+                const metade = numEstacoes / 2;
                 for (let i = 1; i <= metade; i++) {
-                    const numMaq = Math.ceil(i / paresPorMaquina);
-                    containersMaquinas[numMaq].appendChild(criarCardElemento(i));
-                    containersMaquinas[numMaq].appendChild(criarCardElemento(i + metade));
+                    const m = Math.ceil(i / (metade/3));
+                    containersMaquinas[m].appendChild(criarCard(i));
+                    containersMaquinas[m].appendChild(criarCard(i + metade));
                 }
 
-                const infoData = listaExibida.find(d => d.dataHora);
+                const infoData = Object.values(estacoesReais).find(d => d.dataHora);
+                const strEstado = Object.values(estacoesReais).map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
+                let dataSalva = localStorage.getItem(`dataTravada_${grupoAtual}`) || '--';
+
                 if (infoData && infoData.dataHora) {
-                    const chave = infoData.dataHora + (infoData.cracha || "");
-                    const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-                    if (!historicoGrupos[grupoAtual]) { historicoGrupos[grupoAtual] = chave; estadoAlocacao[grupoAtual] = strEstado; } 
-                    else if (historicoGrupos[grupoAtual] !== chave) {
-                        historicoGrupos[grupoAtual] = chave; 
-                        if (estadoAlocacao[grupoAtual] !== strEstado) { estadoAlocacao[grupoAtual] = strEstado; exibirNotificacao(infoData.cracha, infoData.dataHora, grupoAtual); }
+                    if (!historicoGrupos[grupoAtual] || estadoAlocacao[grupoAtual] !== strEstado) {
+                        estadoAlocacao[grupoAtual] = strEstado; historicoGrupos[grupoAtual] = infoData.dataHora;
+                        if(infoData.dataHora.includes('/')) {
+                            const p = infoData.dataHora.split(' '); dataSalva = `${p[0].substring(0, 5)} - ${p[1].substring(0, 5)}`;
+                            localStorage.setItem(`dataTravada_${grupoAtual}`, dataSalva);
+                            if(historicoGrupos[grupoAtual]) exibirNotificacao(infoData.cracha, infoData.dataHora, grupoAtual);
+                        }
                     }
                 }
-
-                let dataAlocacaoFormatada = '--';
-                if (infoData && infoData.dataHora && infoData.dataHora.includes('/')) {
-                    const partes = infoData.dataHora.split(' ');
-                    dataAlocacaoFormatada = `${partes[0].substring(0, 5)} - ${partes[1].substring(0, 5)}`;
-                }
-                document.getElementById('status-update').innerHTML = `Última atualização: ${new Date().toLocaleTimeString()}<br>Alocação salva: ${dataAlocacaoFormatada}`;
-                aplicarFiltroModelo(); 
-            } catch (e) { 
-                const errorBox = document.getElementById('loading-msg'); errorBox.style.display = 'block'; 
-                errorBox.innerHTML = `⚠️ Erro de Comunicação com o Servidor.<br><strong>${e.message}</strong>`;
-            }
+                document.getElementById('status-update').innerHTML = `Sinc: ${new Date().toLocaleTimeString()} &bull; Alocação salva: ${dataSalva}`;
+                aplicarFiltroModelo();
+            } catch (e) { document.getElementById('loading-msg').style.display='block'; document.getElementById('loading-msg').innerText="Erro de conexão."; }
         }
 
-        async function sincronizarProducao() {
-            const grupoAtual = document.getElementById('filtroGrupo').value; const btn = document.getElementById('btnSyncRef');
-            try {
-                btn.disabled = true; btn.innerText = "⌛ Aguarde..."; document.getElementById('status-update').innerText = "Sincronizando...";
-                await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: grupoAtual }) });
-                setTimeout(async () => { await customAlert('Solicitação enviada!'); carregarPainel(); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }, 2000);
-            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }
-        }
-
-        function gerarImpressao() { /* Mantido original */ }
-        
-        async function alterarStatusGlobal() {
-            const selectStatusGlobal = document.getElementById('statusGlobal');
-            const novoStatus = selectStatusGlobal.value;
+        function gerarImpressao() {
             const grupoAtual = document.getElementById('filtroGrupo').value;
+            const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
+            const metade = numEstacoes / 2;
 
-            if (!novoStatus) {
-                await customAlert("⚠️ Por favor, selecione um Status Global (Rodando, Parada ou Quebrada) antes de aplicar.");
-                return;
+            if (Object.keys(estacoesGlobaisParaImpressao).length === 0) { alert("Carregando dados..."); return; }
+
+            let htmlImp = `
+                <html><head><title>Alocação - ${grupoAtual}</title>
+                <style>
+                    body { font-family: sans-serif; font-size: 11px; margin: 10px; }
+                    h2 { text-align: center; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #000; padding: 4px 2px; text-align: center; font-weight: bold; }
+                    th { background: #eee; font-size: 9px; }
+                    .col-est { background: #f9f9f9; width: 30px; }
+                    .divisoria { background: #000; width: 2px; padding: 0; }
+                </style></head><body>
+                <h2>Resumo de Produção - ${grupoAtual}</h2>
+                <table><thead><tr>
+                    <th>EST</th><th>MODELO</th><th>TAM</th><th>G</th><th>R</th><th>X</th>
+                    <th class="divisoria"></th>
+                    <th>EST</th><th>MODELO</th><th>TAM</th><th>G</th><th>R</th><th>X</th>
+                </tr></thead><tbody>`;
+
+            for (let i = 1; i <= metade; i++) {
+                const f = estacoesGlobaisParaImpressao[i] || {};
+                const c = estacoesGlobaisParaImpressao[i + metade] || {};
+                const modF = (f.modelo && f.modelo !== "Não Alocado") ? f.modelo : "";
+                const modC = (c.modelo && c.modelo !== "Não Alocado") ? c.modelo : "";
+
+                htmlImp += `<tr>
+                    <td class="col-est">${String(i).padStart(2,'0')}</td>
+                    <td style="text-align:left">${modF}</td>
+                    <td>${f.tamanho?String(f.tamanho).replace('.',','):''}</td>
+                    <td>${f.giro||0}</td><td>${f.refilagem||0}</td><td>${f.reprovados||0}</td>
+                    <td class="divisoria"></td>
+                    <td class="col-est">${String(i+metade).padStart(2,'0')}</td>
+                    <td style="text-align:left">${modC}</td>
+                    <td>${c.tamanho?String(c.tamanho).replace('.',','):''}</td>
+                    <td>${c.giro||0}</td><td>${c.refilagem||0}</td><td>${c.reprovados||0}</td>
+                </tr>`;
             }
 
-            usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const info = await customPrompt(`Mudar TODAS as estações do ${grupoAtual} para ${novoStatus.toUpperCase()}.\n\nInforme seu crachá:`);
-            const crachaDigitado = info ? info.trim() : ""; 
-            const nomeUsuario = usuariosAutorizados[crachaDigitado];
-
-            if (!nomeUsuario) { 
-                await customAlert("🚫 Acesso negado. Crachá não encontrado."); 
-                return; 
-            }
-
-            try { 
-                document.getElementById('status-update').innerText = "Aplicando status global..."; 
-                
-                await fetch(URL_API, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ 
-                        action: "updateStatusGlobal",
-                        grupo: grupoAtual, 
-                        status: novoStatus, 
-                        cracha: crachaDigitado 
-                    }) 
-                }); 
-                
-                selectStatusGlobal.value = ""; 
-                
-                setTimeout(() => {
-                    carregarPainel(); 
-                }, 1000);
-
-            } catch (err) { 
-                await customAlert("⚠️ Erro ao tentar atualizar o status global.\n\nDetalhe: " + err.message);
-                carregarPainel(); 
-            }
+            htmlImp += `</tbody></table><p style="text-align:right; font-size:8px;">G: Giro | R: Refil | X: Reprovados | Gerado em: ${new Date().toLocaleString()}</p></body></html>`;
+            const win = window.open('', '_blank'); win.document.write(htmlImp); win.document.close();
+            setTimeout(() => { win.print(); win.close(); }, 500);
         }
+
+        function trocarGrupo() { localStorage.setItem('ultimoGrupoSelecionado', document.getElementById('filtroGrupo').value); carregarPainel(); }
+        function aplicarFiltroModelo() { const m = document.getElementById('filtroModelo').value; document.querySelectorAll('.flip-card').forEach(c => { c.style.display = (m === "TODOS" || c.getAttribute('data-modelo') === m) ? 'block' : 'none'; }); }
+        function alternarTema() { document.body.classList.toggle('dark-mode'); localStorage.setItem('temaEscuroMonitor', document.body.classList.contains('dark-mode')); document.getElementById('btnTema').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙'; }
+        function gerarListaDetalhes(t, l, c) { if(!l || l.length===0) return ''; let h = `<div class="det-sec"><div class="det-title" style="color:${c}">${t}</div>`; l.forEach(i => { h += `<div class="det-item">COR ${i.cor} ORD ${i.ordem}#${i.pacote} <span class="prs">${i.qtd} prs</span></div>`; }); h += `</div>`; return h; }
         
-        async function mudarStatus(grupo, estacao, novoStatus) {
-            usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const info = await customPrompt(`Mudar EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nInforme seu crachá:`);
-            const crachaDigitado = info ? info.trim() : ""; const nomeUsuario = usuariosAutorizados[crachaDigitado];
-            if (!nomeUsuario) { await customAlert("Acesso negado."); carregarPainel(); return; }
-            try { document.getElementById('status-update').innerText = "Salvando status..."; await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupo, estacao: estacao, status: novoStatus, cracha: crachaDigitado }) }); carregarPainel(); } catch (err) { carregarPainel(); }
-        }
+        async function sincronizarProducao() { const b = document.getElementById('btnSyncRef'); b.disabled=true; b.innerText="⌛..."; try { await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: document.getElementById('filtroGrupo').value }) }); setTimeout(() => { carregarPainel(); b.disabled=false; b.innerText="🔄 Sincronizar ERP"; }, 2000); } catch(e) { b.disabled=false; } }
+        async function mudarStatus(g, e, s) { const c = await customPrompt(`EST ${e} para ${s.toUpperCase()}:`); if(!usuariosAutorizados[c]) { alert("Negado"); carregarPainel(); return; } await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: g, estacao: e, status: s, cracha: c }) }); carregarPainel(); }
+        async function alterarStatusGlobal() { const s = document.getElementById('statusGlobal').value; if(!s) return; const c = await customPrompt(`Mudar TUDO para ${s.toUpperCase()}:`); if(!usuariosAutorizados[c]) return; const g = document.getElementById('filtroGrupo').value; const n = (g==="Grupo 4"||g==="Grupo 5")?48:36; for(let i=1;i<=n;i++) { fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: g, estacao: i, status: s, cracha: c }) }); } setTimeout(carregarPainel, 2000); }
 
-        window.onload = () => {
-            if (localStorage.getItem('temaEscuroMonitor') === 'true') { document.body.classList.add('dark-mode'); document.getElementById('btnTema').innerText = '☀️'; }
-            const g = localStorage.getItem('ultimoGrupoSelecionado'); if (g) document.getElementById('filtroGrupo').value = g;
-            carregarPainel();
-        };
+        function customAlert(m) { return new Promise(r => { document.getElementById('customModalMessage').innerText=m; document.getElementById('customModalInput').style.display='none'; document.getElementById('customModalBtnCancel').style.display='none'; document.getElementById('customModalOverlay').style.display='flex'; document.getElementById('customModalBtnOk').onclick=()=>{ document.getElementById('customModalOverlay').style.display='none'; r(true); }; }); }
+        function customPrompt(m) { return new Promise(r => { document.getElementById('customModalMessage').innerText=m; const i = document.getElementById('customModalInput'); i.style.display='block'; i.value=''; document.getElementById('customModalBtnCancel').style.display='block'; document.getElementById('customModalOverlay').style.display='flex'; i.focus(); document.getElementById('customModalBtnOk').onclick=()=>{ document.getElementById('customModalOverlay').style.display='none'; r(i.value); }; document.getElementById('customModalBtnCancel').onclick=()=>{ document.getElementById('customModalOverlay').style.display='none'; r(null); }; }); }
+
+        window.onload = () => { if(localStorage.getItem('temaEscuroMonitor')==='true') alternarTema(); const g=localStorage.getItem('ultimoGrupoSelecionado'); if(g) document.getElementById('filtroGrupo').value=g; carregarPainel(); };
         setInterval(carregarPainel, 10000);
     </script>
 </body>

@@ -664,6 +664,8 @@
                     const front = document.createElement('div');
                     front.className = `flip-card-front station-card status-${statusBanco}`;
                     front.setAttribute('data-modelo', modeloBanco.trim());
+                    // NOVIDADE: Adicionando identificador invisível pro Print não se perder
+                    front.setAttribute('data-estacao', i); 
                     front.innerHTML = `
                         <div class="card-header">
                             <h2>EST ${String(i).padStart(2, '0')}${badgeRepetido}</h2>
@@ -764,16 +766,16 @@
             const fronts = document.querySelectorAll('.flip-card-front.station-card');
             
             let dadosCard = {};
+            
+            // NOVIDADE: Buscando o valor de forma blindada contra erros de texto/selos ou cards escondidos
             fronts.forEach(card => {
-                const h2Text = card.querySelector('h2').innerText;
-                const match = h2Text.match(/EST\s*(\d+)/);
-                if (match) {
-                    const numEstacao = parseInt(match[1], 10);
-                    const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
-                    const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
-                    const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
-                    const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
-                    const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
+                const numEstacao = parseInt(card.getAttribute('data-estacao'), 10);
+                if (!isNaN(numEstacao)) {
+                    const mod = card.querySelector('.info-row:nth-child(2) .info-value').textContent;
+                    const tam = card.querySelector('.info-row:nth-child(3) .info-value').textContent;
+                    const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').textContent;
+                    const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').textContent;
+                    const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').textContent;
                     
                     let statusTxt = "", statusCls = "";
                     if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }

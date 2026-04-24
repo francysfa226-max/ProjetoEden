@@ -12,7 +12,7 @@
             --color-parada: #d32f2f;
             --color-quebrada: #fbc02d;
             --color-ok: #2e7d32;
-           
+            
             --bg-machine: #fdfdfd;
             --border-color: #e0e0e0;
             --border-info: #eee;
@@ -24,8 +24,8 @@
             --bg-quebrada-card: #fffde7;
             --bg-input: #ffffff;
             --border-input: #cccccc;
+            --bg-card-back: #f0f4f8;
         }
-
         body.dark-mode {
             --bg-body: #121212;
             --bg-card: #1e1e1e;
@@ -41,56 +41,159 @@
             --bg-quebrada-card: #332d14;
             --bg-input: #2c2c2c;
             --border-input: #444444;
+            --bg-card-back: #252530;
         }
-
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); color: var(--text-dark); margin: 0; padding: 15px; transition: background-color 0.3s, color 0.3s; }
-       
+        
         .header { position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--bg-card); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-wrap: wrap; gap: 15px; transition: background-color 0.3s; }
         .header h1 { margin: 0; font-size: 1.5rem; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
         .header p { margin: 5px 0 0 0; color: var(--text-muted); }
-
         .main-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; align-items: start; }
         .machine-container { background: var(--bg-machine); border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); border-top: 6px solid var(--text-dark); width: 100%; transition: background-color 0.3s, border-color 0.3s; }
         .machine-container.m1 { border-top-color: #d32f2f; }
         .machine-container.m2 { border-top-color: #1976d2; }
         .machine-container.m3 { border-top-color: #7b1fa2; }
         .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-       
-        .station-card { background: var(--bg-card); border-radius: 8px; padding: 12px; border-left: 6px solid var(--color-ok); box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
-        .station-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); cursor: default; }
+
+        /* === FLIP CARD STRUCTURE === */
+        .flip-card-wrapper {
+            perspective: 800px;
+            min-width: 0;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+        }
+        .flip-card-wrapper.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-front {
+            position: relative;
+            z-index: 1;
+        }
+        .flip-card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateY(180deg);
+            z-index: 2;
+            background: var(--bg-card-back);
+            border-radius: 8px;
+            border-left: 6px solid #1976d2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            cursor: pointer;
+        }
+        .flip-card-back .back-title {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #1976d2;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #1976d2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flip-card-back .back-title .back-close {
+            font-size: 10px;
+            background: var(--bg-stat);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+        .flip-card-back .detail-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border-info);
+            font-size: 10px;
+        }
+        .flip-card-back .detail-row:last-child {
+            border-bottom: none;
+        }
+        .flip-card-back .detail-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            padding: 4px 0;
+            font-size: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2px;
+        }
+        .flip-card-back .detail-cell {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-value);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .flip-card-back .detail-cell.cor-cell {
+            color: #d32f2f;
+            font-weight: 900;
+        }
+        .flip-card-back .no-details {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            padding: 20px 0;
+            font-style: italic;
+        }
+        /* === END FLIP === */
+
+        .station-card { background: var(--bg-card); border-radius: 8px; padding: 12px; border-left: 6px solid var(--color-ok); box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; cursor: pointer; }
+        .station-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
         .station-card.status-parada { border-left-color: var(--color-parada); background-color: var(--bg-parada-card); }
         .station-card.status-quebrada { border-left-color: var(--color-quebrada); background-color: var(--bg-quebrada-card); }
-
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 5px; flex-wrap: wrap; }
         .card-header h2 { margin: 0; font-size: 1rem; color: var(--text-dark); display: flex; align-items: center; white-space: nowrap; transition: color 0.3s; }
-       
+        
         .badge-repetido { background: var(--text-dark); color: var(--bg-card); padding: 1px 4px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); vertical-align: middle; }
         .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border-info); transition: border-color 0.3s; }
         .info-label { font-size: 9px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; transition: color 0.3s; }
         .info-value { font-size: 12px; font-weight: 600; color: var(--text-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; transition: color 0.3s; }
-
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
         .stat-box { text-align: center; padding: 6px; background: var(--bg-stat); border-radius: 4px; min-width: 0; transition: background-color 0.3s; }
         .stat-num { display: block; font-size: 16px; font-weight: 900; color: var(--text-value); transition: color 0.3s; }
         .stat-label { font-size: 8px; font-weight: bold; color: var(--text-stat-label); text-transform: uppercase; transition: color 0.3s; }
-       
+        
         select { background-color: var(--bg-input); color: var(--text-dark); padding: 4px; border-radius: 4px; border: 1px solid var(--border-input); font-size: 10px; font-weight: bold; width: auto; max-width: 100%; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
         #loading-msg { text-align: center; font-weight: bold; color: #d32f2f; padding: 20px; display: none; }
-       
+        
         .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .filter-box { display: flex; flex-direction: column; }
         .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: var(--text-muted); text-align: center; transition: color 0.3s; }
         .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid var(--border-input); font-size: 14px; cursor: pointer; text-align: center; text-align-last: center; }
         .filter-box select option { text-align: center; background-color: var(--bg-input); color: var(--text-dark); }
-
         .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
         .btn-sync:hover { background-color: #444; }
         .btn-global { background-color: #d32f2f; }
         .btn-global:hover { background-color: #b71c1c; }
         .btn-print { background-color: #2c3e50; }
         .btn-print:hover { background-color: #1a252f; }
-       
+        
         .btn-theme-floating {
             position: fixed; bottom: 25px; right: 25px; background-color: var(--bg-card); color: var(--text-dark);
             border: 2px solid var(--border-color); border-radius: 50%; width: 55px; height: 55px; font-size: 24px;
@@ -98,7 +201,6 @@
             z-index: 1001; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s, border-color 0.3s;
         }
         .btn-theme-floating:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,0.4); border-color: var(--text-dark); }
-
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .custom-modal-box { background: var(--bg-card); padding: 25px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 320px; max-width: 90%; text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif; transition: background-color 0.3s; }
         .custom-modal-box h3 { margin-top: 0; font-size: 15px; color: var(--text-dark); margin-bottom: 20px; font-weight: 600; line-height: 1.4; white-space: pre-line; transition: color 0.3s; }
@@ -110,7 +212,6 @@
         .btn-cancelar:hover { background: #d0d0d0; }
         .btn-confirmar { background: #d32f2f; color: #fff; }
         .btn-confirmar:hover { background: #b71c1c; }
-
         /* Estilos do Painel de Configurações */
         .config-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; transition: 0.3s; padding: 5px; color: var(--text-dark); }
         .config-btn:hover { transform: rotate(45deg); }
@@ -122,7 +223,6 @@
         .config-btn-action { width: 100%; padding: 8px; background: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; text-transform: uppercase; transition: 0.2s;}
         .config-btn-action:hover { background: #d32f2f; }
         #configMsg { height: 15px; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 15px; }
-
         @media (max-width: 650px) {
             body { padding: 5px; overflow-x: hidden; }
             .header { flex-direction: column; align-items: stretch; position: relative; padding: 10px; margin-bottom: 10px; }
@@ -147,8 +247,10 @@
             .stat-label { font-size: 7px; letter-spacing: -0.3px; }
             #status-update { text-align: center; margin-top: 5px; }
             .btn-theme-floating { width: 45px; height: 45px; font-size: 20px; bottom: 15px; right: 15px; }
+            .flip-card-back { padding: 8px; }
+            .flip-card-back .detail-row { font-size: 9px; }
+            .flip-card-back .back-title { font-size: 10px; }
         }
-
         .toast-alerta {
             position: fixed;
             bottom: 25px;
@@ -162,12 +264,10 @@
 </head>
 <body>
     <audio id="somNotificacao" src="https://www.myinstants.com/media/sounds/uber-request.mp3" preload="auto"></audio>
-
     <div id="toastAlocacao" class="toast-alerta"></div>
-
     <div class="header">
         <div>
-            <h1>📊 Painel de Abastecimento <button class="config-btn" onclick="verificarSenhaConfig()" title="Configurações do Sistema">⚙️</button></h1>
+            <h1> Painel de Abastecimento <button class="config-btn" onclick="verificarSenhaConfig()" title="Configurações do Sistema"></button></h1>
             <p>Monitoramento em Tempo Real</p>
         </div>
         <div class="actions-container">
@@ -184,14 +284,13 @@
                     <option value="Grupo 8" style="text-align: center;">Grupo 8</option>
                 </select>
             </div>
-           
+            
             <div class="filter-box">
                 <label>MODELO</label>
                 <select id="filtroModelo" onchange="aplicarFiltroModelo()">
                     <option value="TODOS" style="text-align: center;">Todos</option>
                 </select>
             </div>
-
             <div class="filter-box">
                 <label>STATUS GLOBAL</label>
                 <select id="statusGlobal">
@@ -201,19 +300,16 @@
                     <option value="quebrada" style="text-align: center;">QUEBRADA</option>
                 </select>
             </div>
-           
-            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
-            <button class="btn-sync btn-print" onclick="gerarImpressao()">🖨️ Imprimir</button>
-            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Atualizar Referência</button>
+            
+            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()"> Aplicar Global</button>
+            <button class="btn-sync btn-print" onclick="gerarImpressao()"> Imprimir</button>
+            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()"> Atualizar Referência</button>
             <div id="status-update" style="font-size: 11px; color: var(--text-muted); line-height: 1.4; text-align: center; transition: color 0.3s;">Atualizando...</div>
         </div>
     </div>
-
-    <div id="loading-msg">⚠️ Erro ao carregar dados!</div>
+    <div id="loading-msg"> Erro ao carregar dados!</div>
     <div class="main-container" id="stationGrid"></div>
-
-    <button id="btnTema" class="btn-theme-floating" onclick="alternarTema()" title="Alternar Tema Escuro/Claro">🌙</button>
-
+    <button id="btnTema" class="btn-theme-floating" onclick="alternarTema()" title="Alternar Tema Escuro/Claro"></button>
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal-box">
             <h3 id="customModalMessage">Mensagem</h3>
@@ -224,39 +320,36 @@
             </div>
         </div>
     </div>
-
     <div id="configModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal-box config-panel">
-            <h3 style="text-align: center; font-size: 18px;">⚙️ Cadastro Rápido - Crachás</h3>
+            <h3 style="text-align: center; font-size: 18px;"> Cadastro Rápido - Crachás</h3>
             <div id="configMsg"></div>
-           
+            
             <div class="config-grid">
                 <div class="config-section" style="flex: 1;">
-                    <h4>👤 Adicionar Funcionário</h4>
+                    <h4> Adicionar Funcionário</h4>
                     <input type="number" id="configNovoCracha" class="config-input" placeholder="Nº do Crachá..." autocomplete="off">
                     <input type="text" id="configNovoNome" class="config-input" placeholder="Nome do Funcionário..." autocomplete="off">
                     <button class="config-btn-action" onclick="adicionarCracha()">Salvar Crachá</button>
                 </div>
             </div>
-           
+            
             <div class="custom-modal-actions">
                 <button onclick="fecharConfig()" class="btn-cancelar" style="flex: none; width: 100%;">Concluir e Fechar</button>
             </div>
         </div>
     </div>
-
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbwZMjbxJFBsgLwzCouv8hegNmhTzPS96srsfAJi1nC6EBWssVQ8ziQIX7Gu0y5SuqTk/exec";
-       
+        
         const defaultUsuarios = {
             "48192292175030": "Francisco Eduardo"
         };
         let usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-
         let historicoGrupos = {};
         let estadoAlocacao = {};
-        let bgGroupIndex = 1;    
-       
+        let bgGroupIndex = 1;
+            
         async function verificarSenhaConfig() {
             const senha = await customPrompt("Acesso Restrito!\nDigite a senha administrativa:");
             if (senha === "14490") {
@@ -265,60 +358,51 @@
                 await customAlert("Senha incorreta!");
             }
         }
-
         function fecharConfig() {
             document.getElementById('configModalOverlay').style.display = 'none';
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
         }
-
         function mostrarMsgConfig(msg, cor) {
             const el = document.getElementById('configMsg');
             el.style.color = cor;
             el.innerText = msg;
             setTimeout(() => el.innerText = '', 3500);
         }
-
         function adicionarCracha() {
             const cracha = document.getElementById('configNovoCracha').value.trim();
             const nome = document.getElementById('configNovoNome').value.trim();
-           
+            
             if(!cracha || !nome) {
-                mostrarMsgConfig("⚠️ Preencha o número do crachá e o nome.", "#d32f2f");
+                mostrarMsgConfig(" Preencha o número do crachá e o nome.", "#d32f2f");
                 return;
             }
-           
+            
             usuariosAutorizados[cracha] = nome;
             localStorage.setItem('customUsuarios', JSON.stringify(usuariosAutorizados));
-           
-            mostrarMsgConfig(`✅ Crachá de ${nome} adicionado com sucesso!`, "#2e7d32");
+            
+            mostrarMsgConfig(` Crachá de ${nome} adicionado com sucesso!`, "#2e7d32");
             document.getElementById('configNovoCracha').value = '';
             document.getElementById('configNovoNome').value = '';
         }
-
         function exibirNotificacao(cracha, dataHora, grupoAlterado) {
             const toast = document.getElementById('toastAlocacao');
             const som = document.getElementById('somNotificacao');
-
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
             const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Usuário";
-
             if (som) {
                 som.currentTime = 0;
                 som.play().catch(e => console.warn("Interaja com a página uma vez para o som ser permitido."));
             }
-
-            toast.innerHTML = `<strong>🚕 Alocação Atualizada!</strong><br>${grupoAlterado}<br>Abastecedor: ${nomeExibicao}<br>Horário: ${dataHora}`;
+            toast.innerHTML = `<strong> Alocação Atualizada!</strong><br>${grupoAlterado}<br>Abastecedor: ${nomeExibicao}<br>Horário: ${dataHora}`;
             toast.style.display = 'block';
-           
+            
             setTimeout(() => toast.style.opacity = '1', 10);
-           
-            // Alterado para 30 segundos conforme solicitado
+            
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => toast.style.display = 'none', 500);
             }, 30000);
         }
-
         window.addEventListener('storage', function(e) {
             if(e.key === 'alocacaoGlobalSalva' && e.newValue) {
                 const dados = JSON.parse(e.newValue);
@@ -332,34 +416,29 @@
                 usuariosAutorizados = JSON.parse(e.newValue);
             }
         });
-
         async function checarProximoGrupoBackground() {
             const grupoAtualVisor = document.getElementById('filtroGrupo').value;
             let grupoChecar = "Grupo " + bgGroupIndex;
-           
+            
             bgGroupIndex++;
             if(bgGroupIndex > 8) bgGroupIndex = 1;
-
             if(grupoChecar === grupoAtualVisor) return;
-
             try {
                 const response = await fetch(`${URL_API}?grupo=${grupoChecar}&_t=${new Date().getTime()}`, { cache: "no-store" });
                 const dados = await response.json();
-               
+                
                 const estacoesReais = {};
                 dados.forEach(d => {
                     if (!d.grupo || d.grupo === grupoChecar) {
                         estacoesReais[d.estacao] = d;
                     }
                 });
-
                 const listaExibida = Object.values(estacoesReais);
                 const infoData = listaExibida.find(d => d.dataHora);
-               
+                
                 if (infoData && infoData.dataHora) {
                     const chave = infoData.dataHora + (infoData.cracha || "");
                     const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-
                     if (!historicoGrupos[grupoChecar]) {
                         historicoGrupos[grupoChecar] = chave;
                         estadoAlocacao[grupoChecar] = strEstado;
@@ -373,33 +452,29 @@
                 }
             } catch(e) {}
         }
-       
+        
         setInterval(checarProximoGrupoBackground, 3500);
-
         function alternarTema() {
             const body = document.body;
             body.classList.toggle('dark-mode');
             const isDark = body.classList.contains('dark-mode');
             localStorage.setItem('temaEscuroMonitor', isDark);
-            document.getElementById('btnTema').innerText = isDark ? '☀️' : '🌙';
+            document.getElementById('btnTema').innerText = isDark ? '' : '';
         }
-
         function customAlert(msg) {
             return new Promise(resolve => {
                 const overlay = document.getElementById('customModalOverlay');
                 document.getElementById('customModalMessage').innerText = msg;
                 document.getElementById('customModalInput').style.display = 'none';
                 document.getElementById('customModalBtnCancel').style.display = 'none';
-               
+                
                 const btnOk = document.getElementById('customModalBtnOk');
                 btnOk.style.display = 'block';
                 btnOk.innerText = 'Entendi';
                 overlay.style.display = 'flex';
-
                 btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
             });
         }
-
         function customPrompt(msg) {
             return new Promise(resolve => {
                 const overlay = document.getElementById('customModalOverlay');
@@ -407,7 +482,7 @@
                 document.getElementById('customModalMessage').innerText = msg;
                 input.style.display = 'block';
                 input.value = '';
-               
+                
                 const btnCancel = document.getElementById('customModalBtnCancel');
                 const btnOk = document.getElementById('customModalBtnOk');
                 btnCancel.style.display = 'block';
@@ -415,32 +490,76 @@
                 btnOk.innerText = 'Confirmar';
                 overlay.style.display = 'flex';
                 input.focus();
-
                 btnOk.onclick = () => { overlay.style.display = 'none'; resolve(input.value); };
                 btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); };
-               
+                
                 input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
             });
         }
-
         function trocarGrupo() {
             const grupo = document.getElementById('filtroGrupo').value;
             localStorage.setItem('ultimoGrupoSelecionado', grupo);
             carregarPainel();
         }
-
         function aplicarFiltroModelo() {
             const modeloSelecionado = document.getElementById('filtroModelo').value;
-            const cards = document.querySelectorAll('.station-card');
-           
-            cards.forEach(card => {
-                const modeloCard = card.getAttribute('data-modelo');
+            const wrappers = document.querySelectorAll('.flip-card-wrapper');
+            
+            wrappers.forEach(wrapper => {
+                const card = wrapper.querySelector('.station-card');
+                const modeloCard = card ? card.getAttribute('data-modelo') : '';
                 if (modeloSelecionado === "TODOS" || modeloCard === modeloSelecionado) {
-                    card.style.display = 'flex';
+                    wrapper.style.display = 'block';
                 } else {
-                    card.style.display = 'none';
+                    wrapper.style.display = 'none';
                 }
             });
+        }
+
+        // Função reescrita para agrupar pacotes com mesma cor e mesma ordem
+        function gerarBackContent(detalhes, estacao, modelo) {
+            let html = '<div class="back-title"><span>EST ' + String(estacao).padStart(2, '0') + ' - DETALHES</span><span class="back-close">VOLTAR</span></div>';
+
+            if (!detalhes || detalhes.length === 0) {
+                html += '<div class="no-details">Sem detalhes de produção</div>';
+                return html;
+            }
+
+            // Lógica de agrupamento
+            const grupos = {};
+            detalhes.forEach(function(d) {
+                const cor = (d.cor || '--').toString().trim();
+                const ordem = (d.ordem || '--').toString().trim();
+                const pacote = (d.pacote || '--').toString().trim();
+                
+                // Cria a chave única baseada em Cor + Ordem
+                const chave = cor + '|' + ordem;
+
+                if (!grupos[chave]) {
+                    grupos[chave] = { cor: cor, ordem: ordem, pacotes: [] };
+                }
+                
+                // Evita adicionar traços vazios na lista de pacotes
+                if (pacote !== '--' && pacote !== '') {
+                    grupos[chave].pacotes.push(pacote);
+                }
+            });
+
+            html += '<div class="detail-header"><div>COR</div><div>ORDEM</div><div>PACOTE</div></div>';
+
+            // Geração das linhas já agrupadas
+            Object.values(grupos).forEach(function(g) {
+                // Junta os pacotes com o # solicitado
+                const pacoteTexto = g.pacotes.length > 0 ? g.pacotes.join('#') : '--';
+                
+                html += '<div class="detail-row">';
+                html += '<div class="detail-cell cor-cell" title="' + g.cor + '">' + g.cor + '</div>';
+                html += '<div class="detail-cell" title="' + g.ordem + '">' + g.ordem + '</div>';
+                html += '<div class="detail-cell" title="' + pacoteTexto + '">' + pacoteTexto + '</div>';
+                html += '</div>';
+            });
+
+            return html;
         }
 
         async function carregarPainel() {
@@ -449,28 +568,25 @@
             try {
                 const response = await fetch(`${URL_API}?grupo=${grupoAtual}&_t=${new Date().getTime()}`, { cache: "no-store" });
                 const dados = await response.json();
-
                 const estacoesReais = {};
                 dados.forEach(d => {
                     if (!d.grupo || d.grupo === grupoAtual) {
                         estacoesReais[d.estacao] = d;
                     }
                 });
-               
+                
                 const listaExibida = Object.values(estacoesReais);
-
                 const modelosUnicos = new Set();
                 listaExibida.forEach(d => {
                     if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
                         modelosUnicos.add(d.modelo.trim());
                     }
                 });
-
                 const selectModelo = document.getElementById('filtroModelo');
                 const valorSelecionadoAtual = selectModelo.value;
-               
+                
                 selectModelo.innerHTML = '<option value="TODOS" style="text-align: center;">Todos</option>';
-               
+                
                 [...modelosUnicos].sort().forEach(m => {
                     const opt = document.createElement('option');
                     opt.value = m;
@@ -479,7 +595,6 @@
                     if (m === valorSelecionadoAtual) opt.selected = true;
                     selectModelo.appendChild(opt);
                 });
-
                 const contagem = {};
                 listaExibida.forEach(d => {
                     if (d.modelo && d.tamanho && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
@@ -488,11 +603,9 @@
                         contagem[chave] = (contagem[chave] || 0) + 1;
                     }
                 });
-
                 const grid = document.getElementById('stationGrid');
                 document.getElementById('loading-msg').style.display = 'none';
                 grid.innerHTML = "";
-
                 const numMaquinas = 3;
                 const containersMaquinas = {};
                 for (let m = 1; m <= numMaquinas; m++) {
@@ -502,7 +615,6 @@
                     grid.appendChild(wrapper);
                     containersMaquinas[m] = wrapper.querySelector('.machine-grid');
                 }
-
                 const criarCardElemento = (i) => {
                     let item = estacoesReais[i];
                     const statusBanco = (item && item.status) ? item.status : 'parada';
@@ -512,13 +624,23 @@
                     const totalRepetido = contagem[chaveAtual] || 0;
                     const badgeRepetido = totalRepetido > 1 ? `<span class="badge-repetido">${totalRepetido}x</span>` : "";
 
-                    const card = document.createElement('div');
-                    card.className = `station-card status-${statusBanco}`;
-                    card.setAttribute('data-modelo', modeloBanco.trim());
-                    card.innerHTML = `
+                    const detalhes = (item && item.detalhes) ? item.detalhes : [];
+
+                    // Wrapper for flip
+                    const flipWrapper = document.createElement('div');
+                    flipWrapper.className = 'flip-card-wrapper';
+
+                    const flipInner = document.createElement('div');
+                    flipInner.className = 'flip-card-inner';
+
+                    // FRONT
+                    const front = document.createElement('div');
+                    front.className = `flip-card-front station-card status-${statusBanco}`;
+                    front.setAttribute('data-modelo', modeloBanco.trim());
+                    front.innerHTML = `
                         <div class="card-header">
                             <h2>EST ${String(i).padStart(2, '0')}${badgeRepetido}</h2>
-                            <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)">
+                            <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)" onclick="event.stopPropagation()">
                                 <option value="rodando" ${statusBanco === 'rodando' ? 'selected' : ''}>RODANDO</option>
                                 <option value="parada" ${statusBanco === 'parada' ? 'selected' : ''}>PARADA</option>
                                 <option value="quebrada" ${statusBanco === 'quebrada' ? 'selected' : ''}>QUEBRADA</option>
@@ -532,26 +654,45 @@
                             <div class="stat-box"><span class="stat-num">${item && item.reprovados ? item.reprovados : 0}</span><span class="stat-label">Reprov</span></div>
                         </div>
                     `;
-                    return card;
-                };
 
+                    // BACK
+                    const back = document.createElement('div');
+                    back.className = 'flip-card-back';
+                    back.innerHTML = gerarBackContent(detalhes, i, modeloBanco);
+
+                    flipInner.appendChild(front);
+                    flipInner.appendChild(back);
+                    flipWrapper.appendChild(flipInner);
+
+                    // Click on front to flip
+                    front.addEventListener('click', function(e) {
+                        // Don't flip if clicking on select
+                        if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
+                        flipWrapper.classList.add('flipped');
+                    });
+
+                    // Click on back to flip back
+                    back.addEventListener('click', function() {
+                        flipWrapper.classList.remove('flipped');
+                    });
+
+                    return flipWrapper;
+                };
                 const metade = numEstacoes / 2;
                 const paresPorMaquina = metade / 3;
-
                 for (let i = 1; i <= metade; i++) {
                     const numMaq = Math.ceil(i / paresPorMaquina);
                     const gridDestino = containersMaquinas[numMaq];
-                   
+                    
                     gridDestino.appendChild(criarCardElemento(i));
                     gridDestino.appendChild(criarCardElemento(i + metade));
                 }
-
                 const infoData = listaExibida.find(d => d.dataHora);
-               
+                
                 if (infoData && infoData.dataHora) {
                     const chave = infoData.dataHora + (infoData.cracha || "");
                     const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-                   
+                    
                     if (!historicoGrupos[grupoAtual]) {
                         historicoGrupos[grupoAtual] = chave;
                         estadoAlocacao[grupoAtual] = strEstado;
@@ -563,7 +704,6 @@
                         }
                     }
                 }
-
                 let dataAlocacaoFormatada = '--';
                 if (infoData && infoData.dataHora && infoData.dataHora.includes('/')) {
                     const partes = infoData.dataHora.split(' ');
@@ -571,40 +711,37 @@
                     const horaMin = partes[1].substring(0, 5);
                     dataAlocacaoFormatada = `${diaMes} - ${horaMin}`;
                 }
-               
+                
                 document.getElementById('status-update').innerHTML =
                     `Última atualização: ${new Date().toLocaleTimeString()}<br>` +
                     `Alocação salva: ${dataAlocacaoFormatada}`;
-                   
+                    
                 aplicarFiltroModelo();
-
             } catch (e) { document.getElementById('loading-msg').style.display = 'block'; }
         }
-
         async function sincronizarProducao() {
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const btn = document.getElementById('btnSyncRef');
             try {
-                btn.disabled = true; btn.innerText = "⌛ Aguarde...";
+                btn.disabled = true; btn.innerText = " Aguarde...";
                 document.getElementById('status-update').innerText = "Sincronizando banco de dados...";
                 await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: grupoAtual }) });
                 setTimeout(async () => {
                     await customAlert('Solicitação enviada! Atualize em instantes.');
                     carregarPainel();
-                    btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência";
+                    btn.disabled = false; btn.innerHTML = " Atualizar Referência";
                 }, 2000);
-            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }
+            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = " Atualizar Referência"; }
         }
-
         function gerarImpressao() {
             const grupo = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupo === "Grupo 4" || grupo === "Grupo 5") ? 48 : 36;
             const metade = numEstacoes / 2;
             const dataAtual = new Date().toLocaleString('pt-BR');
-            const stations = document.querySelectorAll('.station-card');
-           
+            const fronts = document.querySelectorAll('.flip-card-front.station-card');
+            
             let dadosCard = {};
-            stations.forEach(card => {
+            fronts.forEach(card => {
                 const h2Text = card.querySelector('h2').innerText;
                 const match = h2Text.match(/EST\s*(\d+)/);
                 if (match) {
@@ -614,16 +751,15 @@
                     const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
                     const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
                     const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
-                   
+                    
                     let statusTxt = "", statusCls = "";
                     if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
                     else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
                     else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
-                   
+                    
                     dadosCard[numEstacao] = { mod, tam, giro, refil, repr, statusTxt, statusCls };
                 }
             });
-
             let printContent = `<html><head><title>Relatório - ${grupo}</title><style>
                 @page { size: A4 landscape; margin: 6mm; }
                 body { font-family: 'Segoe UI', sans-serif; color: #222; margin: 0; padding: 0; line-height: 1.2;}
@@ -642,45 +778,43 @@
                 <th style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
                 <th class="divisor" style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
             </tr></thead><tbody>`;
-           
+            
             for (let i = 1; i <= metade; i++) {
                 let par = i + metade;
                 let d1 = dadosCard[i] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
                 let d2 = dadosCard[par] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
-
                 printContent += `<tr>
                     <td style="font-weight:bold;">${i}</td>
                     <td style="text-align:left; padding-left:4px;">${d1.mod}</td>
                     <td>${d1.tam}</td><td>${d1.giro}</td><td>${d1.refil}</td><td>${d1.repr}</td>
                     <td class="${d1.statusCls}">${d1.statusTxt}</td>
-                   
+                    
                     <td class="divisor" style="font-weight:bold;">${par}</td>
                     <td style="text-align:left; padding-left:4px;">${d2.mod}</td>
                     <td>${d2.tam}</td><td>${d2.giro}</td><td>${d2.refil}</td><td>${d2.repr}</td>
                     <td class="${d2.statusCls}">${d2.statusTxt}</td>
                 </tr>`;
             }
-           
+            
             printContent += `</tbody></table></body></html>`;
-           
+            
             const win = window.open('', '_blank');
             win.document.write(printContent);
             win.document.close();
             setTimeout(() => { win.print(); win.close(); }, 500);
         }
-
         async function alterarStatusGlobal() {
             const novoStatus = document.getElementById('statusGlobal').value;
             if (!novoStatus) { await customAlert("Selecione um status primeiro."); return; }
-           
+            
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-           
+            
             const info = await customPrompt(`Colocar TODAS as estações como ${novoStatus.toUpperCase()}?\n\nInforme seu crachá para confirmar:`);
             const crachaDigitado = info ? info.trim() : "";
             const nomeUsuario = usuariosAutorizados[crachaDigitado];
-           
+            
             if (!nomeUsuario) { await customAlert("Acesso negado. Crachá inválido ou não cadastrado."); return; }
-           
+            
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
             try {
@@ -694,14 +828,13 @@
                 carregarPainel();
             } catch (err) { carregarPainel(); }
         }
-
         async function mudarStatus(grupo, estacao, novoStatus) {
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-           
+            
             const info = await customPrompt(`Mudar EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nInforme seu crachá:`);
             const crachaDigitado = info ? info.trim() : "";
             const nomeUsuario = usuariosAutorizados[crachaDigitado];
-           
+            
             if (!nomeUsuario) {
                 await customAlert("Acesso negado. Alteração cancelada.");
                 carregarPainel();
@@ -713,15 +846,13 @@
                 carregarPainel();
             } catch (err) { carregarPainel(); }
         }
-
         window.onload = () => {
             const temaSalvo = localStorage.getItem('temaEscuroMonitor');
             if (temaSalvo === 'true') {
                 document.body.classList.add('dark-mode');
                 const btnTema = document.getElementById('btnTema');
-                if (btnTema) btnTema.innerText = '☀️';
+                if (btnTema) btnTema.innerText = '';
             }
-
             const g = localStorage.getItem('ultimoGrupoSelecionado');
             if (g) document.getElementById('filtroGrupo').value = g;
             carregarPainel();

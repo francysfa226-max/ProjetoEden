@@ -285,19 +285,68 @@
         #loading-msg { text-align: center; font-weight: 800; color: var(--color-parada); padding: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; display: none; }
 
         /* === RESPONSIVIDADE === */
+      /* === RESPONSIVIDADE CENTRALIZADA NO CELULAR === */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .header { flex-direction: column; align-items: stretch; padding: 15px; border-radius: 16px; }
-            .header h1 { font-size: 1.2rem; }
-            .actions-container { flex-direction: column; align-items: stretch; gap: 10px; }
-            .filter-box select { width: 100%; }
-            .btn-sync { width: 100%; padding: 14px; }
+            
+            .header { 
+                position: relative; /* Faz a barra rolar com a tela, conforme pedido anterior */
+                top: 0;
+                margin: 0 auto 25px auto; /* Centraliza a própria nav bar */
+                display: flex;
+                flex-direction: column; 
+                align-items: center; /* Centraliza os blocos verticalmente */
+                text-align: center; /* Centraliza os textos */
+                padding: 20px 15px; 
+                border-radius: 16px; 
+                width: 100%;
+            }
+
+            .header h1 { 
+                font-size: 1.2rem; 
+                justify-content: center; /* Centraliza o ícone de engrenagem e o texto */
+            }
+
+            .actions-container { 
+                flex-direction: column; 
+                align-items: center; /* Centraliza filtros e botões horizontalmente */
+                width: 100%;
+                gap: 15px; 
+            }
+
+            .filter-box { 
+                width: 100%; 
+                align-items: center; /* Centraliza o label e o select */
+            }
+
+            .filter-box select { 
+                width: 100%; 
+                max-width: 300px; /* Evita que o filtro fique largo demais */
+                text-align: center;
+                text-align-last: center; /* Centraliza o texto dentro do select */
+            }
+
+            .btn-sync { 
+                width: 100%; 
+                max-width: 300px; /* Mantém os botões em um tamanho harmônico */
+                padding: 14px; 
+                justify-content: center;
+            }
+
+            #status-update { 
+                text-align: center; /* Centraliza o texto de sincronização */
+                width: 100%;
+            }
+
+            /* Mantém o grid e os cards conforme o original */
             .main-container { grid-template-columns: 1fr; gap: 15px; }
             .machine-container { padding: 12px; border-radius: 16px; }
             .machine-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .station-card { padding: 10px; border-radius: 10px; }
             .btn-theme-floating { bottom: 20px; right: 20px; width: 50px; height: 50px; }
         }
+            /* ... restante das regras do media query ... */
+
     </style>
 </head>
 <body>

@@ -285,14 +285,34 @@
 
         #loading-msg { text-align: center; font-weight: 800; color: var(--color-parada); padding: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; display: none; }
 
-        /* === RESPONSIVIDADE === */
+        /* === RESPONSIVIDADE (MOBILE) === */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .header { flex-direction: column; align-items: stretch; padding: 15px; border-radius: 16px; }
-            .header h1 { font-size: 1.2rem; }
-            .actions-container { flex-direction: column; align-items: stretch; gap: 10px; }
-            .filter-box select { width: 100%; }
-            .btn-sync { width: 100%; padding: 14px; }
+            
+            /* Remove o fixo (sticky) e centraliza a Navbar no celular */
+            .header { 
+                position: relative; /* Rola junto com a tela */
+                top: 0;
+                flex-direction: column; 
+                align-items: center; 
+                text-align: center; 
+                padding: 15px; 
+                border-radius: 16px; 
+            }
+            .header div:first-child {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .header h1 { font-size: 1.2rem; justify-content: center; width: 100%; }
+            
+            /* Centraliza os botões, selects e inputs */
+            .actions-container { flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+            .filter-box { width: 100%; align-items: center; text-align: center; }
+            .filter-box select { width: 100%; text-align: center; }
+            .btn-sync { width: 100%; padding: 14px; justify-content: center; }
+            #status-update { text-align: center; width: 100%; }
+
             .main-container { grid-template-columns: 1fr; gap: 15px; }
             .machine-container { padding: 12px; border-radius: 16px; }
             .machine-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -664,7 +684,6 @@
                     const front = document.createElement('div');
                     front.className = `flip-card-front station-card status-${statusBanco}`;
                     front.setAttribute('data-modelo', modeloBanco.trim());
-                    // NOVIDADE: Adicionando identificador invisível pro Print não se perder
                     front.setAttribute('data-estacao', i); 
                     front.innerHTML = `
                         <div class="card-header">
@@ -767,7 +786,6 @@
             
             let dadosCard = {};
             
-            // NOVIDADE: Buscando o valor de forma blindada contra erros de texto/selos ou cards escondidos
             fronts.forEach(card => {
                 const numEstacao = parseInt(card.getAttribute('data-estacao'), 10);
                 if (!isNaN(numEstacao)) {
@@ -824,7 +842,6 @@
             
             printContent += `</tbody></table></body></html>`;
             
-            // Iframe Invisível sem NENHUM delay
             let iframe = document.getElementById('fastPrintFrame');
             if (!iframe) {
                 iframe = document.createElement('iframe');
@@ -841,7 +858,6 @@
             doc.write(printContent);
             doc.close();
             
-            // Chama a impressão imediatamente
             iframe.contentWindow.focus();
             iframe.contentWindow.print();
         }

@@ -184,8 +184,8 @@
         .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 
         /* === CARDS (GLASSMORPHISM & WIN 8.1 TILES) === */
-        .flip-card-wrapper { perspective: 1000px; min-width: 0; }
-        .flip-card-inner { position: relative; width: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card-wrapper { perspective: 1000px; min-width: 0; height: 175px; } /* Altura padronizada fixa */
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
         .flip-card-wrapper.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; height: 100%; }
         
@@ -201,6 +201,7 @@
             display: flex; flex-direction: column; justify-content: space-between; 
             cursor: pointer; 
             transition: all 0.3s ease; 
+            overflow: hidden; /* Evita vazamento */
         }
         .station-card:hover { transform: translateY(-4px); box-shadow: var(--glass-shadow); }
         
@@ -217,11 +218,11 @@
             background: var(--input-bg); color: var(--text-main); padding: 4px 6px; border-radius: 6px; border: 1px solid var(--glass-border); font-size: 9px; font-weight: 800; text-transform: uppercase; cursor: pointer;
         }
 
-        .info-row { display: flex; flex-direction: column; margin-bottom: 8px; }
+        .info-row { display: flex; flex-direction: column; margin-bottom: 8px; width: 100%; }
         .info-label { font-size: 8px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-value { font-size: 13px; font-weight: 700; color: var(--text-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
+        .info-value { font-size: 13px; font-weight: 700; color: var(--text-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; width: 100%; }
         
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
         .stat-box { text-align: center; padding: 8px 4px; background: var(--stat-box); border-radius: 8px; border: 1px solid var(--glass-border); transition: 0.3s; }
         .stat-num { display: block; font-size: 15px; font-weight: 900; color: var(--text-main); font-family: 'JetBrains Mono', monospace; }
         .stat-label { font-size: 7px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; }
@@ -285,68 +286,19 @@
         #loading-msg { text-align: center; font-weight: 800; color: var(--color-parada); padding: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; display: none; }
 
         /* === RESPONSIVIDADE === */
-      /* === RESPONSIVIDADE CENTRALIZADA NO CELULAR === */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            
-            .header { 
-                position: relative; /* Faz a barra rolar com a tela, conforme pedido anterior */
-                top: 0;
-                margin: 0 auto 25px auto; /* Centraliza a própria nav bar */
-                display: flex;
-                flex-direction: column; 
-                align-items: center; /* Centraliza os blocos verticalmente */
-                text-align: center; /* Centraliza os textos */
-                padding: 20px 15px; 
-                border-radius: 16px; 
-                width: 100%;
-            }
-
-            .header h1 { 
-                font-size: 1.2rem; 
-                justify-content: center; /* Centraliza o ícone de engrenagem e o texto */
-            }
-
-            .actions-container { 
-                flex-direction: column; 
-                align-items: center; /* Centraliza filtros e botões horizontalmente */
-                width: 100%;
-                gap: 15px; 
-            }
-
-            .filter-box { 
-                width: 100%; 
-                align-items: center; /* Centraliza o label e o select */
-            }
-
-            .filter-box select { 
-                width: 100%; 
-                max-width: 300px; /* Evita que o filtro fique largo demais */
-                text-align: center;
-                text-align-last: center; /* Centraliza o texto dentro do select */
-            }
-
-            .btn-sync { 
-                width: 100%; 
-                max-width: 300px; /* Mantém os botões em um tamanho harmônico */
-                padding: 14px; 
-                justify-content: center;
-            }
-
-            #status-update { 
-                text-align: center; /* Centraliza o texto de sincronização */
-                width: 100%;
-            }
-
-            /* Mantém o grid e os cards conforme o original */
+            .header { flex-direction: column; align-items: stretch; padding: 15px; border-radius: 16px; }
+            .header h1 { font-size: 1.2rem; }
+            .actions-container { flex-direction: column; align-items: stretch; gap: 10px; }
+            .filter-box select { width: 100%; }
+            .btn-sync { width: 100%; padding: 14px; }
             .main-container { grid-template-columns: 1fr; gap: 15px; }
             .machine-container { padding: 12px; border-radius: 16px; }
             .machine-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .station-card { padding: 10px; border-radius: 10px; }
             .btn-theme-floating { bottom: 20px; right: 20px; width: 50px; height: 50px; }
         }
-            /* ... restante das regras do media query ... */
-
     </style>
 </head>
 <body>
@@ -804,16 +756,34 @@
                 }, 2000);
             } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = " Atualizar Referência"; }
         }
-        async function gerarImpressao() {
+        function gerarImpressao() {
             const grupo = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupo === "Grupo 4" || grupo === "Grupo 5") ? 48 : 36;
             const metade = numEstacoes / 2;
             const dataAtual = new Date().toLocaleString('pt-BR');
-
-            // Chamada para garantir que temos os dados mais recentes antes de imprimir
-            // 'estacoesReais' é preenchida na função carregarPainel, mas vamos garantir acesso a ela
-            // Se a variável estacoesReais não for global, ela precisa ser capturada do estado atual.
+            const fronts = document.querySelectorAll('.flip-card-front.station-card');
             
+            let dadosCard = {};
+            fronts.forEach(card => {
+                const h2Text = card.querySelector('h2').innerText;
+                const match = h2Text.match(/EST\s*(\d+)/);
+                if (match) {
+                    const numEstacao = parseInt(match[1], 10);
+                    const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
+                    const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
+                    const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
+                    const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
+                    const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
+                    
+                    let statusTxt = "", statusCls = "";
+                    if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
+                    else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
+                    else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
+                    
+                    dadosCard[numEstacao] = { mod, tam, giro, refil, repr, statusTxt, statusCls };
+                }
+            });
+
             let printContent = `<html><head><title>Relatório - ${grupo}</title><style>
                 @page { size: A4 landscape; margin: 6mm; }
                 body { font-family: 'Segoe UI', sans-serif; color: #222; margin: 0; padding: 0; line-height: 1.2;}
@@ -833,37 +803,10 @@
                 <th class="divisor" style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
             </tr></thead><tbody>`;
             
-            // BUSCA DADOS DIRETAMENTE DA API/CACHE EM VEZ DO DOM
-            const response = await fetch(`${URL_API}?grupo=${grupo}&_t=${new Date().getTime()}`);
-            const dados = await response.json();
-            const estacoesData = {};
-            dados.forEach(d => { if (!d.grupo || d.grupo === grupo) estacoesData[d.estacao] = d; });
-
             for (let i = 1; i <= metade; i++) {
                 let par = i + metade;
-                
-                const extrairInfo = (num) => {
-                    const d = estacoesData[num] || {};
-                    const mod = d.modelo && d.modelo !== "VAZIO" && d.modelo !== "Não Alocado" ? d.modelo : "";
-                    const tam = d.tamanho ? String(d.tamanho).replace('.', ',') : "";
-                    const statusTxt = d.status ? d.status.toUpperCase() : "";
-                    let statusCls = "";
-                    if(statusTxt === "RODANDO") statusCls = "st-rodando";
-                    else if(statusTxt === "PARADA") statusCls = "st-parada";
-                    else if(statusTxt === "QUEBRADA") statusCls = "st-quebrada";
-
-                    return {
-                        mod, tam, 
-                        giro: d.giro || (mod ? "0" : ""), 
-                        refil: d.refilagem || (mod ? "0" : ""), 
-                        repr: d.reprovados || (mod ? "0" : ""), 
-                        statusTxt, statusCls
-                    };
-                };
-
-                let d1 = extrairInfo(i);
-                let d2 = extrairInfo(par);
-
+                let d1 = dadosCard[i] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
+                let d2 = dadosCard[par] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
                 printContent += `<tr>
                     <td style="font-weight:bold;">${i}</td>
                     <td style="text-align:left; padding-left:4px;">${d1.mod}</td>
@@ -879,10 +822,26 @@
             
             printContent += `</tbody></table></body></html>`;
             
-            const win = window.open('', '_blank');
-            win.document.write(printContent);
-            win.document.close();
-            setTimeout(() => { win.print(); win.close(); }, 500);
+            // Iframe Invisível sem NENHUM delay
+            let iframe = document.getElementById('fastPrintFrame');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'fastPrintFrame';
+                iframe.style.position = 'absolute';
+                iframe.style.width = '0px';
+                iframe.style.height = '0px';
+                iframe.style.border = 'none';
+                document.body.appendChild(iframe);
+            }
+            
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(printContent);
+            doc.close();
+            
+            // Chama a impressão imediatamente
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
         }
         async function alterarStatusGlobal() {
             const novoStatus = document.getElementById('statusGlobal').value;

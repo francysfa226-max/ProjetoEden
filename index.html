@@ -24,8 +24,8 @@
             --color-ok-glow: rgba(16, 185, 129, 0.3);
             --color-parada: #ef4444;
             --color-parada-glow: rgba(239, 68, 68, 0.3);
-            --color-quebrada: #f59e0b;
-            --color-quebrada-glow: rgba(245, 158, 11, 0.3);
+            --color-TROCA: #f59e0b;
+            --color-TROCA-glow: rgba(245, 158, 11, 0.3);
             --color-wip: #8b5cf6;
             --input-bg: rgba(255, 255, 255, 0.9);
             --stat-box: rgba(255, 255, 255, 0.85);
@@ -140,7 +140,7 @@
         .station-card::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; transition: all 0.4s ease; }
         .station-card:hover { transform: translateY(-5px); box-shadow: var(--glass-hover-shadow); }
         .station-card.status-parada::before { background: var(--color-parada); box-shadow: 2px 0 15px var(--color-parada-glow); }
-        .station-card.status-quebrada::before { background: var(--color-quebrada); box-shadow: 2px 0 15px var(--color-quebrada-glow); }
+        .station-card.status-TROCA::before { background: var(--color-TROCA); box-shadow: 2px 0 15px var(--color-TROCA-glow); }
         .station-card.status-rodando::before { background: var(--color-ok); box-shadow: 2px 0 15px var(--color-ok-glow); }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 4px; padding-left: 8px; min-width: 0; }
@@ -268,9 +268,9 @@
         .kpi-rank-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 900; color: var(--text-value); flex-shrink: 0; min-width: 40px; text-align: right; }
         .kpi-status-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
         .kpi-status-tile { border-radius: 20px; padding: 22px 16px; text-align: center; position: relative; overflow: hidden; }
-        .kpi-status-tile.rodando { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); } .kpi-status-tile.parada  { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); } .kpi-status-tile.quebrada { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .kpi-status-tile.rodando { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); } .kpi-status-tile.parada  { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); } .kpi-status-tile.TROCA { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); }
         .kpi-status-tile .st-num  { font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 900; line-height: 1; display: block; letter-spacing: -1px; }
-        .kpi-status-tile.rodando .st-num { color: #10b981; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); } .kpi-status-tile.parada .st-num  { color: #ef4444; text-shadow: 0 0 20px rgba(239, 68, 68, 0.4); } .kpi-status-tile.quebrada .st-num { color: #f59e0b; text-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+        .kpi-status-tile.rodando .st-num { color: #10b981; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); } .kpi-status-tile.parada .st-num  { color: #ef4444; text-shadow: 0 0 20px rgba(239, 68, 68, 0.4); } .kpi-status-tile.TROCA .st-num { color: #f59e0b; text-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
         .kpi-status-tile .st-lbl  { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); margin-top: 10px; display: block; }
         .kpi-status-tile .st-pct  { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-top: 6px; display: block; }
         .btn-kpi-dashboard { background: linear-gradient(135deg, #007AFF, #5E5CE6); color: #fff; border: none; padding: 12px 20px; border-radius: 14px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 17px; box-shadow: 0 6px 20px rgba(0,122,255,0.4); transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1); border: 1px solid rgba(255,255,255,0.2); }
@@ -375,14 +375,14 @@
                     <option value="">Selecionar...</option>
                     <option value="rodando">RODANDO</option>
                     <option value="parada">PARADA</option>
-                    <option value="quebrada">QUEBRADA</option>
+                    <option value="TROCA">TROCA</option>
                 </select>
             </div>
             <button class="btn-sync btn-global" onclick="alterarStatusGlobal()"> Aplicar Global</button>
             <button class="btn-sync btn-print" onclick="gerarImpressao()"> Imprimir</button>
             <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()"> Atualizar DB</button>
             <button class="btn-sync btn-wip" onclick="abrirRelatorioWIP()">📦 Relatório WIP</button>
-            <button class="btn-kpi-dashboard" onclick="abrirDashboard()">✨ Smart Analysis</button>
+            <button class="btn-kpi-dashboard" onclick="abrirDashboard()">✨ Analysis</button>
             <div class="notif-bell-wrap" id="notifBellWrap">
                 <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel(event)" title="Histórico de Notificações">🔔</button>
                 <span class="notif-badge" id="notifBadge">0</span>
@@ -440,7 +440,7 @@
                     <div class="kpi-header-icon">✨</div>
                     <div>
                         <p class="kpi-header-title">Nexus Smart Insights</p>
-                        <p class="kpi-header-sub" id="kpiSubtitle">Processando Telemetria...</p>
+                        <p class="kpi-header-sub" id="kpiSubtitle">Consultando Banco de dados Em Tempo Real...</p>
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
@@ -462,7 +462,7 @@
     <div id="wipModalOverlay" class="wip-overlay" onclick="if(event.target===this) fecharRelatorioWIP()">
         <div class="wip-modal">
             <div class="wip-header">
-                <h2 class="wip-header-title"><span>📦</span> Relatório WIP - Talões Abastecidos</h2>
+                <h2 class="wip-header-title"><span>📦</span> Relatório WIP - Ordens Abastecidas</h2>
                 <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
                     <button class="wip-global-toggle" onclick="toggleAllWip(false)">➕ Expandir Tudo</button>
                     <button class="wip-global-toggle" onclick="toggleAllWip(true)">➖ Contrair Tudo</button>
@@ -742,10 +742,10 @@
                     const totalPecas = giroNum + reprovNum;
                     let saude = 100;
                     if(totalPecas > 0) saude = ((giroNum / totalPecas) * 100).toFixed(1);
-                    else if (statusBanco === 'parada' || statusBanco === 'quebrada') saude = 0;
+                    else if (statusBanco === 'parada' || statusBanco === 'TROCA') saude = 0;
                     
                     let saudeColor = 'var(--color-ok)';
-                    if(saude < 100) saudeColor = saude > 85 ? 'var(--color-quebrada)' : 'var(--color-parada)';
+                    if(saude < 100) saudeColor = saude > 85 ? 'var(--color-TROCA)' : 'var(--color-parada)';
                     if(totalPecas === 0 && statusBanco === 'rodando') saudeColor = '#007AFF';
 
                     const flipWrapper = document.createElement('div'); flipWrapper.className = 'flip-card-wrapper';
@@ -760,7 +760,7 @@
                             <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)" onclick="event.stopPropagation()">
                                 <option value="rodando" ${statusBanco === 'rodando' ? 'selected' : ''}>RODANDO</option>
                                 <option value="parada" ${statusBanco === 'parada' ? 'selected' : ''}>PARADA</option>
-                                <option value="quebrada" ${statusBanco === 'quebrada' ? 'selected' : ''}>QUEBRADA</option>
+                                <option value="TROCA" ${statusBanco === 'TROCA' ? 'selected' : ''}>TROCA</option>
                             </select>
                         </div>
                         <div class="info-row"><span class="info-label">Modelo Ativo</span><span class="info-value" title="${modeloBanco}">${modeloBanco}</span></div>
@@ -841,7 +841,7 @@
                     let statusTxt = "", statusCls = "";
                     if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
                     else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
-                    else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
+                    else { statusTxt = "TROCA"; statusCls = "st-TROCA"; }
                     dadosCard[numEstacao] = { mod, tam, giro, refil, repr, statusTxt, statusCls };
                 }
             });
@@ -851,7 +851,7 @@
                 .print-header h2 { margin: 0; font-size: 14pt; } table { width: 100%; border-collapse: collapse; table-layout: fixed; }
                 th, td { border: 1px solid #999; padding: 3px 2px; text-align: center; font-size: 8pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height: 16px;}
                 th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; font-size: 7.5pt; }
-                .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-quebrada { color: #b7950b; font-weight: bold; }
+                .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-TROCA { color: #b7950b; font-weight: bold; }
                 .divisor { border-left: 3px solid #333 !important; }
             </style></head><body>
             <div class="print-header"><div><h2>${grupo} - Matriz de Produção</h2></div><div>Gerado: ${dataAtual}</div></div>
@@ -1106,13 +1106,13 @@
                 const giro   = parseInt((card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num')||{}).textContent)||0;
                 const refil  = parseInt((card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num')||{}).textContent)||0;
                 const reprov = parseInt((card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num')||{}).textContent)||0;
-                let status = 'parada'; if(card.classList.contains('status-rodando')) status='rodando'; if(card.classList.contains('status-quebrada')) status='quebrada';
+                let status = 'parada'; if(card.classList.contains('status-rodando')) status='rodando'; if(card.classList.contains('status-TROCA')) status='TROCA';
                 const wrapper = card.closest('.flip-card-wrapper'); const cors = [];
                 if(wrapper) wrapper.querySelectorAll('.detail-row .cor-cell').forEach(c => { const v=c.textContent.trim(); if(v&&v!=='--') cors.push(v); });
                 estacoes.push({estNum,modelo:modelo.trim(),tamanho:tamanho.trim(),giro,refil,reprov,status,cors});
             });
             const totalGiro=estacoes.reduce((a,e)=>a+e.giro,0), totalRefil=estacoes.reduce((a,e)=>a+e.refil,0), totalReprov=estacoes.reduce((a,e)=>a+e.reprov,0);
-            const totalEst=estacoes.length, qtdRodando=estacoes.filter(e=>e.status==='rodando').length, qtdParada=estacoes.filter(e=>e.status==='parada').length, qtdQuebrada=estacoes.filter(e=>e.status==='quebrada').length;
+            const totalEst=estacoes.length, qtdRodando=estacoes.filter(e=>e.status==='rodando').length, qtdParada=estacoes.filter(e=>e.status==='parada').length, qtdTROCA=estacoes.filter(e=>e.status==='TROCA').length;
             const porModelo={}, porTamanho={}, porCor={};
             estacoes.forEach(e => {
                 if(!porModelo[e.modelo]) porModelo[e.modelo]={giro:0,refil:0,reprov:0,qtd:0};
@@ -1125,7 +1125,7 @@
             const topModRefil=Object.entries(porModelo).sort((a,b)=>b[1].refil-a[1].refil).slice(0,8);
             const tamSorted=Object.entries(porTamanho).sort((a,b)=>b[1].giro-a[1].giro);
             const topCors=Object.entries(porCor).sort((a,b)=>b[1]-a[1]).slice(0,10);
-            return {estacoes,totalGiro,totalRefil,totalReprov,totalEst,qtdRodando,qtdParada,qtdQuebrada,porModelo,porTamanho,porCor,topModGiro,topModRefil,tamSorted,topCors};
+            return {estacoes,totalGiro,totalRefil,totalReprov,totalEst,qtdRodando,qtdParada,qtdTROCA,porModelo,porTamanho,porCor,topModGiro,topModRefil,tamSorted,topCors};
         }
         function _gerarAvisosInteligentes(d) {
             let insights = [];
@@ -1134,7 +1134,7 @@
             if (efic < 0.6) insights.push(`<span>📉</span> <div><strong>Baixa Eficiência de Linha:</strong> Apenas ${(efic*100).toFixed(0)}% das máquinas estão rodando. Revise o abastecimento urgentemente.</div>`);
             else if (efic > 0.85) insights.push(`<span>🚀</span> <div><strong>Linha em Alta Performance:</strong> Excelente! ${(efic*100).toFixed(0)}% de eficiência operacional no momento.</div>`);
             if (refugoGeral > 0.08) insights.push(`<span>⚠️</span> <div><strong>Alerta de Qualidade:</strong> O índice geral de refugo está em ${(refugoGeral*100).toFixed(1)}%. O aceitável é abaixo de 8%.</div>`);
-            if (d.qtdQuebrada > 0) insights.push(`<span>🔧</span> <div><strong>Impacto de Manutenção:</strong> Existem ${d.qtdQuebrada} estação(ões) reportadas como quebradas paralisando fluxo.</div>`);
+            if (d.qtdTROCA > 0) insights.push(`<span>🔧</span> <div><strong>Impacto de Manutenção:</strong> Existem ${d.qtdTROCA} estação(ões) reportadas como TROCAs paralisando fluxo.</div>`);
             const maquinasCriticas = d.estacoes.filter(e => e.reprov > 0 && (e.reprov / (e.giro + e.reprov)) > 0.15 && (e.giro + e.reprov) > 10);
             if (maquinasCriticas.length > 0) {
                 const nomes = maquinasCriticas.map(m => m.estNum).join(', ');
@@ -1154,8 +1154,8 @@
             requestAnimationFrame(()=>_buildCharts(d,isDark,gridColor,lblColor,txtColor));
         }
         function _tplGeral(d) {
-            const pctR=d.totalEst?((d.qtdRodando/d.totalEst)*100).toFixed(0):0; const pctP=d.totalEst?((d.qtdParada/d.totalEst)*100).toFixed(0):0; const pctQ=d.totalEst?((d.qtdQuebrada/d.totalEst)*100).toFixed(0):0; const efic=d.totalEst?(d.qtdRodando/d.totalEst*100).toFixed(1):0;
-            return `<div class="kpi-big-row"><div class="kpi-big-card c-blue"><span class="kpi-emoji">🔄</span><span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Produzido</span><span class="kpi-sub">Soma do Giro Ativo</span></div><div class="kpi-big-card c-purple"><span class="kpi-emoji">✂️</span><span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Refilagem Total</span><span class="kpi-sub">Processamento Secundário</span></div><div class="kpi-big-card c-red"><span class="kpi-emoji">❌</span><span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Recusado</span><span class="kpi-sub">Total de Reprovações</span></div><div class="kpi-big-card c-green"><span class="kpi-emoji">⚡</span><span class="kpi-num">${efic}%</span><span class="kpi-lbl">Eficiência Global</span><span class="kpi-sub">${d.qtdRodando} de ${d.totalEst} operantes</span></div><div class="kpi-big-card c-teal"><span class="kpi-emoji">🏭</span><span class="kpi-num">${d.totalEst}</span><span class="kpi-lbl">Nós de Produção</span><span class="kpi-sub">Capacidade da Célula</span></div><div class="kpi-big-card c-yellow"><span class="kpi-emoji">📐</span><span class="kpi-num">${Object.keys(d.porModelo).length}</span><span class="kpi-lbl">Diversidade (SKU)</span><span class="kpi-sub">Modelos em processamento</span></div></div><div class="kpi-charts-grid">${_gerarAvisosInteligentes(d)}<div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Distribuição de Carga</div><div class="kpi-status-grid"><div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span><span class="st-pct">${pctR}%</span></div><div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span><span class="st-pct">${pctP}%</span></div><div class="kpi-status-tile quebrada"><span class="st-num">${d.qtdQuebrada}</span><span class="st-lbl">Falhas</span><span class="st-pct">${pctQ}%</span></div></div><div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;"><canvas id="chartDonutStatus"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Throughput por Modelo (Top 8)</div><div class="kpi-chart-wrap"><canvas id="chartBarGiro"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#AF52DE"></span>Proporção de Refilagem / Reprovação</div><div class="kpi-chart-wrap"><canvas id="chartBarRefilReprov"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Ranking Volume</div><ul class="kpi-rank-list" id="rankGiroModelo"></ul></div></div>`;
+            const pctR=d.totalEst?((d.qtdRodando/d.totalEst)*100).toFixed(0):0; const pctP=d.totalEst?((d.qtdParada/d.totalEst)*100).toFixed(0):0; const pctQ=d.totalEst?((d.qtdTROCA/d.totalEst)*100).toFixed(0):0; const efic=d.totalEst?(d.qtdRodando/d.totalEst*100).toFixed(1):0;
+            return `<div class="kpi-big-row"><div class="kpi-big-card c-blue"><span class="kpi-emoji">🔄</span><span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Produzido</span><span class="kpi-sub">Soma do Giro Ativo</span></div><div class="kpi-big-card c-purple"><span class="kpi-emoji">✂️</span><span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Refilagem Total</span><span class="kpi-sub">Processamento Secundário</span></div><div class="kpi-big-card c-red"><span class="kpi-emoji">❌</span><span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Recusado</span><span class="kpi-sub">Total de Reprovações</span></div><div class="kpi-big-card c-green"><span class="kpi-emoji">⚡</span><span class="kpi-num">${efic}%</span><span class="kpi-lbl">Eficiência Global</span><span class="kpi-sub">${d.qtdRodando} de ${d.totalEst} operantes</span></div><div class="kpi-big-card c-teal"><span class="kpi-emoji">🏭</span><span class="kpi-num">${d.totalEst}</span><span class="kpi-lbl">Nós de Produção</span><span class="kpi-sub">Capacidade da Célula</span></div><div class="kpi-big-card c-yellow"><span class="kpi-emoji">📐</span><span class="kpi-num">${Object.keys(d.porModelo).length}</span><span class="kpi-lbl">Diversidade (SKU)</span><span class="kpi-sub">Modelos em processamento</span></div></div><div class="kpi-charts-grid">${_gerarAvisosInteligentes(d)}<div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Distribuição de Carga</div><div class="kpi-status-grid"><div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span><span class="st-pct">${pctR}%</span></div><div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span><span class="st-pct">${pctP}%</span></div><div class="kpi-status-tile TROCA"><span class="st-num">${d.qtdTROCA}</span><span class="st-lbl">Falhas</span><span class="st-pct">${pctQ}%</span></div></div><div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;"><canvas id="chartDonutStatus"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Throughput por Modelo (Top 8)</div><div class="kpi-chart-wrap"><canvas id="chartBarGiro"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#AF52DE"></span>Proporção de Refilagem / Reprovação</div><div class="kpi-chart-wrap"><canvas id="chartBarRefilReprov"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Ranking Volume</div><ul class="kpi-rank-list" id="rankGiroModelo"></ul></div></div>`;
         }
         function _tplModelos(d) {
             const sorted=Object.entries(d.porModelo).sort((a,b)=>b[1].giro-a[1].giro);
@@ -1171,7 +1171,7 @@
         function _buildCharts(d,isDark,gridColor,lblColor,txtColor) {
             const barH=(yMaxLen)=>({indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:lblColor,font:{size:11,weight:'600'}}},y:{grid:{display:false},ticks:{color:txtColor,font:{size:11,weight:'800'}}}}});
             if(_kpiTabAtual==='geral') {
-                const cds=document.getElementById('chartDonutStatus'); if(cds) _kpiCharts.push(new Chart(cds,{type:'doughnut',data:{labels:['Rodando','Parada','Quebrada'],datasets:[{data:[d.qtdRodando,d.qtdParada,d.qtdQuebrada],backgroundColor:['rgba(16,185,129,0.85)','rgba(239,68,68,0.85)','rgba(245,158,11,0.85)'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:12,weight:'800'},padding:20,usePointStyle:true}}}}}));
+                const cds=document.getElementById('chartDonutStatus'); if(cds) _kpiCharts.push(new Chart(cds,{type:'doughnut',data:{labels:['Rodando','Parada','TROCA'],datasets:[{data:[d.qtdRodando,d.qtdParada,d.qtdTROCA],backgroundColor:['rgba(16,185,129,0.85)','rgba(239,68,68,0.85)','rgba(245,158,11,0.85)'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:12,weight:'800'},padding:20,usePointStyle:true}}}}}));
                 const topG=d.topModGiro.slice(0,8); const cbg=document.getElementById('chartBarGiro'); if(cbg) _kpiCharts.push(new Chart(cbg,{type:'bar',data:{labels:topG.map(([m])=>m.length>18?m.slice(0,18)+'…':m),datasets:[{label:'Volume',data:topG.map(([,v])=>v.giro),backgroundColor:_palette(topG.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
                 const topR=d.topModRefil.slice(0,8); const cbr=document.getElementById('chartBarRefilReprov'); if(cbr) _kpiCharts.push(new Chart(cbr,{type:'bar',data:{labels:topR.map(([m])=>m.length>16?m.slice(0,16)+'…':m),datasets:[{label:'Refilagem',data:topR.map(([,v])=>v.refil),backgroundColor:'rgba(175,82,222,0.85)',borderRadius:6,borderSkipped:false},{label:'Falhas',data:topR.map(([m])=>(d.porModelo[m]||{}).reprov||0),backgroundColor:'rgba(239,68,68,0.85)',borderRadius:6,borderSkipped:false}]},options:{...barH(),plugins:{legend:{display:true,labels:{color:lblColor,font:{size:11,weight:'800'},usePointStyle:true}}}}}));
                 const rankEl=document.getElementById('rankGiroModelo'); if(rankEl){const top5=d.topModGiro.slice(0,7);const maxV=top5[0]?top5[0][1].giro:1;rankEl.innerHTML=top5.map(([mod,v],i)=>`<li class="kpi-rank-item"><span class="kpi-rank-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span><span class="kpi-rank-name" title="${mod}">${mod}</span><div class="kpi-rank-bar-wrap"><div class="kpi-rank-bar-fill" style="width:${(v.giro/maxV*100).toFixed(1)}%"></div></div><span class="kpi-rank-val">${v.giro.toLocaleString('pt-BR')}</span></li>`).join('');}

@@ -138,7 +138,7 @@
             cursor: pointer; transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1); overflow: hidden; position: relative;
         }
         .station-card::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; transition: all 0.4s ease; }
-        .station-card:hover { transform: translateY(-5px); box-shadow: var(--glass-hover-shadow); } /* scale(1.01) removido para evitar blur */
+        .station-card:hover { transform: translateY(-5px); box-shadow: var(--glass-hover-shadow); }
         .station-card.status-parada::before { background: var(--color-parada); box-shadow: 2px 0 15px var(--color-parada-glow); }
         .station-card.status-quebrada::before { background: var(--color-quebrada); box-shadow: 2px 0 15px var(--color-quebrada-glow); }
         .station-card.status-rodando::before { background: var(--color-ok); box-shadow: 2px 0 15px var(--color-ok-glow); }
@@ -483,6 +483,7 @@
         let historicoGrupos = {}; let estadoAlocacao = {}; let bgGroupIndex = 1;
         let wipRawData = []; 
         let collapsedModels = new Set();
+        let toastTimeout1, toastTimeout2, toastTimeout3;
 
         /* === HISTÓRICO DE NOTIFICAÇÕES (COM PERSISTÊNCIA DE 5 HORAS) === */
         let notifHistory = JSON.parse(localStorage.getItem('notifHistoryData')) || [];
@@ -580,16 +581,35 @@
             mostrarMsgConfig(` Operador ${nome} registrado com sucesso.`, "#10b981");
             document.getElementById('configNovoCracha').value = ''; document.getElementById('configNovoNome').value = '';
         }
+
         function exibirNotificacao(cracha, dataHora, grupoAlterado) {
-            const toast = document.getElementById('toastAlocacao'); const som = document.getElementById('somNotificacao');
+            const toast = document.getElementById('toastAlocacao'); 
+            const som = document.getElementById('somNotificacao');
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
             const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Sistema";
-            if (som) { som.currentTime = 0; som.play().catch(e => console.warn("Interação pendente para som.")); }
+            
+            if (som) { 
+                som.currentTime = 0; 
+                som.play().catch(e => console.warn("Interação pendente para som.")); 
+            }
+            
             toast.innerHTML = `<strong>🔄 Sincronização Detectada</strong><br>${grupoAlterado}<br>Operador: ${nomeExibicao}<br>Log: ${dataHora}`;
-            toast.style.display = 'block'; setTimeout(() => toast.style.opacity = '1', 10);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.style.display = 'none', 500); }, 30000);
+            
+            clearTimeout(toastTimeout1);
+            clearTimeout(toastTimeout2);
+            clearTimeout(toastTimeout3);
+            
+            toast.style.display = 'block'; 
+            toastTimeout1 = setTimeout(() => toast.style.opacity = '1', 10);
+            
+            toastTimeout2 = setTimeout(() => { 
+                toast.style.opacity = '0'; 
+                toastTimeout3 = setTimeout(() => toast.style.display = 'none', 500); 
+            }, 10000); 
+            
             _adicionarNotifHistorico(cracha, dataHora, grupoAlterado);
         }
+
         window.addEventListener('storage', function(e) {
             if(e.key === 'alocacaoGlobalSalva' && e.newValue) {
                 const dados = JSON.parse(e.newValue); const chave = dados.dataHora + dados.cracha;
@@ -610,7 +630,8 @@
                     if (!historicoGrupos[grupoChecar]) { historicoGrupos[grupoChecar] = chave; estadoAlocacao[grupoChecar] = strEstado; } 
                     else if (historicoGrupos[grupoChecar] !== chave) {
                         historicoGrupos[grupoChecar] = chave;
-                        if (estadoAlocacao[grupoChecar] !== strEstado) { estadoAlocacao[grupoChecar] = strEstado; exibirNotificacao(infoData.cracha, infoData.dataHora, grupoChecar); }
+                        estadoAlocacao[grupoChecar] = strEstado;
+                        exibirNotificacao(infoData.cracha, infoData.dataHora, grupoChecar);
                     }
                 }
             } catch(e) {}
@@ -779,7 +800,8 @@
                     if (!historicoGrupos[grupoAtual]) { historicoGrupos[grupoAtual] = chave; estadoAlocacao[grupoAtual] = strEstado; } 
                     else if (historicoGrupos[grupoAtual] !== chave) {
                         historicoGrupos[grupoAtual] = chave;
-                        if (estadoAlocacao[grupoAtual] !== strEstado) { estadoAlocacao[grupoAtual] = strEstado; exibirNotificacao(infoData.cracha, infoData.dataHora, grupoAtual); }
+                        estadoAlocacao[grupoAtual] = strEstado;
+                        exibirNotificacao(infoData.cracha, infoData.dataHora, grupoAtual);
                     }
                 }
                 

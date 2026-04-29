@@ -65,7 +65,7 @@
         
         body { 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            margin: 0; padding: 24px; min-height: 100vh;
+            margin: 0; min-height: 100vh;
             color: var(--text-main); 
             background: linear-gradient(135deg, var(--bg-color-1), var(--bg-color-2), var(--bg-color-1));
             background-size: 200% 200%;
@@ -73,11 +73,206 @@
             transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
+        .app-wrapper {
+            padding: 24px;
+        }
+
         @keyframes breathingBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 8px; }
+
+        /* === TELA DE ACESSO - SELEÇÃO + LOGIN === */
+        .login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100000; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(145deg, var(--bg-color-1) 0%, var(--bg-color-2) 50%, var(--bg-color-1) 100%);
+        }
+        .login-screen::before {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(0,122,255,0.09) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 70%, rgba(94,92,230,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 60% 20%, rgba(16,185,129,0.05) 0%, transparent 45%);
+        }
+
+        /* Painel de seleção de modo */
+        #selecaoModo {
+            display: flex; flex-direction: column; align-items: center;
+            animation: fadeInUp 0.6s cubic-bezier(0.22,1,0.36,1);
+        }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInBack { from{opacity:0;transform:translateY(-20px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes slideToLogin { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-60px)} }
+        @keyframes slideFromRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes shakeBox { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-10px)} 30%{transform:translateX(10px)} 45%{transform:translateX(-8px)} 60%{transform:translateX(8px)} 80%{transform:translateX(-4px)} }
+        @keyframes ringPulse { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.1);opacity:0.15} }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        .sel-header { text-align: center; margin-bottom: 42px; }
+        .sel-logo {
+            display: flex; align-items: center; justify-content: center; gap: 14px;
+            margin-bottom: 14px;
+        }
+        .sel-logo-icon {
+            width: 52px; height: 52px; border-radius: 14px;
+            background: linear-gradient(135deg, #007AFF, #5E5CE6);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,122,255,0.4);
+        }
+        .sel-logo-icon svg { width: 30px; height: 30px; fill: #fff; }
+        .sel-logo-text { font-size: 2rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px; }
+        .sel-logo-text span { color: #007AFF; }
+        .sel-subtitle { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+
+        .sel-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+
+        .sel-card {
+            width: 220px; background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid var(--glass-border); border-radius: 24px; padding: 36px 24px 32px;
+            text-align: center; cursor: pointer; transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+            position: relative; overflow: hidden;
+        }
+        .sel-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: 24px; opacity: 0;
+            transition: opacity 0.35s;
+        }
+        .sel-card.viewer::before { background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.12), transparent 70%); }
+        .sel-card.editor::before { background: radial-gradient(circle at 50% 0%, rgba(0,122,255,0.12), transparent 70%); }
+        .sel-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 24px 60px rgba(0,0,0,0.15); }
+        .sel-card:hover::before { opacity: 1; }
+        .sel-card.viewer:hover { border-color: rgba(16,185,129,0.45); }
+        .sel-card.editor:hover { border-color: rgba(0,122,255,0.45); }
+        .sel-card:active { transform: translateY(-2px) scale(0.99); }
+
+        .sel-card-icon-wrap {
+            width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 22px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .sel-card.viewer .sel-card-icon-wrap { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 2px solid rgba(16,185,129,0.25); }
+        .sel-card.editor .sel-card-icon-wrap { background: linear-gradient(135deg, rgba(0,122,255,0.15), rgba(94,92,230,0.05)); border: 2px solid rgba(0,122,255,0.25); }
+        .sel-card-icon-inner {
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sel-card.viewer .sel-card-icon-inner { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 8px 24px rgba(16,185,129,0.4); }
+        .sel-card.editor .sel-card-icon-inner { background: linear-gradient(135deg, #007AFF, #5E5CE6); box-shadow: 0 8px 24px rgba(0,122,255,0.4); }
+        .sel-card-icon-inner svg { width: 30px; height: 30px; fill: #fff; }
+
+        .sel-card-ring {
+            position: absolute; inset: -6px; border-radius: 50%; border: 2px solid transparent;
+            transition: border-color 0.35s; animation: ringPulse 3s ease infinite;
+        }
+        .sel-card.viewer:hover .sel-card-ring { border-color: rgba(16,185,129,0.3); }
+        .sel-card.editor:hover .sel-card-ring { border-color: rgba(0,122,255,0.3); }
+
+        .sel-card-title { font-size: 1.05rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px; }
+        .sel-card.viewer .sel-card-title { color: #059669; }
+        .sel-card.editor .sel-card-title { color: #007AFF; }
+        .sel-card-desc { font-size: 11.5px; font-weight: 600; color: var(--text-muted); line-height: 1.6; }
+        .sel-card-badge {
+            display: inline-block; margin-top: 16px; padding: 5px 14px; border-radius: 20px;
+            font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .sel-card.viewer .sel-card-badge { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .sel-card.editor .sel-card-badge { background: rgba(0,122,255,0.1); color: #007AFF; border: 1px solid rgba(0,122,255,0.2); }
+
+        /* Painel de login de editor */
+        #loginEditor {
+            display: none; flex-direction: column; align-items: center;
+        }
+        .login-box {
+            background: var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border); border-radius: 22px; padding: 0;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.08);
+            width: 400px; max-width: 92%; overflow: hidden; position: relative;
+        }
+        /* Barra de título estilo Windows */
+        .login-win-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 11px 16px; background: var(--stat-box);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .login-win-bar-left { display: flex; align-items: center; gap: 8px; }
+        .login-win-bar-left svg { width: 16px; height: 16px; }
+        .login-win-bar-title { font-size: 11.5px; font-weight: 700; color: var(--text-muted); }
+        .win-dots { display: flex; gap: 6px; }
+        .win-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .win-dot.r { background: #ef4444; } .win-dot.y { background: #f59e0b; } .win-dot.g { background: #10b981; }
+
+        .login-body { padding: 32px 36px 36px; }
+        .login-avatar-wrap {
+            width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 18px;
+            background: linear-gradient(135deg, #007AFF, #5E5CE6);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,122,255,0.38); position: relative;
+        }
+        .login-avatar-wrap svg { width: 40px; height: 40px; fill: rgba(255,255,255,0.95); }
+        .login-avatar-ring { position: absolute; inset: -5px; border-radius: 50%; border: 2px solid rgba(0,122,255,0.2); animation: ringPulse 2.5s ease infinite; }
+
+        .login-box h2 { margin: 0 0 4px; font-size: 1.4rem; color: var(--text-main); font-weight: 900; letter-spacing: -0.5px; text-align: center; }
+        .login-box-sub { color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: center; margin: 0 0 26px; }
+
+        .login-field-wrap { position: relative; margin-bottom: 14px; }
+        .login-field-label { display: block; font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .login-field-row { position: relative; }
+        .login-field-ico { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; display: flex; align-items: center; }
+        .login-field-ico svg { width: 16px; height: 16px; fill: currentColor; }
+        .login-inp {
+            width: 100%; padding: 13px 14px 13px 40px; box-sizing: border-box;
+            background: var(--input-bg); border: 1.5px solid var(--glass-border);
+            border-radius: 12px; color: var(--text-main); font-size: 14px; font-weight: 600;
+            font-family: 'Inter', sans-serif; transition: all 0.25s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .login-inp::placeholder { color: var(--text-muted); font-weight: 500; font-size: 13px; }
+        .login-inp:focus { border-color: #007AFF; box-shadow: 0 0 0 3px rgba(0,122,255,0.15); outline: none; }
+        /* Senha em bolinhas grandes */
+        #loginPass.login-inp { letter-spacing: 5px; font-size: 20px; }
+        #loginPass.login-inp::placeholder { letter-spacing: 0; font-size: 13px; }
+
+        .login-btn-ok {
+            width: 100%; padding: 15px; margin-top: 8px;
+            background: linear-gradient(135deg, #007AFF, #5E5CE6); color: #fff; border: none;
+            border-radius: 13px; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,122,255,0.35);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .login-btn-ok svg { width: 16px; height: 16px; fill: #fff; }
+        .login-btn-ok:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,122,255,0.5); }
+        .login-btn-ok:active { transform: translateY(0); }
+        .login-btn-voltar {
+            margin-top: 14px; background: none; border: none; color: var(--text-muted);
+            font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; gap: 6px; width: 100%; padding: 8px;
+            border-radius: 10px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .login-btn-voltar:hover { color: var(--text-main); background: var(--stat-box); }
+        .login-btn-voltar svg { width: 14px; height: 14px; fill: currentColor; }
+        /* Overlay de loading */
+        .login-auth-overlay {
+            position: absolute; inset: 0; background: rgba(0,122,255,0.06);
+            border-radius: 22px; display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(6px); z-index: 10;
+        }
+        .login-auth-spinner { width: 34px; height: 34px; border: 3px solid rgba(0,122,255,0.18); border-top-color: #007AFF; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        /* Alerta de giro baixo no card */
+        .giro-alert-badge {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #fff; font-size: 9px; font-weight: 900; padding: 3px 8px;
+            border-radius: 20px; border: 2px solid var(--bg-color-1);
+            box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+            text-transform: uppercase; letter-spacing: 0.5px; z-index: 5;
+            animation: alertPulse 1.5s ease infinite; white-space: nowrap;
+        }
+        @keyframes alertPulse { 0%,100%{ box-shadow: 0 2px 8px rgba(239,68,68,0.5); } 50%{ box-shadow: 0 2px 20px rgba(239,68,68,0.9), 0 0 0 4px rgba(239,68,68,0.2); } }
+        .station-card.giro-baixo { border-color: rgba(239,68,68,0.4) !important; }
+        .station-card.giro-baixo .stat-box:first-child { background: rgba(239,68,68,0.1) !important; border-color: rgba(239,68,68,0.3) !important; }
+        .btn-viewer { display: none; } /* não usada mais */
 
         /* === HEADER === */
         .header { 
@@ -100,6 +295,7 @@
             width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
         }
         .filter-box select:hover, .filter-box select:focus { border-color: #007AFF; box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15); }
+        .filter-box select:disabled { opacity: 0.7; cursor: not-allowed; }
 
         .btn-sync { 
             background-color: var(--text-main); color: var(--bg-color-1); border: none; padding: 12px 18px; 
@@ -112,6 +308,7 @@
         .btn-sync:active { transform: translateY(1px) scale(0.98); }
         .btn-global { background-color: var(--color-parada); color: #fff; box-shadow: 0 6px 20px var(--color-parada-glow); }
         .btn-print { background-color: #007AFF; color: #fff; box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3); } 
+        .btn-clear-manual { background-color: #f59e0b; color: #fff; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3); } 
         .btn-wip { background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: #fff; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3); border: 1px solid rgba(255,255,255,0.2); }
 
         #status-update { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); font-weight: 600; line-height: 1.5; text-align: center; background: var(--stat-box); padding: 8px 14px; border-radius: 12px; border: 1px solid var(--glass-border); margin-top: 17px; display: flex; align-items: center; justify-content: center; width: 100%; }
@@ -148,7 +345,8 @@
         .badge-repetido { background: rgba(0, 122, 255, 0.15); color: #007AFF; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 800; margin-left: 8px; border: 1px solid rgba(0, 122, 255, 0.3); flex-shrink: 0; }
         
         .card-header select { background: var(--stat-box); color: var(--text-main); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--glass-border); font-size: 9px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; flex-shrink: 0; max-width: 90px; }
-        .card-header select:hover { background: var(--input-bg); }
+        .card-header select:hover:not(:disabled) { background: var(--input-bg); }
+        .card-header select:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .info-row { display: flex; flex-direction: column; margin-bottom: 10px; width: 100%; padding-left: 8px; min-width: 0; }
         .info-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -161,7 +359,7 @@
         .health-bar-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.22, 1, 0.36, 1); }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; flex-shrink: 0; min-width: 0; }
-        .stat-box { text-align: center; padding: 8px 2px; background: var(--stat-box); border-radius: 10px; border: 1px solid var(--glass-border); transition: 0.3s; overflow: hidden; min-width: 0; }
+        .stat-box { text-align: center; padding: 8px 2px; background: var(--stat-box); border-radius: 10px; border: 1px solid var(--glass-border); transition: 0.3s; min-width: 0; }
         .stat-box:hover { transform: translateY(-2px); background: var(--input-bg); }
         .stat-num { display: block; font-size: 14px; font-weight: 800; color: var(--text-main); font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .stat-label { font-size: 8px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -194,7 +392,7 @@
         }
 
         @media (max-width: 600px) {
-            body { padding: 12px; }
+            .app-wrapper { padding: 12px; }
             .actions-container { grid-template-columns: 1fr 1fr; } 
             .btn-wip, .btn-kpi-dashboard { grid-column: 1 / -1; padding: 14px; font-size: 12px; } 
             .main-container { grid-template-columns: 1fr; gap: 20px; }
@@ -205,11 +403,11 @@
         }
 
         /* === MODAIS GENÉRICOS === */
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); animation: fadeIn 0.3s ease; }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .custom-modal-box { background: var(--glass-bg); backdrop-filter: blur(40px); border: 1px solid var(--glass-border); padding: 35px; border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); width: 380px; max-width: 90%; text-align: center; transform: translateY(0); animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .custom-modal-box h3 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); margin-bottom: 25px; font-weight: 900; }
+        .custom-modal-box h3 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); margin-bottom: 25px; font-weight: 900; white-space: pre-wrap; } 
         .custom-modal-input { background: var(--input-bg); color: var(--text-main); width: 100%; padding: 18px; margin-bottom: 25px; border: 1px solid var(--glass-border); border-radius: 16px; font-size: 20px; text-align: center; font-weight: 800; font-family: 'JetBrains Mono', monospace; letter-spacing: 3px; transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
         .custom-modal-input:focus { border-color: #007AFF; box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2); }
         .custom-modal-actions { display: flex; gap: 15px; justify-content: center; }
@@ -222,7 +420,7 @@
         .config-section h4 { color: #007AFF; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 20px; }
         .config-input { width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-main); font-size: 14px; margin-bottom: 16px; font-weight: 600; }
         .config-btn-action { width: 100%; padding: 16px; background: var(--text-main); color: var(--bg-color-1); border: none; border-radius: 14px; font-weight: 900; text-transform: uppercase; font-size: 13px; cursor: pointer; transition: 0.3s; }
-        .btn-theme-floating { position: fixed; bottom: 35px; right: 35px; background: var(--glass-bg); backdrop-filter: blur(25px); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 50%; width: 60px; height: 60px; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--glass-shadow); z-index: 1001; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .btn-theme-floating { position: fixed; bottom: 35px; right: 35px; background: var(--glass-bg); backdrop-filter: blur(25px); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 50%; width: 60px; height: 60px; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--glass-shadow); z-index: 100001; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .btn-theme-floating:hover { transform: scale(1.15) rotate(15deg); box-shadow: var(--glass-hover-shadow); }
         .config-btn { background: transparent; border: none; cursor: pointer; transition: 0.5s; padding: 5px; opacity: 0.6; filter: grayscale(1); font-size: 20px; }
         .config-btn:hover { opacity: 1; transform: rotate(180deg); filter: grayscale(0); }
@@ -287,7 +485,7 @@
         }
 
         /* === WIP REPORT MODAL === */
-        .wip-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; animation: kpiFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .wip-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 99998; display: none; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; animation: kpiFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         .wip-overlay.open { display: flex; align-items: flex-start; }
         .wip-modal { width: 100%; max-width: 1280px; background: var(--glass-bg); backdrop-filter: blur(50px); -webkit-backdrop-filter: blur(50px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 50px 150px rgba(0,0,0,0.5); overflow: hidden; margin-top: 20px; margin-bottom: 20px; display: flex; flex-direction: column; }
         .wip-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 30px; border-bottom: 1px solid var(--glass-border); background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(167,139,250,0.05)); flex-wrap: wrap; gap: 15px; }
@@ -341,149 +539,382 @@
     </style>
 </head>
 <body>
-    <audio id="somNotificacao" src="https://www.myinstants.com/media/sounds/uber-request.mp3" preload="auto"></audio>
-    <div id="toastAlocacao" class="toast-alerta"></div>
     
-    <div class="header">
-        <div class="header-left">
-            <h1> Painel de Abastecimento <button class="config-btn" onclick="verificarSenhaConfig()" title="Configurações do Sistema">⚙️</button></h1>
-            <p>Monitoramento Analítico em Tempo Real</p>
-        </div>
-        <div class="actions-container">
-            <div class="filter-box">
-                <label>GRUPO</label>
-                <select id="filtroGrupo" onchange="trocarGrupo()">
-                    <option value="Grupo 1">Grupo 1</option>
-                    <option value="Grupo 2">Grupo 2</option>
-                    <option value="Grupo 3">Grupo 3</option>
-                    <option value="Grupo 4">Grupo 4</option>
-                    <option value="Grupo 5">Grupo 5</option>
-                    <option value="Grupo 6">Grupo 6</option>
-                    <option value="Grupo 7">Grupo 7</option>
-                    <option value="Grupo 8">Grupo 8</option>
-                </select>
-            </div>
-            <div class="filter-box">
-                <label>MODELO</label>
-                <select id="filtroModelo" onchange="aplicarFiltroModelo()">
-                    <option value="TODOS">Todos</option>
-                </select>
-            </div>
-            <div class="filter-box">
-                <label>STATUS GLOBAL</label>
-                <select id="statusGlobal">
-                    <option value="">Selecionar...</option>
-                    <option value="rodando">RODANDO</option>
-                    <option value="parada">PARADA</option>
-                    <option value="TROCA">TROCA</option>
-                </select>
-            </div>
-            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()"> Aplicar Global</button>
-            <button class="btn-sync btn-print" onclick="gerarImpressao()"> Imprimir</button>
-            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()"> Atualizar DB</button>
-            <button class="btn-sync btn-wip" onclick="abrirRelatorioWIP()">📦 Relatório WIP</button>
-            <button class="btn-kpi-dashboard" onclick="abrirDashboard()">✨ Analysis</button>
-            <div class="notif-bell-wrap" id="notifBellWrap">
-                <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel(event)" title="Histórico de Notificações">🔔</button>
-                <span class="notif-badge" id="notifBadge">0</span>
-                <div class="notif-panel" id="notifPanel">
-                    <div class="notif-panel-header">
-                        <span class="notif-panel-title">🔔 Notificações</span>
-                        <button class="notif-clear-btn" onclick="limparNotificacoes()">Limpar tudo</button>
+    <div id="loginScreen" class="login-screen">
+
+        <div id="selecaoModo">
+            <div class="sel-header">
+                <div class="sel-logo">
+                    <div class="sel-logo-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 2h2v2h-2zm4 0h2v2h-2zm-4 4h2v2h-2zm4 0h2v2h-2z"/></svg>
                     </div>
-                    <div class="notif-list" id="notifList">
-                        <div class="notif-empty">Nenhuma notificação ainda.</div>
+                    <div class="sel-logo-text">NEXUS <span>Monitor</span></div>
+                </div>
+                <div class="sel-subtitle">Selecione o tipo de acesso</div>
+            </div>
+
+            <div class="sel-cards">
+                <div class="sel-card viewer" onclick="entrarComoViewer()">
+                    <div class="sel-card-icon-wrap">
+                        <div class="sel-card-ring"></div>
+                        <div class="sel-card-icon-inner">
+                            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </div>
                     </div>
+                    <div class="sel-card-title">Visualização</div>
+                    <div class="sel-card-desc">Acesse o painel de monitoramento em modo somente leitura, sem necessidade de autenticação.</div>
+                    <span class="sel-card-badge">Read-Only · Livre</span>
+                </div>
+
+                <div class="sel-card editor" onclick="mostrarLoginEditor()">
+                    <div class="sel-card-icon-wrap">
+                        <div class="sel-card-ring"></div>
+                        <div class="sel-card-icon-inner">
+                            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
+                    </div>
+                    <div class="sel-card-title">Editor</div>
+                    <div class="sel-card-desc">Acesse com credenciais de operador para alterar status, sincronizar e gerenciar o sistema.</div>
+                    <span class="sel-card-badge">Autenticação · Requerida</span>
                 </div>
             </div>
-            <div id="status-update">Sincronizando Nexus...</div>
         </div>
+
+        <div id="loginEditor">
+            <div class="login-box">
+                <div class="login-auth-overlay" id="loginAuthOverlay">
+                    <div class="login-auth-spinner"></div>
+                </div>
+                <div class="login-win-bar">
+                    <div class="login-win-bar-left">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="3" width="8" height="8" rx="1.5" fill="#007AFF"/>
+                            <rect x="13" y="3" width="8" height="8" rx="1.5" fill="#5E5CE6"/>
+                            <rect x="3" y="13" width="8" height="8" rx="1.5" fill="#10b981"/>
+                            <rect x="13" y="13" width="8" height="8" rx="1.5" fill="#f59e0b"/>
+                        </svg>
+                        <span class="login-win-bar-title">Nexus Monitor — Autenticação de Editor</span>
+                    </div>
+                    <div class="win-dots">
+                        <div class="win-dot r"></div>
+                        <div class="win-dot y"></div>
+                        <div class="win-dot g"></div>
+                    </div>
+                </div>
+
+                <div class="login-body">
+                    <div class="login-avatar-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+                        <div class="login-avatar-ring"></div>
+                    </div>
+                    <h2>Acesso de Editor</h2>
+                    <p class="login-box-sub">Credenciais obrigatórias</p>
+
+                    <div class="login-field-wrap">
+                        <span class="login-field-label">Usuário / Crachá</span>
+                        <div class="login-field-row">
+                            <div class="login-field-ico">
+                                <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                            </div>
+                            <input type="text" id="loginUser" class="login-inp" placeholder="Digite seu usuário..." autocomplete="off" onkeypress="if(event.key==='Enter') document.getElementById('loginPass').focus()">
+                        </div>
+                    </div>
+
+                    <div class="login-field-wrap">
+                        <span class="login-field-label">Senha de Acesso</span>
+                        <div class="login-field-row">
+                            <div class="login-field-ico">
+                                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                            </div>
+                            <input type="password" id="loginPass" class="login-inp" placeholder="Senha..." autocomplete="off" onkeypress="if(event.key==='Enter') fazerLogin('editor')">
+                        </div>
+                    </div>
+
+                    <button class="login-btn-ok" onclick="fazerLogin('editor')">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        Entrar como Editor
+                    </button>
+
+                    <button class="login-btn-voltar" onclick="voltarSelecao()">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        Voltar à seleção
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
-    
-    <div id="loading-msg"> Estabelecendo Conexão DB...</div>
-    <div class="main-container" id="stationGrid"></div>
+
+    <div id="mainApp" class="app-wrapper" style="display: none;">
+        <div id="toastAlocacao" class="toast-alerta"></div>
+        
+        <div class="header">
+            <div class="header-left">
+                <h1> Painel de Abastecimento <button class="config-btn" id="btnConfig" onclick="verificarSenhaConfig()" title="Configurações do Sistema">⚙️</button></h1>
+                <p>Monitoramento Analítico em Tempo Real</p>
+            </div>
+            <div class="actions-container">
+                <div class="filter-box">
+                    <label>GRUPO</label>
+                    <select id="filtroGrupo" onchange="trocarGrupo()">
+                        <option value="Grupo 1">Grupo 1</option>
+                        <option value="Grupo 2">Grupo 2</option>
+                        <option value="Grupo 3">Grupo 3</option>
+                        <option value="Grupo 4">Grupo 4</option>
+                        <option value="Grupo 5">Grupo 5</option>
+                        <option value="Grupo 6">Grupo 6</option>
+                        <option value="Grupo 7">Grupo 7</option>
+                        <option value="Grupo 8">Grupo 8</option>
+                    </select>
+                </div>
+                <div class="filter-box">
+                    <label>MODELO</label>
+                    <select id="filtroModelo" onchange="aplicarFiltroModelo()">
+                        <option value="TODOS">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-box">
+                    <label>STATUS GLOBAL</label>
+                    <select id="statusGlobal">
+                        <option value="">Selecionar...</option>
+                        <option value="rodando">RODANDO</option>
+                        <option value="parada">PARADA</option>
+                        <option value="TROCA">TROCA</option>
+                    </select>
+                </div>
+                <button class="btn-sync btn-global" id="btnGlobal" onclick="alterarStatusGlobal()"> Aplicar Global</button>
+                <button class="btn-sync btn-print" onclick="gerarImpressao()"> Imprimir</button>
+                <button class="btn-sync btn-clear-manual" id="btnClearManual" onclick="limparPrsManuais()">🗑️ Limpar Manuais</button>
+                <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()"> Atualizar DB</button>
+                <button class="btn-sync btn-wip" onclick="abrirRelatorioWIP()">📦 Relatório WIP</button>
+                <button class="btn-kpi-dashboard" onclick="abrirDashboard()">✨ Analysis</button>
+                <div class="notif-bell-wrap" id="notifBellWrap">
+                    <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel(event)" title="Histórico de Notificações">🔔</button>
+                    <span class="notif-badge" id="notifBadge">0</span>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-panel-header">
+                            <span class="notif-panel-title">🔔 Notificações</span>
+                            <button class="notif-clear-btn" onclick="limparNotificacoes()">Limpar tudo</button>
+                        </div>
+                        <div class="notif-list" id="notifList">
+                            <div class="notif-empty">Nenhuma notificação ainda.</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="status-update">Sincronizando Nexus...</div>
+            </div>
+        </div>
+        
+        <div id="loading-msg"> Estabelecendo Conexão DB...</div>
+        <div class="main-container" id="stationGrid"></div>
+        
+        <div id="customModalOverlay" class="custom-modal-overlay">
+            <div class="custom-modal-box">
+                <h3 id="customModalMessage">Mensagem</h3>
+                <input type="text" id="customModalInput" class="custom-modal-input" placeholder="Autenticação..." style="display:none;" autocomplete="off">
+                <div class="custom-modal-actions">
+                    <button id="customModalBtnCancel" class="btn-cancelar">Cancelar</button>
+                    <button id="customModalBtnOk" class="btn-confirmar">Autorizar</button>
+                </div>
+            </div>
+        </div>
+        <div id="configModalOverlay" class="custom-modal-overlay">
+            <div class="custom-modal-box config-panel">
+                <h3 style="text-align: center; font-size: 1.4rem;"> Protocolo de Acesso</h3>
+                <div id="configMsg"></div>
+                <div class="config-grid">
+                    <div class="config-section" style="flex: 1;">
+                        <h4> Adicionar Operador</h4>
+                        <input type="text" id="configNovoCracha" class="config-input" placeholder="ID do Crachá / Usuário..." autocomplete="off">
+                        <input type="text" id="configNovoNome" class="config-input" placeholder="Nome do Operador..." autocomplete="off">
+                        <button class="config-btn-action" onclick="adicionarCracha()">Registrar no Sistema</button>
+                    </div>
+                </div>
+                <div class="custom-modal-actions">
+                    <button onclick="fecharConfig()" class="btn-cancelar" style="flex: none; width: 100%;">Finalizar Protocolo</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="kpiOverlay" class="kpi-overlay" onclick="if(event.target===this) fecharDashboard()">
+            <div class="kpi-modal">
+                <div class="kpi-header">
+                    <div class="kpi-header-left">
+                        <div class="kpi-header-icon">✨</div>
+                        <div>
+                            <p class="kpi-header-title">Nexus Smart Insights</p>
+                            <p class="kpi-header-sub" id="kpiSubtitle">Consultando Banco de dados Em Tempo Real...</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+                        <div class="kpi-header-tabs">
+                            <button class="kpi-tab active" onclick="kpiSetTab(this,'geral')">Visão Geral</button>
+                            <button class="kpi-tab" onclick="kpiSetTab(this,'modelos')">Perf. Modelos</button>
+                            <button class="kpi-tab" onclick="kpiSetTab(this,'tamanhos')">Grades</button>
+                            <button class="kpi-tab" onclick="kpiSetTab(this,'cors')">Cores</button>
+                        </div>
+                        <button class="kpi-close-btn" onclick="fecharDashboard()">✕</button>
+                    </div>
+                </div>
+                <div class="kpi-body" id="kpiBody">
+                    <p style="text-align:center;color:var(--text-muted);padding:60px 0;font-weight:800;font-size:18px;">Gerando Matriz de Dados...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="wipModalOverlay" class="wip-overlay" onclick="if(event.target===this) fecharRelatorioWIP()">
+            <div class="wip-modal">
+                <div class="wip-header">
+                    <h2 class="wip-header-title"><span>📦</span> Relatório WIP - Ordens Abastecidas</h2>
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                        <button class="wip-global-toggle" onclick="toggleAllWip(false)">➕ Expandir Tudo</button>
+                        <button class="wip-global-toggle" onclick="toggleAllWip(true)">➖ Contrair Tudo</button>
+                        <button class="kpi-close-btn" style="margin-left: 10px;" onclick="fecharRelatorioWIP()">✕</button>
+                    </div>
+                </div>
+                <div class="wip-body" id="wipBody">
+                    <p style="text-align:center;color:var(--text-muted);font-weight:700;">Carregando dados da produção...</p>
+                </div>
+            </div>
+        </div>
+    </div> 
     
     <button id="btnTema" class="btn-theme-floating" onclick="alternarTema()" title="Alternar Modo Imersivo">🌓</button>
-    
-    <div id="customModalOverlay" class="custom-modal-overlay">
-        <div class="custom-modal-box">
-            <h3 id="customModalMessage">Mensagem</h3>
-            <input type="password" id="customModalInput" class="custom-modal-input" placeholder="Autenticação..." style="display:none;" autocomplete="off">
-            <div class="custom-modal-actions">
-                <button id="customModalBtnCancel" class="btn-cancelar">Cancelar</button>
-                <button id="customModalBtnOk" class="btn-confirmar">Autorizar</button>
-            </div>
-        </div>
-    </div>
-    <div id="configModalOverlay" class="custom-modal-overlay">
-        <div class="custom-modal-box config-panel">
-            <h3 style="text-align: center; font-size: 1.4rem;"> Protocolo de Acesso</h3>
-            <div id="configMsg"></div>
-            <div class="config-grid">
-                <div class="config-section" style="flex: 1;">
-                    <h4> Adicionar Operador</h4>
-                    <input type="number" id="configNovoCracha" class="config-input" placeholder="ID do Crachá..." autocomplete="off">
-                    <input type="text" id="configNovoNome" class="config-input" placeholder="Nome do Operador..." autocomplete="off">
-                    <button class="config-btn-action" onclick="adicionarCracha()">Registrar no Sistema</button>
-                </div>
-            </div>
-            <div class="custom-modal-actions">
-                <button onclick="fecharConfig()" class="btn-cancelar" style="flex: none; width: 100%;">Finalizar Protocolo</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="kpiOverlay" class="kpi-overlay" onclick="if(event.target===this) fecharDashboard()">
-        <div class="kpi-modal">
-            <div class="kpi-header">
-                <div class="kpi-header-left">
-                    <div class="kpi-header-icon">✨</div>
-                    <div>
-                        <p class="kpi-header-title">Nexus Smart Insights</p>
-                        <p class="kpi-header-sub" id="kpiSubtitle">Consultando Banco de dados Em Tempo Real...</p>
-                    </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
-                    <div class="kpi-header-tabs">
-                        <button class="kpi-tab active" onclick="kpiSetTab(this,'geral')">Visão Geral</button>
-                        <button class="kpi-tab" onclick="kpiSetTab(this,'modelos')">Perf. Modelos</button>
-                        <button class="kpi-tab" onclick="kpiSetTab(this,'tamanhos')">Grades</button>
-                        <button class="kpi-tab" onclick="kpiSetTab(this,'cors')">Cores</button>
-                    </div>
-                    <button class="kpi-close-btn" onclick="fecharDashboard()">✕</button>
-                </div>
-            </div>
-            <div class="kpi-body" id="kpiBody">
-                <p style="text-align:center;color:var(--text-muted);padding:60px 0;font-weight:800;font-size:18px;">Gerando Matriz de Dados...</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="wipModalOverlay" class="wip-overlay" onclick="if(event.target===this) fecharRelatorioWIP()">
-        <div class="wip-modal">
-            <div class="wip-header">
-                <h2 class="wip-header-title"><span>📦</span> Relatório WIP - Ordens Abastecidas</h2>
-                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                    <button class="wip-global-toggle" onclick="toggleAllWip(false)">➕ Expandir Tudo</button>
-                    <button class="wip-global-toggle" onclick="toggleAllWip(true)">➖ Contrair Tudo</button>
-                    <button class="kpi-close-btn" style="margin-left: 10px;" onclick="fecharRelatorioWIP()">✕</button>
-                </div>
-            </div>
-            <div class="wip-body" id="wipBody">
-                <p style="text-align:center;color:var(--text-muted);font-weight:700;">Carregando dados da produção...</p>
-            </div>
-        </div>
-    </div>
 
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbwZMjbxJFBsgLwzCouv8hegNmhTzPS96srsfAJi1nC6EBWssVQ8ziQIX7Gu0y5SuqTk/exec";
         
-        const defaultUsuarios = { "48192292175030": "Francisco Eduardo","1987": "Administrador"  };
+        // Cadastrando os usuários com seus respectivos nomes de exibição
+        const defaultUsuarios = { 
+            "48192292175030": "Francisco Eduardo",
+            "1987": "Administrador",
+            "Raine.neres": "Raine Neres",
+            "Maria.dias": "Maria Dias",
+            "Francisco.carvalho": "Francisco Carvalho",
+            "Rafael.matos": "Rafael Matos",
+            "Bruno.bs": "Bruno BS",
+            "Rafael.miranda": "Rafael Miranda",
+            "Sandra.santos": "Sandra Santos"
+        };
+
+        // Credenciais centrais exigidas no Login Inicial e Configurações (Usuário: Senha)
+        const credenciaisEditor = {
+            "Raine.neres": "dados1",
+            "Maria.dias": "dados2",
+            "Francisco.carvalho": "dados3",
+            "Rafael.matos": "dados4",
+            "Bruno.bs": "dados5",
+            "Rafael.miranda": "dados6",
+            "Sandra.santos": "dados7"
+        };
+
         let usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
         let historicoGrupos = {}; let estadoAlocacao = {}; let bgGroupIndex = 1;
         let wipRawData = []; 
         let collapsedModels = new Set();
         let toastTimeout1, toastTimeout2, toastTimeout3;
+        
+        let userRole = 'viewer'; // Controle de permissão do usuário
+        let sysIntervals = [];
+
+        /* === DESBLOQUEADOR UNIVERSAL DE ÁUDIO === */
+        let audioDesbloqueado = false;
+
+        function forcarDesbloqueioAudio() {
+            if (audioDesbloqueado) return;
+            const som = document.getElementById('somNotificacao');
+            if (som) {
+                som.volume = 0; // Toca totalmente silencioso
+                som.play().then(() => {
+                    som.pause();
+                    som.currentTime = 0;
+                    som.volume = 1; // Deixa preparado pro volume máximo
+                    audioDesbloqueado = true;
+                    // Limpa os event listeners pra não pesar a página
+                    document.removeEventListener('click', forcarDesbloqueioAudio);
+                    document.removeEventListener('touchstart', forcarDesbloqueioAudio);
+                }).catch(e => {
+                    // Ignora, significa que ainda não pode tocar
+                });
+            }
+        }
+
+        // Tenta destravar em qualquer clique do usuário no documento
+        document.addEventListener('click', forcarDesbloqueioAudio);
+        document.addEventListener('touchstart', forcarDesbloqueioAudio);
+
+
+        /* === NAVEGAÇÃO DA TELA DE ACESSO === */
+        function mostrarLoginEditor() {
+            const sel = document.getElementById('selecaoModo');
+            const ed  = document.getElementById('loginEditor');
+            sel.style.animation = 'slideToLogin 0.35s cubic-bezier(0.22,1,0.36,1) forwards';
+            setTimeout(() => {
+                sel.style.display = 'none';
+                sel.style.animation = '';
+                ed.style.display = 'flex';
+                ed.style.animation = 'slideFromRight 0.4s cubic-bezier(0.22,1,0.36,1)';
+                document.getElementById('loginUser').focus();
+            }, 300);
+        }
+
+        function voltarSelecao() {
+            const sel = document.getElementById('selecaoModo');
+            const ed  = document.getElementById('loginEditor');
+            ed.style.display = 'none';
+            sel.style.display = 'flex';
+            sel.style.animation = 'fadeInBack 0.4s cubic-bezier(0.22,1,0.36,1)';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+        }
+
+        function entrarComoViewer() {
+            userRole = 'viewer';
+            forcarDesbloqueioAudio();
+            setTimeout(() => tocarSomLogin(), 80);
+            sessionStorage.setItem('nexusSession', JSON.stringify({ role: 'viewer', user: '', ts: Date.now() }));
+            _abrirSistema();
+        }
+
+        function _abrirSistema() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            aplicarPermissoesDeAcesso();
+            iniciarSistema();
+        }
+
+        /* === SISTEMA DE LOGIN === */
+        function fazerLogin(modo) {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!user || credenciaisEditor[user] !== pass) {
+                tocarSomErro();
+                const box = document.querySelector('.login-box');
+                box.style.animation = 'none'; void box.offsetWidth;
+                box.style.animation = 'shakeBox 0.5s ease';
+                setTimeout(() => box.style.animation = '', 600);
+                alert("Acesso Negado!\nVerifique o usuário e a senha.");
+                return;
+            }
+
+            userRole = 'editor';
+            document.getElementById('loginAuthOverlay').style.display = 'flex';
+            forcarDesbloqueioAudio();
+            setTimeout(() => tocarSomLogin(), 100);
+            sessionStorage.setItem('nexusSession', JSON.stringify({ role: 'editor', user: user, ts: Date.now() }));
+            setTimeout(_abrirSistema, 650);
+        }
+
+        function aplicarPermissoesDeAcesso() {
+            if (userRole === 'viewer') {
+                document.getElementById('statusGlobal').disabled = true;
+                document.getElementById('btnGlobal').style.display = 'none';
+                document.getElementById('btnSyncRef').style.display = 'none';
+                document.getElementById('btnClearManual').style.display = 'none';
+                document.getElementById('btnConfig').style.display = 'none';
+            }
+        }
 
         /* === HISTÓRICO DE NOTIFICAÇÕES (COM PERSISTÊNCIA DE 5 HORAS) === */
         let notifHistory = JSON.parse(localStorage.getItem('notifHistoryData')) || [];
@@ -498,7 +929,6 @@
                 localStorage.setItem('notifHistoryData', JSON.stringify(notifHistory));
             }
         }
-        limparNotificacoesAntigas(); // Roda sempre que a página carrega
 
         function atualizarDomNotificacoes() {
             const badge = document.getElementById('notifBadge');
@@ -534,8 +964,9 @@
 
         document.addEventListener('click', function(e) {
             const wrap = document.getElementById('notifBellWrap');
-            if (wrap && !wrap.contains(e.target)) {
-                document.getElementById('notifPanel').classList.remove('open');
+            const panel = document.getElementById('notifPanel');
+            if (wrap && panel && !wrap.contains(e.target)) {
+                panel.classList.remove('open');
             }
         });
 
@@ -544,17 +975,15 @@
             const agora = new Date();
             const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             
-            // Adiciona timestamp para validação de 5 horas futuramente
             notifHistory.unshift({ grupo: grupoAlterado, operador: nomeExib, dataHora: dataHora || '—', hora, timestamp: agora.getTime() });
             if (notifHistory.length > 50) notifHistory.pop();
             notifUnread++;
             
-            // Salva no navegador permanentemente
             localStorage.setItem('notifHistoryData', JSON.stringify(notifHistory));
             localStorage.setItem('notifUnreadCount', notifUnread);
             
             const btn = document.getElementById('notifBellBtn');
-            btn.classList.remove('has-notif'); void btn.offsetWidth; // Gatilho visual imediato
+            btn.classList.remove('has-notif'); void btn.offsetWidth;
             atualizarDomNotificacoes();
         }
 
@@ -568,10 +997,16 @@
         } 
             
         async function verificarSenhaConfig() {
-            const senha = await customPrompt("Nível de Acesso Restrito.\nInsira a credencial administrativa:");
-            if (senha === "14490") { document.getElementById('configModalOverlay').style.display = 'flex'; } 
-            else if (senha !== null && senha !== "") { await customAlert("Credencial Inválida. Acesso Negado."); }
+            const senha = await customPrompt("Nível de Acesso Restrito.\nInsira a credencial administrativa (Senha):", true);
+            const senhasValidas = Object.values(credenciaisEditor);
+            
+            if (senhasValidas.includes(senha)) { 
+                document.getElementById('configModalOverlay').style.display = 'flex'; 
+            } else if (senha !== null && senha !== "") { 
+                await customAlert("Credencial Inválida. Acesso Negado."); 
+            }
         }
+        
         function fecharConfig() { document.getElementById('configModalOverlay').style.display = 'none'; usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios; }
         function mostrarMsgConfig(msg, cor) { const el = document.getElementById('configMsg'); el.style.color = cor; el.innerText = msg; setTimeout(() => el.innerText = '', 3500); }
         function adicionarCracha() {
@@ -582,22 +1017,199 @@
             document.getElementById('configNovoCracha').value = ''; document.getElementById('configNovoNome').value = '';
         }
 
+        // ========================================================
+        // SOM DE NOTIFICAÇÃO VIA WEB AUDIO API (sem dependência externa)
+        // ========================================================
+        let _audioCtx = null;
+        function _getAudioCtx() {
+            if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return _audioCtx;
+        }
+        // Desbloqueia o AudioContext na primeira interação do usuário
+        document.addEventListener('click', function _unlockAudio() {
+            try { const ctx = _getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
+        }, { once: true });
+
+        function tocarSomNotificacao() {
+            try {
+                const ctx = _getAudioCtx();
+                if (ctx.state === 'suspended') ctx.resume();
+
+                // Reprodução fiel do som Uber Eats: duas notas "bell" ascendentes (badum)
+                function playBell(freq, startTime, volume) {
+                    const dur = 0.55;
+                    // Camada 1: fundamental (corpo do som)
+                    const osc1 = ctx.createOscillator();
+                    const g1   = ctx.createGain();
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(freq, startTime);
+                    g1.gain.setValueAtTime(0, startTime);
+                    g1.gain.linearRampToValueAtTime(volume, startTime + 0.008);
+                    g1.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+                    osc1.connect(g1); g1.connect(ctx.destination);
+                    osc1.start(startTime); osc1.stop(startTime + dur + 0.05);
+
+                    // Camada 2: 2º harmônico (brilho/metalicidade)
+                    const osc2 = ctx.createOscillator();
+                    const g2   = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(freq * 2.756, startTime); // inharmonic partial, característica de sino
+                    g2.gain.setValueAtTime(0, startTime);
+                    g2.gain.linearRampToValueAtTime(volume * 0.35, startTime + 0.006);
+                    g2.gain.exponentialRampToValueAtTime(0.001, startTime + dur * 0.6);
+                    osc2.connect(g2); g2.connect(ctx.destination);
+                    osc2.start(startTime); osc2.stop(startTime + dur);
+
+                    // Camada 3: sub-harmônico leve (corpo/peso do som)
+                    const osc3 = ctx.createOscillator();
+                    const g3   = ctx.createGain();
+                    osc3.type = 'triangle';
+                    osc3.frequency.setValueAtTime(freq * 0.5, startTime);
+                    g3.gain.setValueAtTime(0, startTime);
+                    g3.gain.linearRampToValueAtTime(volume * 0.15, startTime + 0.010);
+                    g3.gain.exponentialRampToValueAtTime(0.001, startTime + dur * 0.4);
+                    osc3.connect(g3); g3.connect(ctx.destination);
+                    osc3.start(startTime); osc3.stop(startTime + dur);
+                }
+
+                const now = ctx.currentTime;
+                // Nota 1: ~587 Hz (D5), Nota 2: ~784 Hz (G5) — intervalo de quarta ascendente, típico do Uber Eats
+                playBell(587.33, now,        0.55);
+                playBell(783.99, now + 0.19, 0.55);
+            } catch(e) { console.warn("Web Audio API indisponível.", e); }
+        }
+
+        // =====================================================
+        // SOM DE LOGIN BEM-SUCEDIDO (acorde ascendente)
+        // =====================================================
+        function tocarSomLogin() {
+            try {
+                const ctx = _getAudioCtx();
+                if (ctx.state === 'suspended') ctx.resume();
+                const notas = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+                notas.forEach((freq, i) => {
+                    const osc = ctx.createOscillator(); const g = ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.value = freq;
+                    const t = ctx.currentTime + i * 0.1;
+                    g.gain.setValueAtTime(0, t);
+                    g.gain.linearRampToValueAtTime(0.35, t + 0.01);
+                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+                    osc.connect(g); g.connect(ctx.destination);
+                    osc.start(t); osc.stop(t + 0.5);
+                });
+            } catch(e) {}
+        }
+
+        // Som de erro / acesso negado
+        function tocarSomErro() {
+            try {
+                const ctx = _getAudioCtx();
+                if (ctx.state === 'suspended') ctx.resume();
+                const notas = [400, 320];
+                notas.forEach((freq, i) => {
+                    const osc = ctx.createOscillator(); const g = ctx.createGain();
+                    osc.type = 'square'; osc.frequency.value = freq;
+                    const t = ctx.currentTime + i * 0.15;
+                    g.gain.setValueAtTime(0, t);
+                    g.gain.linearRampToValueAtTime(0.15, t + 0.01);
+                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+                    osc.connect(g); g.connect(ctx.destination);
+                    osc.start(t); osc.stop(t + 0.3);
+                });
+            } catch(e) {}
+        }
+
+        // Som de autenticação (prompt de crachá confirmado)
+        function tocarSomAuth() {
+            try {
+                const ctx = _getAudioCtx();
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator(); const g = ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(1100, ctx.currentTime + 0.12);
+                g.gain.setValueAtTime(0, ctx.currentTime);
+                g.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.02);
+                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                osc.connect(g); g.connect(ctx.destination);
+                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+            } catch(e) {}
+        }
+
+        // =====================================================
+        // SOM DE ALERTA PARA ESTAÇÃO COM GIRO BAIXO
+        // =====================================================
+        function tocarSomAlertaGiro() {
+            try {
+                const ctx = _getAudioCtx();
+                if (ctx.state === 'suspended') ctx.resume();
+                // Padrão de urgência: 3 bips rápidos
+                [0, 0.22, 0.44].forEach(delay => {
+                    const osc = ctx.createOscillator(); const g = ctx.createGain();
+                    osc.type = 'triangle'; osc.frequency.value = 1200;
+                    const t = ctx.currentTime + delay;
+                    g.gain.setValueAtTime(0, t);
+                    g.gain.linearRampToValueAtTime(0.45, t + 0.01);
+                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+                    osc.connect(g); g.connect(ctx.destination);
+                    osc.start(t); osc.stop(t + 0.2);
+                });
+            } catch(e) {}
+        }
+
+        // Controle de alertas de giro baixo já emitidos (evita repetição a cada ciclo)
+        let _giroAlertasEmitidos = new Set();
+
+        function verificarAlertasGiroBaixo(grupo, listaEstacoes) {
+            const limiteGiro = 60;
+            listaEstacoes.forEach(({ estacao, giro, status }) => {
+                const chave = `${grupo}_${estacao}`;
+                if (status === 'rodando' && giro < limiteGiro && giro > 0) {
+                    if (!_giroAlertasEmitidos.has(chave)) {
+                        _giroAlertasEmitidos.add(chave);
+                        tocarSomAlertaGiro();
+                        // Toast de alerta
+                        mostrarToastAlertaGiro(grupo, estacao, giro);
+                    }
+                } else {
+                    // Remove da lista se o giro voltou ao normal
+                    _giroAlertasEmitidos.delete(chave);
+                }
+            });
+        }
+
+        function mostrarToastAlertaGiro(grupo, estacao, giro) {
+            const toastId = `toast_giro_${grupo}_${estacao}`;
+            let t = document.getElementById(toastId);
+            if (!t) {
+                t = document.createElement('div');
+                t.id = toastId;
+                t.style.cssText = `position:fixed;bottom:${35 + (_giroAlertasEmitidos.size * 90)}px;right:35px;
+                    background:linear-gradient(135deg,rgba(239,68,68,0.95),rgba(220,38,38,0.95));
+                    backdrop-filter:blur(20px);color:#fff;padding:16px 22px;border-radius:16px;
+                    box-shadow:0 12px 35px rgba(239,68,68,0.5);z-index:99999;font-size:13px;
+                    font-weight:700;line-height:1.5;border:1px solid rgba(255,255,255,0.25);
+                    transition:opacity 0.5s;opacity:0;max-width:280px;font-family:'Inter',sans-serif;`;
+                document.body.appendChild(t);
+            }
+            const estPad = String(estacao).padStart(2,'0');
+            t.innerHTML = `<div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;opacity:0.8;margin-bottom:4px;">⚠️ ALERTA DE GIRO BAIXO</div>
+                <strong>EST ${estPad} — ${grupo}</strong><br>
+                Giro atual: <span style="font-family:'JetBrains Mono',monospace;font-weight:900;">${giro}</span> pares <span style="font-size:11px;opacity:0.8;">(mín: 60)</span>`;
+            t.style.opacity = '0'; t.style.display = 'block';
+            setTimeout(() => t.style.opacity = '1', 20);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 600); }, 12000);
+        }
+
         function exibirNotificacao(cracha, dataHora, grupoAlterado) {
             const toast = document.getElementById('toastAlocacao'); 
-            const som = document.getElementById('somNotificacao');
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
             const nomeExibicao = usuariosAutorizados[cracha] || cracha || "Sistema";
-            
-            if (som) { 
-                som.currentTime = 0; 
-                som.play().catch(e => console.warn("Interação pendente para som.")); 
-            }
+
+            tocarSomNotificacao();
             
             toast.innerHTML = `<strong>🔄 Sincronização Detectada</strong><br>${grupoAlterado}<br>Operador: ${nomeExibicao}<br>Log: ${dataHora}`;
             
-            clearTimeout(toastTimeout1);
-            clearTimeout(toastTimeout2);
-            clearTimeout(toastTimeout3);
+            clearTimeout(toastTimeout1); clearTimeout(toastTimeout2); clearTimeout(toastTimeout3);
             
             toast.style.display = 'block'; 
             toastTimeout1 = setTimeout(() => toast.style.opacity = '1', 10);
@@ -618,30 +1230,39 @@
             if(e.key === 'customUsuarios') { usuariosAutorizados = JSON.parse(e.newValue); }
         });
         
+        // ========================================================
+        // ATUALIZADO: GATILHO REVERTIDO APENAS PARA DATA/HORA+CRACHÁ
+        // ========================================================
         async function checarProximoGrupoBackground() {
             const grupoAtualVisor = document.getElementById('filtroGrupo').value; let grupoChecar = "Grupo " + bgGroupIndex;
             bgGroupIndex++; if(bgGroupIndex > 8) bgGroupIndex = 1; if(grupoChecar === grupoAtualVisor) return;
             try {
-                const response = await fetch(`${URL_API}?grupo=${grupoChecar}&_t=${new Date().getTime()}`, { cache: "no-store" }); const dados = await response.json();
+                const response = await fetch(`${URL_API}?grupo=${grupoChecar}&_t=${new Date().getTime()}`, { cache: "no-store" }); 
+                const dados = await response.json();
                 const estacoesReais = {}; dados.forEach(d => { if (!d.grupo || d.grupo === grupoChecar) { estacoesReais[d.estacao] = d; } });
-                const listaExibida = Object.values(estacoesReais); const infoData = listaExibida.find(d => d.dataHora);
-                if (infoData && infoData.dataHora) {
-                    const chave = infoData.dataHora + (infoData.cracha || ""); const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-                    if (!historicoGrupos[grupoChecar]) { historicoGrupos[grupoChecar] = chave; estadoAlocacao[grupoChecar] = strEstado; } 
-                    else if (historicoGrupos[grupoChecar] !== chave) {
-                        historicoGrupos[grupoChecar] = chave;
-                        estadoAlocacao[grupoChecar] = strEstado;
-                        exibirNotificacao(infoData.cracha, infoData.dataHora, grupoChecar);
+                const listaExibida = Object.values(estacoesReais); 
+                
+                const infoData = listaExibida.find(d => d.dataHora) || {};
+                
+                // O Radar agora SÓ dispara se a string de DataHora + Crachá mudar. Ignora mudanças fantasma.
+                const chaveAtual = (infoData.dataHora || "") + (infoData.cracha || ""); 
+                
+                if (chaveAtual !== "") {
+                    if (!historicoGrupos[grupoChecar]) { 
+                        historicoGrupos[grupoChecar] = chaveAtual; 
+                    } else if (historicoGrupos[grupoChecar] !== chaveAtual) {
+                        historicoGrupos[grupoChecar] = chaveAtual;
+                        exibirNotificacao(infoData.cracha || "Sistema", infoData.dataHora, grupoChecar);
                     }
                 }
             } catch(e) {}
         }
-        setInterval(checarProximoGrupoBackground, 3500);
         
         function alternarTema() {
             const body = document.body; body.classList.toggle('dark-mode'); const isDark = body.classList.contains('dark-mode');
             localStorage.setItem('temaEscuroMonitor', isDark); document.getElementById('btnTema').innerText = isDark ? '☀️' : '🌒';
         }
+        
         function customAlert(msg) {
             return new Promise(resolve => {
                 const overlay = document.getElementById('customModalOverlay'); document.getElementById('customModalMessage').innerText = msg;
@@ -650,16 +1271,32 @@
                 overlay.style.display = 'flex'; btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
             });
         }
-        function customPrompt(msg) {
+        
+        // Modal de Interação Customizado (agora suporta texto como padrão para inserir usuários ou números)
+        function customPrompt(msg, isPassword = false) {
             return new Promise(resolve => {
-                const overlay = document.getElementById('customModalOverlay'); const input = document.getElementById('customModalInput');
-                document.getElementById('customModalMessage').innerText = msg; input.style.display = 'block'; input.value = '';
-                const btnCancel = document.getElementById('customModalBtnCancel'); const btnOk = document.getElementById('customModalBtnOk');
-                btnCancel.style.display = 'block'; btnOk.style.display = 'block'; btnOk.innerText = 'Confirmar Execução';
-                overlay.style.display = 'flex'; input.focus(); btnOk.onclick = () => { overlay.style.display = 'none'; resolve(input.value); };
-                btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); }; input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
+                const overlay = document.getElementById('customModalOverlay'); 
+                const input = document.getElementById('customModalInput');
+                
+                document.getElementById('customModalMessage').innerText = msg; 
+                input.style.display = 'block'; 
+                input.type = isPassword ? 'password' : 'text'; // Trocado para texto, para aceitar chaves como "Raine.neres"
+                input.value = '';
+                
+                const btnCancel = document.getElementById('customModalBtnCancel'); 
+                const btnOk = document.getElementById('customModalBtnOk');
+                btnCancel.style.display = 'block'; 
+                btnOk.style.display = 'block'; 
+                btnOk.innerText = 'Confirmar Execução';
+                overlay.style.display = 'flex'; 
+                input.focus(); 
+                
+                btnOk.onclick = () => { overlay.style.display = 'none'; if(input.value) tocarSomAuth(); resolve(input.value); };
+                btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); }; 
+                input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
             });
         }
+        
         function trocarGrupo() { const grupo = document.getElementById('filtroGrupo').value; localStorage.setItem('ultimoGrupoSelecionado', grupo); carregarPainel(); }
         function aplicarFiltroModelo() {
             const modeloSelecionado = document.getElementById('filtroModelo').value; const wrappers = document.querySelectorAll('.flip-card-wrapper');
@@ -685,6 +1322,67 @@
                 html += '<div class="detail-row"><div class="detail-cell cor-cell" title="' + g.cor + '">' + g.cor + '</div><div class="detail-cell" title="' + g.ordem + '">' + g.ordem + '</div><div class="detail-cell" title="' + pacoteTexto + '">' + pacoteTexto + '</div></div>';
             });
             return html;
+        }
+        
+        /* FUNÇÃO PARA ADICIONAR PRs MANUALMENTE */
+        async function adicionarPrManual(grupo, estacao, event) {
+            event.stopPropagation(); 
+            const chave = `pr_manual_${grupo}_${estacao}`;
+            const chaveTime = `pr_manual_time_${grupo}_${estacao}`;
+            let atual = parseInt(localStorage.getItem(chave)) || 0;
+            
+            const val = await customPrompt(`Quantos PRs adicionar manualmente na EST ${estacao} do ${grupo}?\n(Digite 0 para resetar/limpar. Atual: +${atual})`, false);
+            
+            if (val !== null && val.trim() !== '') {
+                const num = parseInt(val);
+                if (!isNaN(num)) {
+                    if (num === 0) {
+                        localStorage.removeItem(chave);
+                        localStorage.removeItem(chaveTime);
+                    } else {
+                        localStorage.setItem(chave, atual + num);
+                        const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        localStorage.setItem(chaveTime, horaAtual);
+                    }
+                    carregarPainel(); 
+                } else {
+                    await customAlert('Por favor, digite um número válido.');
+                }
+            }
+        }
+
+        /* FUNÇÃO PARA LIMPAR TODOS OS PRs MANUAIS */
+        async function limparPrsManuais() {
+            usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
+            const info = await customPrompt("Ação Crítica de Limpeza.\n\nPor favor, digite seu Usuário/Crachá para confirmar:", false);
+            
+            const crachaDigitado = info ? info.trim() : "";
+            const nomeUsuario = usuariosAutorizados[crachaDigitado];
+            
+            if (!nomeUsuario) { 
+                await customAlert("Acesso negado. Usuário/Crachá inválido ou não cadastrado."); 
+                return; 
+            }
+
+            let contadorDeletados = 0;
+            const chavesParaDeletar = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const chave = localStorage.key(i);
+                if (chave && chave.startsWith('pr_manual_')) {
+                    chavesParaDeletar.push(chave);
+                }
+            }
+
+            chavesParaDeletar.forEach(chave => {
+                localStorage.removeItem(chave);
+                // Como as chaves de tempo começam com 'pr_manual_time_', 
+                // elas também serão capturadas e excluídas neste loop.
+                contadorDeletados++;
+            });
+
+            await customAlert(`Limpeza concluída por ${nomeUsuario}.\nRegistros manuais foram apagados da memória.`);
+            carregarPainel();
         }
 
         async function carregarPainel() {
@@ -735,7 +1433,12 @@
                     const badgeRepetido = totalRepetido > 1 ? `<span class="badge-repetido">${totalRepetido}x</span>` : "";
                     const detalhes = (item && item.detalhes) ? item.detalhes : [];
 
-                    const giroNum = item && item.giro ? parseInt(item.giro) : 0;
+                    const prManual = parseInt(localStorage.getItem(`pr_manual_${grupoAtual}_${i}`)) || 0;
+                    const prTime = localStorage.getItem(`pr_manual_time_${grupoAtual}_${i}`) || '';
+                    
+                    const giroNumBase = item && item.giro ? parseInt(item.giro) : 0;
+                    const giroNum = giroNumBase + prManual;
+                    
                     const reprovNum = item && item.reprovados ? parseInt(item.reprovados) : 0;
                     const refilNum = item && item.refilagem ? parseInt(item.refilagem) : 0;
                     
@@ -748,16 +1451,23 @@
                     if(saude < 100) saudeColor = saude > 85 ? 'var(--color-TROCA)' : 'var(--color-parada)';
                     if(totalPecas === 0 && statusBanco === 'rodando') saudeColor = '#007AFF';
 
+                    const disableSelect = userRole === 'viewer' ? 'disabled' : '';
+                    const buttonHtml = userRole === 'editor' 
+                        ? `<button onclick="adicionarPrManual('${grupoAtual}', ${i}, event)" style="background: var(--text-muted); color: var(--stat-box); border: none; border-radius: 4px; width: 14px; height: 14px; font-size: 11px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: 0.2s;" onmouseover="this.style.background='#007AFF'; this.style.color='#fff'" onmouseout="this.style.background='var(--text-muted)'; this.style.color='var(--stat-box)'" title="Adicionar PR Manual">+</button>`
+                        : '';
+
+                    const titleTooltip = prTime ? `${prManual} adicionados manualmente (Última att: ${prTime})` : `${prManual} adicionados manualmente`;
+
                     const flipWrapper = document.createElement('div'); flipWrapper.className = 'flip-card-wrapper';
                     const flipInner = document.createElement('div'); flipInner.className = 'flip-card-inner';
                     const front = document.createElement('div');
-                    front.className = `flip-card-front station-card status-${statusBanco}`;
-                    front.setAttribute('data-modelo', modeloBanco.trim()); front.setAttribute('data-estacao', i); 
+                    front.className = `flip-card-front station-card status-${statusBanco}${(giroNum < 60 && giroNum > 0 && statusBanco === 'rodando') ? ' giro-baixo' : ''}`;
+                    front.setAttribute('data-modelo', modeloBanco.trim()); front.setAttribute('data-estacao', i);
                     
                     front.innerHTML = `
                         <div class="card-header">
                             <h2 title="EST ${String(i).padStart(2, '0')}">EST ${String(i).padStart(2, '0')}${badgeRepetido}</h2>
-                            <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)" onclick="event.stopPropagation()">
+                            <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)" onclick="event.stopPropagation()" ${disableSelect}>
                                 <option value="rodando" ${statusBanco === 'rodando' ? 'selected' : ''}>RODANDO</option>
                                 <option value="parada" ${statusBanco === 'parada' ? 'selected' : ''}>PARADA</option>
                                 <option value="TROCA" ${statusBanco === 'TROCA' ? 'selected' : ''}>TROCA</option>
@@ -772,7 +1482,15 @@
                         </div>
 
                         <div class="stats-grid">
-                            <div class="stat-box"><span class="stat-num" title="${giroNum}">${giroNum}</span><span class="stat-label">Giro</span></div>
+                            <div class="stat-box" style="position: relative; overflow: visible;">
+                                ${prManual > 0 ? `<div style="position: absolute; top: -8px; right: -8px; background: #007AFF; color: white; font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.4); z-index: 5;" title="${titleTooltip}">+${prManual}</div>` : ''}
+                                ${(giroNum < 60 && giroNum > 0 && statusBanco === 'rodando') ? `<div class="giro-alert-badge">⚠ Giro Baixo</div>` : ''}
+                                <span class="stat-num" title="${giroNum}">${giroNum}</span>
+                                <span class="stat-label" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+                                    Giro
+                                    ${buttonHtml}
+                                </span>
+                            </div>
                             <div class="stat-box"><span class="stat-num" title="${refilNum}">${refilNum}</span><span class="stat-label">Refil</span></div>
                             <div class="stat-box"><span class="stat-num" title="${reprovNum}">${reprovNum}</span><span class="stat-label">Reprov</span></div>
                         </div>
@@ -788,19 +1506,26 @@
                 };
 
                 const metade = numEstacoes / 2; const paresPorMaquina = metade / 3;
+                const _dadosGiroParaAlerta = [];
                 for (let i = 1; i <= metade; i++) {
                     const numMaq = Math.ceil(i / paresPorMaquina); const gridDestino = containersMaquinas[numMaq];
                     gridDestino.appendChild(criarCardElemento(i)); gridDestino.appendChild(criarCardElemento(i + metade));
                 }
                 
+                // Verificar alertas de giro baixo após renderizar
+                listaExibida.forEach(d => {
+                    const giroB = parseInt(d.giro || 0) + (parseInt(localStorage.getItem(`pr_manual_${grupoAtual}_${d.estacao}`)) || 0);
+                    _dadosGiroParaAlerta.push({ estacao: d.estacao, giro: giroB, status: d.status || 'parada' });
+                });
+                verificarAlertasGiroBaixo(grupoAtual, _dadosGiroParaAlerta);
+                
                 const infoData = listaExibida.find(d => d.dataHora);
                 if (infoData && infoData.dataHora) {
                     const chave = infoData.dataHora + (infoData.cracha || "");
-                    const strEstado = listaExibida.map(d => `${d.estacao}-${d.modelo || ''}-${d.tamanho || ''}`).join('|');
-                    if (!historicoGrupos[grupoAtual]) { historicoGrupos[grupoAtual] = chave; estadoAlocacao[grupoAtual] = strEstado; } 
-                    else if (historicoGrupos[grupoAtual] !== chave) {
+                    if (!historicoGrupos[grupoAtual]) { 
+                        historicoGrupos[grupoAtual] = chave; 
+                    } else if (historicoGrupos[grupoAtual] !== chave) {
                         historicoGrupos[grupoAtual] = chave;
-                        estadoAlocacao[grupoAtual] = strEstado;
                         exibirNotificacao(infoData.cracha, infoData.dataHora, grupoAtual);
                     }
                 }
@@ -827,9 +1552,15 @@
         function gerarImpressao() {
             const grupo = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupo === "Grupo 4" || grupo === "Grupo 5") ? 48 : 36;
-            const metade = numEstacoes / 2; const dataAtual = new Date().toLocaleString('pt-BR');
+            const metade = numEstacoes / 2; 
+            
+            const statusText = document.getElementById('status-update').innerText;
+            const matchData = statusText.match(/Alocação Atualizada:\s*(.+)/);
+            const dataAtual = matchData ? matchData[1] : new Date().toLocaleString('pt-BR');
+
             const fronts = document.querySelectorAll('.flip-card-front.station-card');
             let dadosCard = {};
+            
             fronts.forEach(card => {
                 const numEstacao = parseInt(card.getAttribute('data-estacao'), 10);
                 if (!isNaN(numEstacao)) {
@@ -838,13 +1569,18 @@
                     const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').textContent;
                     const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').textContent;
                     const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').textContent;
+                    
+                    const prManual = parseInt(localStorage.getItem(`pr_manual_${grupo}_${numEstacao}`)) || 0;
+
                     let statusTxt = "", statusCls = "";
                     if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
                     else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
                     else { statusTxt = "TROCA"; statusCls = "st-TROCA"; }
-                    dadosCard[numEstacao] = { mod, tam, giro, refil, repr, statusTxt, statusCls };
+                    
+                    dadosCard[numEstacao] = { mod, tam, giro, refil, repr, prManual, statusTxt, statusCls };
                 }
             });
+
             let printContent = `<html><head><title>Relatório Nexus - ${grupo}</title><style>
                 @page { size: A4 landscape; margin: 6mm; } body { font-family: 'Segoe UI', sans-serif; color: #222; margin: 0; padding: 0; line-height: 1.2;}
                 .print-header { border-bottom: 2px solid #333; margin-bottom: 8px; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -853,19 +1589,28 @@
                 th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; font-size: 7.5pt; }
                 .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-TROCA { color: #b7950b; font-weight: bold; }
                 .divisor { border-left: 3px solid #333 !important; }
+                .pr-col { color: #007AFF; font-weight: bold; }
             </style></head><body>
-            <div class="print-header"><div><h2>${grupo} - Matriz de Produção</h2></div><div>Gerado: ${dataAtual}</div></div>
+            <div class="print-header"><div><h2>${grupo} - Matriz de Produção</h2></div><div>Alocação Atualizada: ${dataAtual}</div></div>
             <table><thead><tr>
-                <th style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
-                <th class="divisor" style="width:30px;">EST</th><th>MODELO</th><th style="width:50px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:35px;">REF</th><th style="width:35px;">REP</th><th style="width:65px;">STATUS</th>
+                <th style="width:25px;">EST</th><th>MODELO</th><th style="width:45px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:30px;">REF</th><th style="width:30px;">REP</th><th style="width:30px;">+PR</th><th style="width:60px;">STATUS</th>
+                <th class="divisor" style="width:25px;">EST</th><th>MODELO</th><th style="width:45px;">TAM</th><th style="width:35px;">GIRO</th><th style="width:30px;">REF</th><th style="width:30px;">REP</th><th style="width:30px;">+PR</th><th style="width:60px;">STATUS</th>
             </tr></thead><tbody>`;
+            
             for (let i = 1; i <= metade; i++) {
-                let par = i + metade; let d1 = dadosCard[i] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' }; let d2 = dadosCard[par] || { mod: '', tam: '', giro: '', refil: '', repr: '', statusTxt: '', statusCls: '' };
+                let par = i + metade; 
+                let d1 = dadosCard[i] || { mod: '', tam: '', giro: '', refil: '', repr: '', prManual: 0, statusTxt: '', statusCls: '' }; 
+                let d2 = dadosCard[par] || { mod: '', tam: '', giro: '', refil: '', repr: '', prManual: 0, statusTxt: '', statusCls: '' };
+                
+                let prTxt1 = d1.prManual > 0 ? `+${d1.prManual}` : '';
+                let prTxt2 = d2.prManual > 0 ? `+${d2.prManual}` : '';
+
                 printContent += `<tr>
-                    <td style="font-weight:bold;">${i}</td><td style="text-align:left; padding-left:4px;">${d1.mod}</td><td>${d1.tam}</td><td>${d1.giro}</td><td>${d1.refil}</td><td>${d1.repr}</td><td class="${d1.statusCls}">${d1.statusTxt}</td>
-                    <td class="divisor" style="font-weight:bold;">${par}</td><td style="text-align:left; padding-left:4px;">${d2.mod}</td><td>${d2.tam}</td><td>${d2.giro}</td><td>${d2.refil}</td><td>${d2.repr}</td><td class="${d2.statusCls}">${d2.statusTxt}</td>
+                    <td style="font-weight:bold;">${i}</td><td style="text-align:left; padding-left:4px;">${d1.mod}</td><td>${d1.tam}</td><td>${d1.giro}</td><td>${d1.refil}</td><td>${d1.repr}</td><td class="pr-col">${prTxt1}</td><td class="${d1.statusCls}">${d1.statusTxt}</td>
+                    <td class="divisor" style="font-weight:bold;">${par}</td><td style="text-align:left; padding-left:4px;">${d2.mod}</td><td>${d2.tam}</td><td>${d2.giro}</td><td>${d2.refil}</td><td>${d2.repr}</td><td class="pr-col">${prTxt2}</td><td class="${d2.statusCls}">${d2.statusTxt}</td>
                 </tr>`;
             }
+            
             printContent += `</tbody></table></body></html>`;
             let iframe = document.getElementById('fastPrintFrame');
             if (!iframe) { iframe = document.createElement('iframe'); iframe.id = 'fastPrintFrame'; iframe.style.position = 'absolute'; iframe.style.width = '0px'; iframe.style.height = '0px'; iframe.style.border = 'none'; document.body.appendChild(iframe); }
@@ -877,11 +1622,15 @@
             const novoStatus = document.getElementById('statusGlobal').value;
             if (!novoStatus) { await customAlert("Selecione um status alvo."); return; }
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const info = await customPrompt(`Acionar override global para ${novoStatus.toUpperCase()}?\n\nInsira a credencial do operador:`);
+            
+            const info = await customPrompt(`Acionar override global para ${novoStatus.toUpperCase()}?\n\nInsira o Usuário/Crachá do operador:`, false);
             const crachaDigitado = info ? info.trim() : ""; const nomeUsuario = usuariosAutorizados[crachaDigitado];
-            if (!nomeUsuario) { await customAlert("Acesso negado. Credencial inválida."); return; }
+            
+            if (!nomeUsuario) { await customAlert("Acesso negado. Usuário/Crachá inválido."); return; }
+            
             const grupoAtual = document.getElementById('filtroGrupo').value;
             const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
+            
             try {
                 document.getElementById('status-update').innerText = "Injetando Override..."; const promessas = [];
                 for (let i = 1; i <= numEstacoes; i++) { promessas.push(fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupoAtual, estacao: i, status: novoStatus, cracha: crachaDigitado }) })); }
@@ -891,8 +1640,10 @@
 
         async function mudarStatus(grupo, estacao, novoStatus) {
             usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            const info = await customPrompt(`Alterar Estado da EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nCredencial do Operador:`);
+            
+            const info = await customPrompt(`Alterar Estado da EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nUsuário/Crachá do Operador:`, false);
             const crachaDigitado = info ? info.trim() : ""; const nomeUsuario = usuariosAutorizados[crachaDigitado];
+            
             if (!nomeUsuario) { await customAlert("Acesso negado. Procedimento abortado."); carregarPainel(); return; }
             try {
                 document.getElementById('status-update').innerText = "Transmitindo...";
@@ -1192,14 +1943,45 @@
             }
         }
 
+        /* === INICIALIZAÇÃO DE SISTEMA === */
         window.onload = () => {
             const temaSalvo = localStorage.getItem('temaEscuroMonitor');
-            if (temaSalvo === 'true') { document.body.classList.add('dark-mode'); const btnTema = document.getElementById('btnTema'); if (btnTema) btnTema.innerText = '☀️'; }
-            const g = localStorage.getItem('ultimoGrupoSelecionado'); if (g) document.getElementById('filtroGrupo').value = g;
+            if (temaSalvo === 'true') { 
+                document.body.classList.add('dark-mode'); 
+                const btnTema = document.getElementById('btnTema'); 
+                if (btnTema) btnTema.innerText = '☀️'; 
+            }
+            const g = localStorage.getItem('ultimoGrupoSelecionado'); 
+            if (g) document.getElementById('filtroGrupo').value = g;
+            
             atualizarDomNotificacoes();
-            carregarPainel();
+
+            // ✅ RESTAURAR SESSÃO — evita voltar ao login ao recarregar
+            const sessaoSalva = sessionStorage.getItem('nexusSession');
+            if (sessaoSalva) {
+                try {
+                    const sess = JSON.parse(sessaoSalva);
+                    // Sessão válida por 12 horas
+                    const dozeHoras = 12 * 60 * 60 * 1000;
+                    if (sess.role && (Date.now() - sess.ts) < dozeHoras) {
+                        userRole = sess.role;
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('mainApp').style.display = 'block';
+                        aplicarPermissoesDeAcesso();
+                        iniciarSistema();
+                        return;
+                    }
+                } catch(e) {}
+                sessionStorage.removeItem('nexusSession');
+            }
         };
-        setInterval(carregarPainel, 10000);
+
+        function iniciarSistema() {
+            carregarPainel();
+            sysIntervals.push(setInterval(carregarPainel, 10000));
+            sysIntervals.push(setInterval(checarProximoGrupoBackground, 3500));
+        }
+
     </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -753,7 +754,7 @@
         const defaultUsuarios = { 
             "48192292175030": "Francisco Eduardo",
             "1987": "Administrador",
-            "Raine.neres": "Raine Neres",
+            "Raiane.neres": "Raiane Neres",
             "Maria.dias": "Maria Dias",
             "Francisco.carvalho": "Francisco Carvalho",
             "Rafael.matos": "Rafael Matos",
@@ -763,7 +764,7 @@
         };
 
         const credenciaisEditor = {
-            "Raine.neres": "dados1",
+            "Raiane.neres": "dados1",
             "Maria.dias": "dados2",
             "Francisco.carvalho": "dados3",
             "Rafael.matos": "dados4",
@@ -1270,23 +1271,12 @@
         async function adicionarPrManual(grupo, estacao, atual, event) {
             event.stopPropagation(); 
             
-            usuariosAutorizados = JSON.parse(localStorage.getItem('customUsuarios')) || defaultUsuarios;
-            
             const val = await customPrompt(`Quantos PRs adicionar manualmente na EST ${estacao} do ${grupo}?\n(Atual: +${atual}. Digite 0 para zerar)`, false);
             
             if (val !== null && val.trim() !== '') {
                 const num = parseInt(val);
                 if (!isNaN(num)) {
                     
-                    const info = await customPrompt(`Confirme a adição de ${num} PR(s) na EST ${estacao}.\n\nInsira seu Usuário/Crachá:`, false);
-                    const crachaDigitado = info ? info.trim() : "";
-                    const nomeUsuario = usuariosAutorizados[crachaDigitado];
-                    
-                    if (!nomeUsuario) { 
-                        await customAlert("Acesso negado. Usuário/Crachá inválido ou não cadastrado."); 
-                        return; 
-                    }
-
                     let novoPr = 0;
                     let novoTime = "";
                     if (num !== 0) {
@@ -1294,6 +1284,9 @@
                         novoTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     }
                     
+                    let sessionData = JSON.parse(sessionStorage.getItem('nexusSession')) || {};
+                    const crachaDigitado = sessionData.user || "Sistema";
+
                     document.getElementById('status-update').innerText = "Sincronizando com a Matriz Global...";
                     try {
                         await fetch(URL_API, { 
@@ -1893,3 +1886,4 @@
     </script>
 </body>
 </html>
+```

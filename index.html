@@ -276,6 +276,51 @@
         .header-left h1 { margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
         .header-left p { margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
 
+        /* === INDICADORES DE STATUS CIRCULARES (RODANDO, PARADA, TROCA) === */
+        .global-status-circles {
+            display: flex;
+            gap: 15px;
+            margin-top: 16px;
+            align-items: center;
+        }
+        .status-circle-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--text-main);
+            background: transparent;
+            border: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .st-circle-rodando { 
+            border-color: #10b981; 
+        }
+        .st-circle-parada { 
+            border-color: #ef4444; 
+        }
+        .st-circle-troca { 
+            border-color: #f59e0b; 
+        }
+        .status-circle-lbl {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .actions-container { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; flex: 1; }
         .filter-box { display: flex; flex-direction: column; min-width: 0; }
         .filter-box label { font-size: 9px; font-weight: 800; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
@@ -364,6 +409,7 @@
         @media (max-width: 1024px) {
             .header { position: relative; top: 0; flex-direction: column; align-items: stretch; text-align: center; padding: 20px; z-index: 10; margin-bottom: 25px; }
             .header-left { align-items: center; margin-bottom: 15px; }
+            .global-status-circles { justify-content: center; margin-bottom: 15px; }
             .actions-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; justify-content: stretch; }
             .filter-box, .btn-sync { width: 100%; margin-top: 0; height: 100%; }
             .btn-sync { padding: 12px; }
@@ -618,6 +664,22 @@
                     <button class="config-btn" onclick="fazerLogout()" title="Sair / Voltar ao Login" style="margin-left: 8px;">🚪</button>
                 </h1>
                 <p>Monitoramento Analítico em Tempo Real</p>
+                
+                <div class="global-status-circles">
+                    <div class="status-circle-wrap">
+                        <div class="status-circle st-circle-rodando" id="countRodando">0</div>
+                        <span class="status-circle-lbl">RODANDO</span>
+                    </div>
+                    <div class="status-circle-wrap">
+                        <div class="status-circle st-circle-parada" id="countParada">0</div>
+                        <span class="status-circle-lbl">PARADA</span>
+                    </div>
+                    <div class="status-circle-wrap">
+                        <div class="status-circle st-circle-troca" id="countTroca">0</div>
+                        <span class="status-circle-lbl">TROCA</span>
+                    </div>
+                </div>
+
             </div>
             <div class="actions-container">
                 <div class="filter-box">
@@ -652,7 +714,7 @@
                 <button class="btn-sync btn-print" onclick="gerarImpressao()"> Imprimir</button>
                 <button class="btn-sync btn-clear-manual" id="btnClearManual" onclick="limparPrsManuais()">🗑️ Limpar Manuais</button>
                 <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()"> Atualizar DB</button>
-                <button class="btn-sync btn-wip" onclick="abrirRelatorioWIP()">📦 Relatório WIP</button>
+                <button class="btn-sync btn-wip" onclick="abrirRelatorioWIP()">📦 WIP</button>
                 <button class="btn-kpi-dashboard" onclick="abrirDashboard()">✨ Analysis</button>
                 <div class="notif-bell-wrap" id="notifBellWrap">
                     <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel(event)" title="Histórico de Notificações">🔔</button>
@@ -708,7 +770,7 @@
                     <div class="kpi-header-left">
                         <div class="kpi-header-icon">✨</div>
                         <div>
-                            <p class="kpi-header-title">Nexus Smart Insights</p>
+                            <p class="kpi-header-title">Visão Geral Do Grupo</p>
                             <p class="kpi-header-sub" id="kpiSubtitle">Consultando Banco de dados Em Tempo Real...</p>
                         </div>
                     </div>
@@ -911,7 +973,7 @@
             
             const list = document.getElementById('notifList');
             if(notifHistory.length > 0) {
-                list.innerHTML = notifHistory.map(n => `<div class="notif-item"><div class="notif-item-title">🔄 Sincronização Detectada</div><div class="notif-item-body">${n.grupo}<br>Operador: ${n.operador}</div><div class="notif-item-time">Log: ${n.dataHora} &nbsp;•&nbsp; ${n.hora}</div></div>`).join('');
+                list.innerHTML = notifHistory.map(n => `<div class="notif-item"><div class="notif-item-title">🔄 Alocação Atualizada</div><div class="notif-item-body">${n.grupo}<br>Operador: ${n.operador}</div><div class="notif-item-time">Log: ${n.dataHora} &nbsp;•&nbsp; ${n.hora}</div></div>`).join('');
             } else {
                 list.innerHTML = '<div class="notif-empty">Nenhuma notificação ainda.</div>';
             }
@@ -1155,7 +1217,7 @@
 
             tocarSomNotificacao();
             
-            toast.innerHTML = `<strong>🔄 Sincronização Detectada</strong><br>${grupoAlterado}<br>Operador: ${nomeExibicao}<br>Log: ${dataHora}`;
+            toast.innerHTML = `<strong>🔄 Alocação Atualizada</strong><br>${grupoAlterado}<br>Operador: ${nomeExibicao}<br>Log: ${dataHora}`;
             
             clearTimeout(toastTimeout1); clearTimeout(toastTimeout2); clearTimeout(toastTimeout3);
             
@@ -1350,6 +1412,20 @@
                 const estacoesReais = {}; dados.forEach(d => { if (!d.grupo || d.grupo === grupoAtual) { estacoesReais[d.estacao] = d; } });
                 
                 const listaExibida = Object.values(estacoesReais);
+
+                // --- ATUALIZAÇÃO DOS CÍRCULOS DE STATUS ---
+                let cRodando = 0, cParada = 0, cTroca = 0;
+                for (let i = 1; i <= numEstacoes; i++) {
+                    let item = estacoesReais[i];
+                    let status = (item && item.status) ? item.status : 'parada';
+                    if(status === 'rodando') cRodando++;
+                    else if(status === 'TROCA') cTroca++;
+                    else cParada++;
+                }
+                document.getElementById('countRodando').innerText = cRodando;
+                document.getElementById('countParada').innerText = cParada;
+                document.getElementById('countTroca').innerText = cTroca;
+                // ------------------------------------------
 
                 const modelosUnicos = new Set();
                 listaExibida.forEach(d => { if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") { modelosUnicos.add(d.modelo.trim()); } });
@@ -1812,36 +1888,118 @@
             const topCors=Object.entries(porCor).sort((a,b)=>b[1]-a[1]).slice(0,10);
             return {estacoes,totalGiro,totalRefil,totalReprov,totalEst,qtdRodando,qtdParada,qtdTROCA,porModelo,porTamanho,porCor,topModGiro,topModRefil,tamSorted,topCors};
         }
+        
         function _gerarAvisosInteligentes(d) {
             let insights = [];
             const efic = d.totalEst ? (d.qtdRodando / d.totalEst) : 0;
             const refugoGeral = d.totalGiro > 0 ? (d.totalReprov / (d.totalGiro + d.totalReprov)) : 0;
+            
             if (efic < 0.6) insights.push(`<span>📉</span> <div><strong>Baixa Eficiência de Linha:</strong> Apenas ${(efic*100).toFixed(0)}% das máquinas estão rodando. Revise o abastecimento urgentemente.</div>`);
             else if (efic > 0.85) insights.push(`<span>🚀</span> <div><strong>Linha em Alta Performance:</strong> Excelente! ${(efic*100).toFixed(0)}% de eficiência operacional no momento.</div>`);
+            
             if (refugoGeral > 0.08) insights.push(`<span>⚠️</span> <div><strong>Alerta de Qualidade:</strong> O índice geral de refugo está em ${(refugoGeral*100).toFixed(1)}%. O aceitável é abaixo de 8%.</div>`);
+            
             if (d.qtdTROCA > 0) insights.push(`<span>🔧</span> <div><strong>Impacto de Manutenção:</strong> Existem ${d.qtdTROCA} estação(ões) reportadas como TROCAs paralisando fluxo.</div>`);
+            
             const maquinasCriticas = d.estacoes.filter(e => e.reprov > 0 && (e.reprov / (e.giro + e.reprov)) > 0.15 && (e.giro + e.reprov) > 10);
             if (maquinasCriticas.length > 0) {
                 const nomes = maquinasCriticas.map(m => m.estNum).join(', ');
                 insights.push(`<span>🎯</span> <div><strong>Foco Necessário:</strong> As estações [${nomes}] apresentam mais de 15% de reprovação. Necessária intervenção imediata.</div>`);
             }
             if(insights.length === 0) insights.push(`<span>✅</span> <div><strong>Tudo Normal:</strong> Os parâmetros operacionais estão dentro da normalidade padrão.</div>`);
-            let html = `<div class="kpi-chart-card span3" style="background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(0,122,255,0.05)); border: 1px solid rgba(0,122,255,0.2);"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span> Nexus AI Insights</div><ul class="smart-insight-list">`;
-            insights.forEach(i => html += `<li class="smart-insight-item">${i}</li>`); html += `</ul></div>`; return html;
+            
+            let html = `<div class="kpi-chart-card span3" style="grid-column: span 3; background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(0,122,255,0.05)); border: 1px solid rgba(0,122,255,0.2);"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span> Nexus AI Insights</div><ul class="smart-insight-list">`;
+            insights.forEach(i => html += `<li class="smart-insight-item">${i}</li>`); 
+            html += `</ul></div>`; 
+            return html;
         }
+
         function _renderKpiBody(d) {
             _kpiCharts.forEach(c=>{try{c.destroy();}catch(ex){}}); _kpiCharts=[];
             const isDark=document.body.classList.contains('dark-mode');
             const gridColor=isDark?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.05)', lblColor=isDark?'#94a3b8':'#64748b', txtColor=isDark?'#f8fafc':'#0f172a';
             Chart.defaults.font.family="'Inter',sans-serif"; Chart.defaults.color=lblColor;
             const body=document.getElementById('kpiBody');
-            if(_kpiTabAtual==='geral') body.innerHTML=_tplGeral(d); else if(_kpiTabAtual==='modelos') body.innerHTML=_tplModelos(d); else if(_kpiTabAtual==='tamanhos') body.innerHTML=_tplTamanhos(d); else if(_kpiTabAtual==='cors') body.innerHTML=_tplCors(d);
+            
+            if(_kpiTabAtual==='geral') body.innerHTML=_tplGeral(d); 
+            else if(_kpiTabAtual==='modelos') body.innerHTML=_tplModelos(d); 
+            else if(_kpiTabAtual==='tamanhos') body.innerHTML=_tplTamanhos(d); 
+            else if(_kpiTabAtual==='cors') body.innerHTML=_tplCors(d);
+            
             requestAnimationFrame(()=>_buildCharts(d,isDark,gridColor,lblColor,txtColor));
         }
+
         function _tplGeral(d) {
-            const pctR=d.totalEst?((d.qtdRodando/d.totalEst)*100).toFixed(0):0; const pctP=d.totalEst?((d.qtdParada/d.totalEst)*100).toFixed(0):0; const pctQ=d.totalEst?((d.qtdTROCA/d.totalEst)*100).toFixed(0):0; const efic=d.totalEst?(d.qtdRodando/d.totalEst*100).toFixed(1):0;
-            return `<div class="kpi-big-row"><div class="kpi-big-card c-blue"><span class="kpi-emoji">🔄</span><span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Produzido</span><span class="kpi-sub">Soma do Giro Ativo</span></div><div class="kpi-big-card c-purple"><span class="kpi-emoji">✂️</span><span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Refilagem Total</span><span class="kpi-sub">Processamento Secundário</span></div><div class="kpi-big-card c-red"><span class="kpi-emoji">❌</span><span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Recusado</span><span class="kpi-sub">Total de Reprovações</span></div><div class="kpi-big-card c-green"><span class="kpi-emoji">⚡</span><span class="kpi-num">${efic}%</span><span class="kpi-lbl">Eficiência Global</span><span class="kpi-sub">${d.qtdRodando} de ${d.totalEst} operantes</span></div><div class="kpi-big-card c-teal"><span class="kpi-emoji">🏭</span><span class="kpi-num">${d.totalEst}</span><span class="kpi-lbl">Nós de Produção</span><span class="kpi-sub">Capacidade da Célula</span></div><div class="kpi-big-card c-yellow"><span class="kpi-emoji">📐</span><span class="kpi-num">${Object.keys(d.porModelo).length}</span><span class="kpi-lbl">Diversidade (SKU)</span><span class="kpi-sub">Modelos em processamento</span></div></div><div class="kpi-charts-grid">${_gerarAvisosInteligentes(d)}<div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Distribuição de Carga</div><div class="kpi-status-grid"><div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span><span class="st-pct">${pctR}%</span></div><div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span><span class="st-pct">${pctP}%</span></div><div class="kpi-status-tile TROCA"><span class="st-num">${d.qtdTROCA}</span><span class="st-lbl">Trocas</span><span class="st-pct">${pctQ}%</span></div></div><div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;"><canvas id="chartDonutStatus"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Throughput por Modelo (Top 8)</div><div class="kpi-chart-wrap"><canvas id="chartBarGiro"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#AF52DE"></span>Proporção de Refilagem / Reprovação</div><div class="kpi-chart-wrap"><canvas id="chartBarRefilReprov"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Ranking Volume</div><ul class="kpi-rank-list" id="rankGiroModelo"></ul></div></div>`;
+            const pctR = d.totalEst ? ((d.qtdRodando / d.totalEst) * 100).toFixed(0) : 0; 
+            const pctP = d.totalEst ? ((d.qtdParada / d.totalEst) * 100).toFixed(0) : 0; 
+            const pctQ = d.totalEst ? ((d.qtdTROCA / d.totalEst) * 100).toFixed(0) : 0; 
+            const efic = d.totalEst ? (d.qtdRodando / d.totalEst * 100).toFixed(1) : 0;
+            
+            return `
+            <div class="kpi-big-row">
+                <div class="kpi-big-card c-blue">
+                    <span class="kpi-emoji">🔄</span>
+                    <span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span>
+                    <span class="kpi-lbl">Volume Produzido</span>
+                    <span class="kpi-sub">Soma do Giro Ativo</span>
+                </div>
+                <div class="kpi-big-card c-purple">
+                    <span class="kpi-emoji">✂️</span>
+                    <span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span>
+                    <span class="kpi-lbl">Refilagem Total</span>
+                    <span class="kpi-sub">Processamento Secundário</span>
+                </div>
+                <div class="kpi-big-card c-red">
+                    <span class="kpi-emoji">❌</span>
+                    <span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span>
+                    <span class="kpi-lbl">Volume Recusado</span>
+                    <span class="kpi-sub">Total de Reprovações</span>
+                </div>
+                <div class="kpi-big-card c-green">
+                    <span class="kpi-emoji">⚡</span>
+                    <span class="kpi-num">${efic}%</span>
+                    <span class="kpi-lbl">Eficiência De Grade do Grupo</span>
+                    <span class="kpi-sub">${d.qtdRodando} de ${d.totalEst} operantes</span>
+                </div>
+                <div class="kpi-big-card c-teal">
+                    <span class="kpi-emoji">🏭</span>
+                    <span class="kpi-num">${d.totalEst}</span>
+                    <span class="kpi-lbl">Matrizes de Produção</span>
+                    <span class="kpi-sub">Capacidade da Célula</span>
+                </div>
+                <div class="kpi-big-card c-yellow">
+                    <span class="kpi-emoji">📐</span>
+                    <span class="kpi-num">${Object.keys(d.porModelo).length}</span>
+                    <span class="kpi-lbl">Diversidade (SKU)</span>
+                    <span class="kpi-sub">Modelos em processamento</span>
+                </div>
+            </div>
+            
+            <div class="kpi-charts-grid">
+                ${_gerarAvisosInteligentes(d)}
+            </div>
+            
+            <div class="kpi-charts-grid" style="grid-template-columns: 1fr 2fr;">
+                <div class="kpi-chart-card">
+                    <div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Distribuição de Carga</div>
+                    <div class="kpi-status-grid">
+                        <div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span><span class="st-pct">${pctR}%</span></div>
+                        <div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span><span class="st-pct">${pctP}%</span></div>
+                        <div class="kpi-status-tile TROCA"><span class="st-num">${d.qtdTROCA}</span><span class="st-lbl">Trocas</span><span class="st-pct">${pctQ}%</span></div>
+                    </div>
+                    <div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;">
+                        <canvas id="chartDonutStatus"></canvas>
+                    </div>
+                </div>
+                <div class="kpi-chart-card">
+                    <div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Abastecido por Modelo (Top 8)</div>
+                    <div class="kpi-chart-wrap">
+                        <canvas id="chartBarGiro"></canvas>
+                    </div>
+                </div>
+            </div>`;
         }
+
         function _tplModelos(d) {
             const sorted=Object.entries(d.porModelo).sort((a,b)=>b[1].giro-a[1].giro);
             const rows=sorted.map(([mod,v],i)=>`<tr style="border-bottom:1px solid var(--glass-border); transition: 0.2s;"><td style="padding:14px 10px;font-weight:900;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">#${i+1}</td><td style="padding:14px 10px;font-weight:800;color:var(--text-main);">${mod}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#007AFF;">${v.giro.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#AF52DE;">${v.refil.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#ef4444;">${v.reprov.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:800;color:var(--text-muted);">${v.qtd}</td></tr>`).join('');
@@ -1853,13 +2011,12 @@
             return `<div class="kpi-charts-grid"><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#f59e0b"></span>Espectro de Frequência</div><div class="kpi-chart-wrap"><canvas id="chartCorsBar"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Densidade por Cor</div><div class="kpi-chart-wrap"><canvas id="chartCorsDonu"></canvas></div></div><div class="kpi-chart-card span3"><div class="kpi-chart-title"><span class="dot" style="background:#5AC8FA"></span>Top Cores Processadas</div><ul class="kpi-rank-list" id="rankCors"></ul></div></div>`;
         }
         function _palette(n,alpha=1) { const colors=[`rgba(0,122,255,${alpha})`,`rgba(94,92,230,${alpha})`,`rgba(16,185,129,${alpha})`,`rgba(175,82,222,${alpha})`,`rgba(90,200,250,${alpha})`,`rgba(245,158,11,${alpha})`,`rgba(239,68,68,${alpha})`,`rgba(250,204,21,${alpha})`,`rgba(50,173,230,${alpha})`,`rgba(191,90,242,${alpha})`]; const result=[]; for(let i=0;i<n;i++) result.push(colors[i%colors.length]); return result; }
+        
         function _buildCharts(d,isDark,gridColor,lblColor,txtColor) {
             const barH=(yMaxLen)=>({indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:lblColor,font:{size:11,weight:'600'}}},y:{grid:{display:false},ticks:{color:txtColor,font:{size:11,weight:'800'}}}}});
             if(_kpiTabAtual==='geral') {
                 const cds=document.getElementById('chartDonutStatus'); if(cds) _kpiCharts.push(new Chart(cds,{type:'doughnut',data:{labels:['Rodando','Parada','TROCA'],datasets:[{data:[d.qtdRodando,d.qtdParada,d.qtdTROCA],backgroundColor:['rgba(16,185,129,0.85)','rgba(239,68,68,0.85)','rgba(245,158,11,0.85)'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:12,weight:'800'},padding:20,usePointStyle:true}}}}}));
                 const topG=d.topModGiro.slice(0,8); const cbg=document.getElementById('chartBarGiro'); if(cbg) _kpiCharts.push(new Chart(cbg,{type:'bar',data:{labels:topG.map(([m])=>m.length>18?m.slice(0,18)+'…':m),datasets:[{label:'Volume',data:topG.map(([,v])=>v.giro),backgroundColor:_palette(topG.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
-                const topR=d.topModRefil.slice(0,8); const cbr=document.getElementById('chartBarRefilReprov'); if(cbr) _kpiCharts.push(new Chart(cbr,{type:'bar',data:{labels:topR.map(([m])=>m.length>16?m.slice(0,16)+'…':m),datasets:[{label:'Refilagem',data:topR.map(([,v])=>v.refil),backgroundColor:'rgba(175,82,222,0.85)',borderRadius:6,borderSkipped:false},{label:'Falhas',data:topR.map(([m])=>(d.porModelo[m]||{}).reprov||0),backgroundColor:'rgba(239,68,68,0.85)',borderRadius:6,borderSkipped:false}]},options:{...barH(),plugins:{legend:{display:true,labels:{color:lblColor,font:{size:11,weight:'800'},usePointStyle:true}}}}}));
-                const rankEl=document.getElementById('rankGiroModelo'); if(rankEl){const top5=d.topModGiro.slice(0,7);const maxV=top5[0]?top5[0][1].giro:1;rankEl.innerHTML=top5.map(([mod,v],i)=>`<li class="kpi-rank-item"><span class="kpi-rank-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span><span class="kpi-rank-name" title="${mod}">${mod}</span><div class="kpi-rank-bar-wrap"><div class="kpi-rank-bar-fill" style="width:${(v.giro/maxV*100).toFixed(1)}%"></div></div><span class="kpi-rank-val">${v.giro.toLocaleString('pt-BR')}</span></li>`).join('');}
             }
             else if(_kpiTabAtual==='modelos') {
                 const top10=Object.entries(d.porModelo).sort((a,b)=>b[1].giro-a[1].giro).slice(0,10); const c1=document.getElementById('chartModGiro2'); if(c1) _kpiCharts.push(new Chart(c1,{type:'bar',data:{labels:top10.map(([m])=>m.length>16?m.slice(0,16)+'…':m),datasets:[{label:'Giro',data:top10.map(([,v])=>v.giro),backgroundColor:_palette(top10.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));

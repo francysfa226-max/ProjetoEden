@@ -273,33 +273,8 @@
             gap: 20px; transition: 0.5s; flex-wrap: wrap;
         }
         .header-left { flex-shrink: 0; display: flex; flex-direction: column; }
-        .header-left h1 { margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .header-left h1 { margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
         .header-left p { margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
-
-        /* === WIDGETS STATUS ESTILO IOS === */
-        .status-counters { display: flex; gap: 18px; margin-top: 14px; }
-        .status-widget { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: default; }
-        .status-circle {
-            width: 52px; height: 52px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; font-weight: 900; color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 5px solid; /* Anel estilo IOS */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .status-widget:hover .status-circle { transform: scale(1.08); }
-        .status-rodando-circle { border-color: #10b981; background: rgba(16, 185, 129, 0.15); box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); }
-        .status-parada-circle { border-color: #ef4444; background: rgba(239, 68, 68, 0.15); box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); }
-        .status-TROCA-circle { border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
-        
-        .status-label {
-            font-size: 10px; font-weight: 800; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1.5px;
-        }
 
         .actions-container { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; flex: 1; }
         .filter-box { display: flex; flex-direction: column; min-width: 0; }
@@ -369,7 +344,7 @@
         .health-bar-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.22, 1, 0.36, 1); }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; flex-shrink: 0; min-width: 0; }
-        .stat-box { text-align: center; padding: 8px 2px; background: var(--stat-box); border-radius: 10px; border: 1px solid var(--glass-border); transition: 0.3s; min-width: 0; overflow: hidden; }
+        .stat-box { text-align: center; padding: 8px 2px; background: var(--stat-box); border-radius: 10px; border: 1px solid var(--glass-border); transition: 0.3s; min-width: 0; }
         .stat-num { display: block; font-size: 14px; font-weight: 800; color: var(--text-main); font-family: 'JetBrains Mono', monospace; }
         .stat-label { font-size: 8px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; }
 
@@ -389,53 +364,18 @@
         @media (max-width: 1024px) {
             .header { position: relative; top: 0; flex-direction: column; align-items: stretch; text-align: center; padding: 20px; z-index: 10; margin-bottom: 25px; }
             .header-left { align-items: center; margin-bottom: 15px; }
-            .status-counters { justify-content: center; }
             .actions-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; justify-content: stretch; }
             .filter-box, .btn-sync { width: 100%; margin-top: 0; height: 100%; }
             .btn-sync { padding: 12px; }
             #status-update { grid-column: 1 / -1; }
         }
 
-        /* === RESPONSIVIDADE MOBILE RIGOROSA === */
         @media (max-width: 600px) {
-            .app-wrapper { padding: 8px; }
-            .header { padding: 15px; margin-bottom: 15px; }
-            
-            /* Adaptação dos círculos iOS para mobile */
-            .status-counters { gap: 12px; margin-top: 10px; }
-            .status-circle { width: 44px; height: 44px; font-size: 15px; border-width: 4px; }
-            .status-label { font-size: 9px; letter-spacing: 0.5px; }
-
+            .app-wrapper { padding: 12px; }
             .actions-container { grid-template-columns: 1fr 1fr; } 
-            .main-container { grid-template-columns: 1fr; gap: 15px; }
-            
-            /* Força sempre os cards ficarem lado a lado na versão mobile com '!important' */
-            .machine-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; } 
-            .machine-container { padding: 12px; border-radius: 20px; }
-            .flip-card-wrapper { height: 215px; }
-            
-            /* Ajustes finos do card para não quebrar em 2 colunas */
-            .station-card { padding: 8px; border-radius: 14px; }
-            .card-header h2 { font-size: 0.8rem; }
-            .card-header select { font-size: 8px; padding: 4px; max-width: 65px; }
-            .info-label { font-size: 8px; }
-            .info-value { font-size: 10px; }
-            .health-container { padding: 5px 6px; margin-bottom: 8px; }
-            .health-label { font-size: 7px; }
-            .stat-box { padding: 4px 2px; border-radius: 8px; }
-            .stat-num { font-size: 10px; }
-            .stat-label { font-size: 7px; }
-
+            .main-container { grid-template-columns: 1fr; gap: 20px; }
+            .machine-grid { grid-template-columns: 1fr; gap: 16px; } 
             .btn-theme-floating { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 22px; }
-        }
-        
-        /* Ajuste extremo para celulares muito estreitos (ex: iPhone SE antigo 320px) */
-        @media (max-width: 360px) {
-            .station-card { padding: 6px; }
-            .flip-card-wrapper { height: 205px; }
-            .card-header h2 { font-size: 0.7rem; }
-            .info-value { font-size: 9px; }
-            .card-header select { max-width: 55px; font-size: 7px; }
         }
 
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -678,22 +618,7 @@
                     <button class="config-btn" onclick="fazerLogout()" title="Sair / Voltar ao Login" style="margin-left: 8px;">🚪</button>
                 </h1>
                 <p>Monitoramento Analítico em Tempo Real</p>
-                
-                <div id="statusCounters" class="status-counters">
-                    <div class="status-widget" title="Estações Rodando">
-                        <div class="status-circle status-rodando-circle"><span id="countRodando">0</span></div>
-                        <span class="status-label">Rodando</span>
-                    </div>
-                    <div class="status-widget" title="Estações Paradas (Inativas/Vazias)">
-                        <div class="status-circle status-parada-circle"><span id="countParada">0</span></div>
-                        <span class="status-label">Parada</span>
-                    </div>
-                    <div class="status-widget" title="Estações em Troca">
-                        <div class="status-circle status-TROCA-circle"><span id="countTroca">0</span></div>
-                        <span class="status-label">Troca</span>
-                    </div>
-                </div>
-                </div>
+            </div>
             <div class="actions-container">
                 <div class="filter-box">
                     <label>GRUPO</label>
@@ -1426,28 +1351,6 @@
                 
                 const listaExibida = Object.values(estacoesReais);
 
-                let cRodando = 0, cParada = 0, cTroca = 0;
-                
-                // MUDANÇA CRUCIAL: Agora ele faz um loop cravado pelas 36 ou 48 estações que a tela tem. 
-                // Assim ele acha as vazias geradas no ar e conta no círculo de parada.
-                for (let i = 1; i <= numEstacoes; i++) {
-                    let item = estacoesReais[i];
-                    const st = (item && item.status) ? item.status : 'parada';
-                    const mod = (item && item.modelo && item.modelo.trim() !== "") ? item.modelo.trim() : 'Não Alocado';
-                    
-                    if (mod === 'Não Alocado' || mod === 'VAZIO') {
-                        cParada++;
-                    } else {
-                        if (st === 'rodando') cRodando++;
-                        else if (st === 'parada') cParada++;
-                        else if (st === 'TROCA') cTroca++;
-                    }
-                }
-
-                document.getElementById('countRodando').innerText = cRodando;
-                document.getElementById('countParada').innerText = cParada;
-                document.getElementById('countTroca').innerText = cTroca;
-
                 const modelosUnicos = new Set();
                 listaExibida.forEach(d => { if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") { modelosUnicos.add(d.modelo.trim()); } });
                 
@@ -1910,9 +1813,19 @@
             return {estacoes,totalGiro,totalRefil,totalReprov,totalEst,qtdRodando,qtdParada,qtdTROCA,porModelo,porTamanho,porCor,topModGiro,topModRefil,tamSorted,topCors};
         }
         function _gerarAvisosInteligentes(d) {
-            let insights = []; const efic = d.totalEst ? (d.qtdRodando / d.totalEst) : 0; const refugoGeral = d.totalGiro > 0 ? (d.totalReprov / (d.totalGiro + d.totalReprov)) : 0;
-            if (efic < 0.6) insights.push(`<span>📉</span> <div><strong>Baixa Eficiência de Linha:</strong> Apenas ${(efic*100).toFixed(0)}% das máquinas estão rodando.</div>`);
-            if (refugoGeral > 0.08) insights.push(`<span>⚠️</span> <div><strong>Alerta de Qualidade:</strong> O índice geral de refugo está em ${(refugoGeral*100).toFixed(1)}%.</div>`);
+            let insights = [];
+            const efic = d.totalEst ? (d.qtdRodando / d.totalEst) : 0;
+            const refugoGeral = d.totalGiro > 0 ? (d.totalReprov / (d.totalGiro + d.totalReprov)) : 0;
+            if (efic < 0.6) insights.push(`<span>📉</span> <div><strong>Baixa Eficiência de Linha:</strong> Apenas ${(efic*100).toFixed(0)}% das máquinas estão rodando. Revise o abastecimento urgentemente.</div>`);
+            else if (efic > 0.85) insights.push(`<span>🚀</span> <div><strong>Linha em Alta Performance:</strong> Excelente! ${(efic*100).toFixed(0)}% de eficiência operacional no momento.</div>`);
+            if (refugoGeral > 0.08) insights.push(`<span>⚠️</span> <div><strong>Alerta de Qualidade:</strong> O índice geral de refugo está em ${(refugoGeral*100).toFixed(1)}%. O aceitável é abaixo de 8%.</div>`);
+            if (d.qtdTROCA > 0) insights.push(`<span>🔧</span> <div><strong>Impacto de Manutenção:</strong> Existem ${d.qtdTROCA} estação(ões) reportadas como TROCAs paralisando fluxo.</div>`);
+            const maquinasCriticas = d.estacoes.filter(e => e.reprov > 0 && (e.reprov / (e.giro + e.reprov)) > 0.15 && (e.giro + e.reprov) > 10);
+            if (maquinasCriticas.length > 0) {
+                const nomes = maquinasCriticas.map(m => m.estNum).join(', ');
+                insights.push(`<span>🎯</span> <div><strong>Foco Necessário:</strong> As estações [${nomes}] apresentam mais de 15% de reprovação. Necessária intervenção imediata.</div>`);
+            }
+            if(insights.length === 0) insights.push(`<span>✅</span> <div><strong>Tudo Normal:</strong> Os parâmetros operacionais estão dentro da normalidade padrão.</div>`);
             let html = `<div class="kpi-chart-card span3" style="background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(0,122,255,0.05)); border: 1px solid rgba(0,122,255,0.2);"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span> Nexus AI Insights</div><ul class="smart-insight-list">`;
             insights.forEach(i => html += `<li class="smart-insight-item">${i}</li>`); html += `</ul></div>`; return html;
         }
@@ -1926,22 +1839,41 @@
             requestAnimationFrame(()=>_buildCharts(d,isDark,gridColor,lblColor,txtColor));
         }
         function _tplGeral(d) {
-            const pctR=d.totalEst?((d.qtdRodando/d.totalEst)*100).toFixed(0):0; const efic=d.totalEst?(d.qtdRodando/d.totalEst*100).toFixed(1):0;
-            return `<div class="kpi-big-row"><div class="kpi-big-card c-blue"><span class="kpi-emoji">🔄</span><span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Produzido</span></div><div class="kpi-big-card c-purple"><span class="kpi-emoji">✂️</span><span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Refilagem Total</span></div><div class="kpi-big-card c-red"><span class="kpi-emoji">❌</span><span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Recusado</span></div><div class="kpi-big-card c-green"><span class="kpi-emoji">⚡</span><span class="kpi-num">${efic}%</span><span class="kpi-lbl">Eficiência Global</span></div></div><div class="kpi-charts-grid">${_gerarAvisosInteligentes(d)}<div class="kpi-chart-card"><div class="kpi-chart-title">Distribuição de Carga</div><div class="kpi-status-grid"><div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span></div><div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span></div></div><div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;"><canvas id="chartDonutStatus"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title">Volume por Modelo (Top 8)</div><div class="kpi-chart-wrap"><canvas id="chartBarGiro"></canvas></div></div></div>`;
+            const pctR=d.totalEst?((d.qtdRodando/d.totalEst)*100).toFixed(0):0; const pctP=d.totalEst?((d.qtdParada/d.totalEst)*100).toFixed(0):0; const pctQ=d.totalEst?((d.qtdTROCA/d.totalEst)*100).toFixed(0):0; const efic=d.totalEst?(d.qtdRodando/d.totalEst*100).toFixed(1):0;
+            return `<div class="kpi-big-row"><div class="kpi-big-card c-blue"><span class="kpi-emoji">🔄</span><span class="kpi-num">${d.totalGiro.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Produzido</span><span class="kpi-sub">Soma do Giro Ativo</span></div><div class="kpi-big-card c-purple"><span class="kpi-emoji">✂️</span><span class="kpi-num">${d.totalRefil.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Refilagem Total</span><span class="kpi-sub">Processamento Secundário</span></div><div class="kpi-big-card c-red"><span class="kpi-emoji">❌</span><span class="kpi-num">${d.totalReprov.toLocaleString('pt-BR')}</span><span class="kpi-lbl">Volume Recusado</span><span class="kpi-sub">Total de Reprovações</span></div><div class="kpi-big-card c-green"><span class="kpi-emoji">⚡</span><span class="kpi-num">${efic}%</span><span class="kpi-lbl">Eficiência Global</span><span class="kpi-sub">${d.qtdRodando} de ${d.totalEst} operantes</span></div><div class="kpi-big-card c-teal"><span class="kpi-emoji">🏭</span><span class="kpi-num">${d.totalEst}</span><span class="kpi-lbl">Nós de Produção</span><span class="kpi-sub">Capacidade da Célula</span></div><div class="kpi-big-card c-yellow"><span class="kpi-emoji">📐</span><span class="kpi-num">${Object.keys(d.porModelo).length}</span><span class="kpi-lbl">Diversidade (SKU)</span><span class="kpi-sub">Modelos em processamento</span></div></div><div class="kpi-charts-grid">${_gerarAvisosInteligentes(d)}<div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Distribuição de Carga</div><div class="kpi-status-grid"><div class="kpi-status-tile rodando"><span class="st-num">${d.qtdRodando}</span><span class="st-lbl">Ativas</span><span class="st-pct">${pctR}%</span></div><div class="kpi-status-tile parada"><span class="st-num">${d.qtdParada}</span><span class="st-lbl">Inativas</span><span class="st-pct">${pctP}%</span></div><div class="kpi-status-tile TROCA"><span class="st-num">${d.qtdTROCA}</span><span class="st-lbl">Trocas</span><span class="st-pct">${pctQ}%</span></div></div><div class="kpi-chart-wrap" style="min-height:160px;margin-top:20px;"><canvas id="chartDonutStatus"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Throughput por Modelo (Top 8)</div><div class="kpi-chart-wrap"><canvas id="chartBarGiro"></canvas></div></div><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#AF52DE"></span>Proporção de Refilagem / Reprovação</div><div class="kpi-chart-wrap"><canvas id="chartBarRefilReprov"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Ranking Volume</div><ul class="kpi-rank-list" id="rankGiroModelo"></ul></div></div>`;
         }
         function _tplModelos(d) {
             const sorted=Object.entries(d.porModelo).sort((a,b)=>b[1].giro-a[1].giro);
-            const rows=sorted.map(([mod,v],i)=>`<tr><td style="padding:10px;">#${i+1}</td><td style="padding:10px;">${mod}</td><td style="padding:10px;text-align:center;">${v.giro}</td><td style="padding:10px;text-align:center;">${v.refil}</td><td style="padding:10px;text-align:center;">${v.reprov}</td></tr>`).join('');
-            return `<div class="kpi-charts-grid"><div class="kpi-chart-card span3"><table><thead><tr><th>Rank</th><th>SKU</th><th>Volume</th><th>Refil</th><th>Falhas</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+            const rows=sorted.map(([mod,v],i)=>`<tr style="border-bottom:1px solid var(--glass-border); transition: 0.2s;"><td style="padding:14px 10px;font-weight:900;color:var(--text-muted);font-family:'JetBrains Mono',monospace;">#${i+1}</td><td style="padding:14px 10px;font-weight:800;color:var(--text-main);">${mod}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#007AFF;">${v.giro.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#AF52DE;">${v.refil.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:900;font-family:'JetBrains Mono',monospace;color:#ef4444;">${v.reprov.toLocaleString('pt-BR')}</td><td style="padding:14px 10px;text-align:center;font-weight:800;color:var(--text-muted);">${v.qtd}</td></tr>`).join('');
+            return `<div class="kpi-charts-grid"><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#007AFF"></span>Volume Processado (Top 10)</div><div class="kpi-chart-wrap"><canvas id="chartModGiro2"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Índice de Falhas por SKU</div><div class="kpi-chart-wrap"><canvas id="chartModReprov2"></canvas></div></div><div class="kpi-chart-card span3"><div class="kpi-chart-title"><span class="dot" style="background:#5AC8FA"></span>Matriz Completa de SKUs Ativos</div><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="border-bottom:2px solid var(--glass-border);"><th style="padding:12px 10px;color:var(--text-muted);font-size:11px;font-weight:900;text-transform:uppercase;text-align:left;">Rank</th><th style="padding:12px 10px;color:var(--text-muted);font-size:11px;font-weight:900;text-transform:uppercase;text-align:left;">Identificador SKU</th><th style="padding:12px 10px;color:#007AFF;font-size:11px;font-weight:900;text-transform:uppercase;">Volume</th><th style="padding:12px 10px;color:#AF52DE;font-size:11px;font-weight:900;text-transform:uppercase;">Refil</th><th style="padding:12px 10px;color:#ef4444;font-size:11px;font-weight:900;text-transform:uppercase;">Falhas</th><th style="padding:12px 10px;color:var(--text-muted);font-size:11px;font-weight:900;text-transform:uppercase;">Alocação</th></tr></thead><tbody>${rows}</tbody></table></div></div></div>`;
         }
-        function _tplTamanhos(d) { return `<div class="kpi-charts-grid"><div class="kpi-chart-card span3"><div class="kpi-chart-wrap"><canvas id="chartTamGiro"></canvas></div></div></div>`; }
-        function _tplCors(d) { return `<div class="kpi-charts-grid"><div class="kpi-chart-card span3"><div class="kpi-chart-wrap"><canvas id="chartCorsBar"></canvas></div></div></div>`; }
-        function _palette(n,alpha=1) { const colors=[`rgba(0,122,255,${alpha})`,`rgba(94,92,230,${alpha})`,`rgba(16,185,129,${alpha})`]; const result=[]; for(let i=0;i<n;i++) result.push(colors[i%colors.length]); return result; }
+        function _tplTamanhos(d) { return `<div class="kpi-charts-grid"><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#10b981"></span>Análise de Grades (Giro)</div><div class="kpi-chart-wrap"><canvas id="chartTamGiro"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#f59e0b"></span>Densidade de Alocação (Tamanho)</div><div class="kpi-chart-wrap"><canvas id="chartTamQtd"></canvas></div></div><div class="kpi-chart-card span3"><div class="kpi-chart-title"><span class="dot" style="background:#AF52DE"></span>Comparativo Refil/Reprov por Grade</div><div class="kpi-chart-wrap" style="min-height:250px;"><canvas id="chartTamRefil"></canvas></div></div></div>`; }
+        function _tplCors(d) {
+            if(!d.topCors.length) return `<div style="text-align:center;padding:100px 0;color:var(--text-muted);font-weight:800;font-size:16px;">🎨 Nenhuma variável de COR detectada na rede ativa.<br><span style="font-size:12px;font-weight:600;margin-top:10px;display:inline-block;padding:8px 16px;background:var(--stat-box);border-radius:12px;border:1px solid var(--glass-border);">Dados populados pelos detalhes de verso do card.</span></div>`;
+            return `<div class="kpi-charts-grid"><div class="kpi-chart-card span2"><div class="kpi-chart-title"><span class="dot" style="background:#f59e0b"></span>Espectro de Frequência</div><div class="kpi-chart-wrap"><canvas id="chartCorsBar"></canvas></div></div><div class="kpi-chart-card"><div class="kpi-chart-title"><span class="dot" style="background:#ef4444"></span>Densidade por Cor</div><div class="kpi-chart-wrap"><canvas id="chartCorsDonu"></canvas></div></div><div class="kpi-chart-card span3"><div class="kpi-chart-title"><span class="dot" style="background:#5AC8FA"></span>Top Cores Processadas</div><ul class="kpi-rank-list" id="rankCors"></ul></div></div>`;
+        }
+        function _palette(n,alpha=1) { const colors=[`rgba(0,122,255,${alpha})`,`rgba(94,92,230,${alpha})`,`rgba(16,185,129,${alpha})`,`rgba(175,82,222,${alpha})`,`rgba(90,200,250,${alpha})`,`rgba(245,158,11,${alpha})`,`rgba(239,68,68,${alpha})`,`rgba(250,204,21,${alpha})`,`rgba(50,173,230,${alpha})`,`rgba(191,90,242,${alpha})`]; const result=[]; for(let i=0;i<n;i++) result.push(colors[i%colors.length]); return result; }
         function _buildCharts(d,isDark,gridColor,lblColor,txtColor) {
-            const barH=(yMaxLen)=>({indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:lblColor}},y:{grid:{display:false},ticks:{color:txtColor}}}});
+            const barH=(yMaxLen)=>({indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:lblColor,font:{size:11,weight:'600'}}},y:{grid:{display:false},ticks:{color:txtColor,font:{size:11,weight:'800'}}}}});
             if(_kpiTabAtual==='geral') {
-                const cds=document.getElementById('chartDonutStatus'); if(cds) _kpiCharts.push(new Chart(cds,{type:'doughnut',data:{labels:['Rodando','Parada','TROCA'],datasets:[{data:[d.qtdRodando,d.qtdParada,d.qtdTROCA],backgroundColor:['rgba(16,185,129,0.85)','rgba(239,68,68,0.85)','rgba(245,158,11,0.85)']}]},options:{responsive:true,maintainAspectRatio:false}}));
-                const topG=d.topModGiro.slice(0,8); const cbg=document.getElementById('chartBarGiro'); if(cbg) _kpiCharts.push(new Chart(cbg,{type:'bar',data:{labels:topG.map(([m])=>m),datasets:[{label:'Volume',data:topG.map(([,v])=>v.giro),backgroundColor:_palette(topG.length,0.9)}]},options:barH()}));
+                const cds=document.getElementById('chartDonutStatus'); if(cds) _kpiCharts.push(new Chart(cds,{type:'doughnut',data:{labels:['Rodando','Parada','TROCA'],datasets:[{data:[d.qtdRodando,d.qtdParada,d.qtdTROCA],backgroundColor:['rgba(16,185,129,0.85)','rgba(239,68,68,0.85)','rgba(245,158,11,0.85)'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:12,weight:'800'},padding:20,usePointStyle:true}}}}}));
+                const topG=d.topModGiro.slice(0,8); const cbg=document.getElementById('chartBarGiro'); if(cbg) _kpiCharts.push(new Chart(cbg,{type:'bar',data:{labels:topG.map(([m])=>m.length>18?m.slice(0,18)+'…':m),datasets:[{label:'Volume',data:topG.map(([,v])=>v.giro),backgroundColor:_palette(topG.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
+                const topR=d.topModRefil.slice(0,8); const cbr=document.getElementById('chartBarRefilReprov'); if(cbr) _kpiCharts.push(new Chart(cbr,{type:'bar',data:{labels:topR.map(([m])=>m.length>16?m.slice(0,16)+'…':m),datasets:[{label:'Refilagem',data:topR.map(([,v])=>v.refil),backgroundColor:'rgba(175,82,222,0.85)',borderRadius:6,borderSkipped:false},{label:'Falhas',data:topR.map(([m])=>(d.porModelo[m]||{}).reprov||0),backgroundColor:'rgba(239,68,68,0.85)',borderRadius:6,borderSkipped:false}]},options:{...barH(),plugins:{legend:{display:true,labels:{color:lblColor,font:{size:11,weight:'800'},usePointStyle:true}}}}}));
+                const rankEl=document.getElementById('rankGiroModelo'); if(rankEl){const top5=d.topModGiro.slice(0,7);const maxV=top5[0]?top5[0][1].giro:1;rankEl.innerHTML=top5.map(([mod,v],i)=>`<li class="kpi-rank-item"><span class="kpi-rank-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span><span class="kpi-rank-name" title="${mod}">${mod}</span><div class="kpi-rank-bar-wrap"><div class="kpi-rank-bar-fill" style="width:${(v.giro/maxV*100).toFixed(1)}%"></div></div><span class="kpi-rank-val">${v.giro.toLocaleString('pt-BR')}</span></li>`).join('');}
+            }
+            else if(_kpiTabAtual==='modelos') {
+                const top10=Object.entries(d.porModelo).sort((a,b)=>b[1].giro-a[1].giro).slice(0,10); const c1=document.getElementById('chartModGiro2'); if(c1) _kpiCharts.push(new Chart(c1,{type:'bar',data:{labels:top10.map(([m])=>m.length>16?m.slice(0,16)+'…':m),datasets:[{label:'Giro',data:top10.map(([,v])=>v.giro),backgroundColor:_palette(top10.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
+                const top10r=Object.entries(d.porModelo).sort((a,b)=>b[1].reprov-a[1].reprov).slice(0,8); const c2=document.getElementById('chartModReprov2'); if(c2) _kpiCharts.push(new Chart(c2,{type:'doughnut',data:{labels:top10r.map(([m])=>m.length>14?m.slice(0,14)+'…':m),datasets:[{data:top10r.map(([,v])=>v.reprov||0.01),backgroundColor:_palette(top10r.length,0.9),borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{color:lblColor,font:{size:10,weight:'800'},padding:14,usePointStyle:true}}}}}));
+            }
+            else if(_kpiTabAtual==='tamanhos') {
+                const tams=d.tamSorted; const labels=tams.map(([t])=>t); const c1=document.getElementById('chartTamGiro'); if(c1) _kpiCharts.push(new Chart(c1,{type:'bar',data:{labels,datasets:[{label:'Giro',data:tams.map(([,v])=>v.giro),backgroundColor:_palette(tams.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
+                const c2=document.getElementById('chartTamQtd'); if(c2) _kpiCharts.push(new Chart(c2,{type:'pie',data:{labels,datasets:[{data:tams.map(([,v])=>v.qtd),backgroundColor:_palette(tams.length,0.9),borderWidth:0,hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:11,weight:'800'},padding:14,usePointStyle:true}}}}}));
+                const c3=document.getElementById('chartTamRefil'); if(c3) _kpiCharts.push(new Chart(c3,{type:'bar',data:{labels,datasets:[{label:'Refilagem',data:tams.map(([,v])=>v.refil),backgroundColor:'rgba(175,82,222,0.85)',borderRadius:6,borderSkipped:false},{label:'Falhas',data:tams.map(([,v])=>v.reprov),backgroundColor:'rgba(239,68,68,0.85)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:lblColor,font:{size:12,weight:'800'},usePointStyle:true}}},scales:{x:{grid:{display:false},ticks:{color:lblColor,font:{size:12,weight:'700'}}},y:{grid:{color:gridColor},ticks:{color:lblColor,font:{size:12,weight:'700'}}}}}}));
+            }
+            else if(_kpiTabAtual==='cors') {
+                const topC=d.topCors; if(!topC.length) return; const c1=document.getElementById('chartCorsBar'); if(c1) _kpiCharts.push(new Chart(c1,{type:'bar',data:{labels:topC.map(([c])=>c),datasets:[{label:'Ocorrências',data:topC.map(([,v])=>v),backgroundColor:_palette(topC.length,0.9),borderRadius:8,borderSkipped:false}]},options:barH()}));
+                const c2=document.getElementById('chartCorsDonu'); if(c2) _kpiCharts.push(new Chart(c2,{type:'doughnut',data:{labels:topC.map(([c])=>c),datasets:[{data:topC.map(([,v])=>v),backgroundColor:_palette(topC.length,0.9),borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:lblColor,font:{size:11,weight:'800'},padding:14,usePointStyle:true}}}}}));
+                const rankEl=document.getElementById('rankCors'); if(rankEl){const maxV=topC[0]?topC[0][1]:1;rankEl.innerHTML=topC.map(([cor,v],i)=>`<li class="kpi-rank-item"><span class="kpi-rank-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span><span class="kpi-rank-name">${cor}</span><div class="kpi-rank-bar-wrap"><div class="kpi-rank-bar-fill" style="width:${(v/maxV*100).toFixed(1)}%"></div></div><span class="kpi-rank-val">${v}</span></li>`).join('');}
             }
         }
 
